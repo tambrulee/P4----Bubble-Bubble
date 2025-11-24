@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 
+
 class Product(models.Model):
     CANDLE = "CANDLE"
     SOAP = "SOAP"
@@ -14,12 +15,11 @@ class Product(models.Model):
     product_type = models.CharField(max_length=12, choices=TYPES)
     description = models.TextField(blank=True)
     scent = models.CharField(max_length=50, help_text="e.g. Lavender, Citrus")
-    burn_time_min = models.PositiveIntegerField(null=True, blank=True)  # candles only
+    burn_time_min = models.PositiveIntegerField(null=True, blank=True)
     weight_g = models.PositiveIntegerField(help_text="Net weight in grams")
-    price = models.DecimalField(max_digits=6, decimal_places=2)  # e.g. 12.99
+    price = models.DecimalField(max_digits=6, decimal_places=2)
     stock_qty = models.PositiveIntegerField(default=0)
     active = models.BooleanField(default=True)
-    image_url = models.URLField(blank=True)  # keep it simple: link to an image
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -38,3 +38,14 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="images"
+    )
+    image = models.ImageField(upload_to="products/")
+    alt_text = models.CharField(max_length=140, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.product.title}"
