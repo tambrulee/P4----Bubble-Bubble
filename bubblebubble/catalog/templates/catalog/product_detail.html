@@ -4,63 +4,32 @@
 <div class="row">
   <div class="col-md-6 mb-3">
     <div class="border rounded p-2">
-      <img id="main-img" src="{{ product.image }}" class="img-fluid" alt="{{ product.title }}">
-    </div>
-    <!-- Simple thumbnail row (using the same image for now) -->
-    <div class="d-flex gap-2 mt-2">
-      <img src="{{ product.image }}" data-src="{{ product.image }}" class="thumb border rounded"
-           style="height:70px;cursor:pointer;" alt="thumb 1">
-      <img src="{{ product.image }}" data-src="{{ product.image }}" class="thumb border rounded"
-           style="height:70px;cursor:pointer;" alt="thumb 2">
+      {% if product.image_url %}
+      <img id="main-img" src="{{ product.image_url }}" class="img-fluid" alt="{{ product.title }}">
+      {% else %}
+      <div class="text-muted">No image yet.</div>
+      {% endif %}
     </div>
   </div>
 
   <div class="col-md-6 mb-3">
     <h1 class="h3">{{ product.title }}</h1>
     <p class="text-muted">
-      {{ product.scent }} • {{ product.weight_g }}g • {{ product.type }}
+      {{ product.scent }} • {{ product.weight_g }}g • {{ product.get_product_type_display }}
     </p>
     <p class="h4 mb-3">£{{ product.price }}</p>
 
     <p>{{ product.description }}</p>
 
-    <form id="add-form" method="post" action="/cart/add/1/">
-      {# later we'll use the real product id #}
+    <form id="add-form" method="post" action="{% url 'cart:add' product.id %}">
       {% csrf_token %}
       <div class="input-group mb-3" style="max-width: 220px;">
         <span class="input-group-text">Qty</span>
-        <input type="number" name="qty" value="1" min="1" max="10" class="form-control">
+        <input type="number" name="qty" value="1" min="1" max="{{ product.stock_qty }}" class="form-control">
       </div>
       <button type="submit" class="btn btn-primary">Add to cart</button>
     </form>
   </div>
 </div>
 
-{% endblock %}
-
-{% block scripts %}
-<script>
-// image gallery swap
-for (const t of document.querySelectorAll('.thumb')) {
-  t.addEventListener('mouseenter', () => {
-    document.getElementById('main-img').src = t.dataset.src;
-  });
-}
-
-// basic AJAX add-to-cart (placeholder URL for now)
-document.getElementById('add-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const form = e.currentTarget;
-  const res = await fetch(form.action, {
-    method: 'POST',
-    body: new FormData(form),
-    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-  });
-  if (res.ok) {
-    alert('Added to cart!');  // later: replace with Bootstrap toast
-  } else {
-    alert('Something went wrong adding to cart.');
-  }
-});
-</script>
 {% endblock %}
