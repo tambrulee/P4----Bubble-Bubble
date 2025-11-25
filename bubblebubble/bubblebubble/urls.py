@@ -28,6 +28,7 @@ urlpatterns = [
     path('reviews/', include('reviews.urls')),
     # Auth (login/logout/password reset)
     path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
 
 if settings.DEBUG:
