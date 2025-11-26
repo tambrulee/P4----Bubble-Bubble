@@ -1,3 +1,8 @@
 from django.urls import path
-app_name = 'reviews'
-urlpatterns = []
+from . import views
+
+app_name = "reviews"
+
+urlpatterns = [
+    path("add/<slug:slug>/", views.add_review, name="add"),
+]
