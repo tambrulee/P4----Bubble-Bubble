@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Checkout</h1>
+
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Qty</th>
+      <th>Unit</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in cart.items.all %}
+    <tr>
+      <td>{{ item.product.title }}</td>
+      <td>{{ item.qty }}</td>
+      <td>£{{ item.product.price }}</td>
+      <td>£{{ item.subtotal }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+  <a href="{% url 'cart:view' %}" class="btn btn-outline-secondary">Back to cart</a>
+
+  <div class="text-end">
+    <h4>Total: £{{ cart.total }}</h4>
+    <button id="pay-button" class="btn btn-primary">Pay with Stripe</button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const payButton = document.getElementById('pay-button');
+  payButton.addEventListener('click', async () => {
+    payButton.disabled = true;
+    try {
+      const res = await fetch("{% url 'checkout:start' %}", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+      });
+      if (!res.ok) {
+        alert("Could not start checkout.");
+        payButton.disabled = false;
+        return;
+      }
+      const data = await res.json();
+      const stripe = Stripe("{{ stripe_public_key }}");
+      const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
+      if (result.error) {
+        alert(result.error.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred starting checkout.");
+    } finally {
+      payButton.disabled = false;
+    }
+  });
+</script>
+{% endblock %}
