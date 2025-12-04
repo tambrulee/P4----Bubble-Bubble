@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'cart',
     'checkout',
     'reviews',
+    #csv import export
+    'import_export',
 ]
 
 MIDDLEWARE = [
