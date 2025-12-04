@@ -39,11 +39,11 @@
 
   <h2 class="h5">Reviews</h2>
 
-  {% if product.reviews.all %}
+    {% if product.reviews.all %}
     {% for r in product.reviews.all %}
       <div class="mb-3">
         <strong>{{ r.user.username }}</strong>
-        <span class="text-warning">
+        <span class="review-stars">
           {% for i in "12345"|slice:":r.rating"|make_list %}★{% endfor %}
         </span>
         <small class="text-muted">{{ r.created_at|date:"j M Y" }}</small>
