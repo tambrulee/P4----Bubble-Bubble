@@ -118,3 +118,17 @@ footer {
 footer .text-muted {
   color: #a5748a !important;
 }
+
+
+/* ===============================
+   Product List Card Image Fix
+   =============================== */
+
+.card-img-top {
+  height: 240px;               /* adjust this if you want shorter/taller cards */
+  width: 100%;
+  object-fit: cover;           /* crops while keeping proportions */
+  object-position: center;     /* keeps focal point centered */
+  border-top-left-radius: 0.85rem;
+  border-top-right-radius: 0.85rem;
+}
