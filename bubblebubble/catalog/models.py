@@ -15,7 +15,6 @@ class Product(models.Model):
     product_type = models.CharField(max_length=12, choices=TYPES)
     description = models.TextField(blank=True)
     scent = models.CharField(max_length=50, help_text="e.g. Lavender, Citrus")
-    burn_time_min = models.PositiveIntegerField(null=True, blank=True)
     weight_g = models.PositiveIntegerField(help_text="Net weight in grams")
     price = models.DecimalField(max_digits=6, decimal_places=2)
     stock_qty = models.PositiveIntegerField(default=0)
@@ -38,7 +37,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class ProductImage(models.Model):
     product = models.ForeignKey(
