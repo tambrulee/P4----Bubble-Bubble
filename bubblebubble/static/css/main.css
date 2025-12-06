@@ -145,3 +145,52 @@ footer .text-muted {
 .cart-qty-input::-webkit-inner-spin-button {
   margin: 0;
 }
+
+/* ===============================
+   THEMED BUTTONS FOR CART PAGE
+   =============================== */
+
+/* Update button (subtle) */
+.btn-update {
+  border-color: #EC297C;
+  color: #EC297C;
+}
+.btn-update:hover {
+  background-color: #EC297C;
+  color: #ffffff;
+  border-color: #EC297C;
+}
+
+/* Remove button (danger but on-brand) */
+.btn-remove {
+  border-color: #EC297C;
+  color: #EC297C;
+}
+.btn-remove:hover {
+  background-color: #EC297C;
+  color: #ffffff;
+}
+
+/* Continue shopping */
+.btn-continue {
+  background-color: #F3E2E5;
+  color: #EC297C;
+  border: none;
+  font-weight: 500;
+}
+.btn-continue:hover {
+  background-color: #e4c7d1;
+  color: #c41f63;
+}
+
+/* Checkout button (primary action) */
+.btn-checkout {
+  background-color: #EC297C;
+  border-color: #EC297C;
+  color: #ffffff;
+}
+.btn-checkout:hover {
+  background-color: #c41f63;
+  border-color: #c41f63;
+  color: #ffffff;
+}
