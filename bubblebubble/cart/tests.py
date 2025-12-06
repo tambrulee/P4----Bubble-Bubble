@@ -8,14 +8,14 @@ from cart.models import Cart, CartItem
 User = get_user_model()
 
 
-class CartViewQuantityTests(TestCase):
+class AddToCartTests(TestCase):
     def setUp(self):
+        User = get_user_model()
         self.user = User.objects.create_user(
             username="cartuser", password="testpass123"
         )
         self.client.login(username="cartuser", password="testpass123")
 
-        # Create a product
         self.product = Product.objects.create(
             title="Test Soap",
             product_type=Product.SOAP,
@@ -27,29 +27,26 @@ class CartViewQuantityTests(TestCase):
             active=True,
         )
 
-        # Create a cart for this user and a cart item with qty=3
-        self.cart = Cart.objects.create(user=self.user, session_key="testsession")
-        self.item = CartItem.objects.create(
-            cart=self.cart,
-            product=self.product,
-            qty=3,
-        )
-
-    def test_cart_page_displays_item_quantity(self):
-        """
-        Cart page should show the item's quantity in the quantity input.
-        """
-        url = reverse("cart:view")
-        response = self.client.get(url)
+    def test_first_add_sets_qty_to_requested_amount(self):
+        """First add_to_cart should set qty exactly to requested value (not default+requested)."""
+        url = reverse("cart:add", args=[self.product.id])
+        response = self.client.post(url, {"qty": 1}, follow=True)
 
         self.assertEqual(response.status_code, 200)
+        cart = Cart.objects.first()
+        item = cart.items.get(product=self.product)
+        self.assertEqual(item.qty, 1)
 
-        # Check the cart in context has the right qty
-        cart = response.context["cart"]
-        item = cart.items.first()
-        self.assertEqual(item.qty, 3)
+    def test_second_add_increments_quantity(self):
+        """Adding the same product again should increment qty."""
+        url = reverse("cart:add", args=[self.product.id])
 
-        # Check the rendered HTML contains value="3" on the qty input
-        html = response.content.decode("utf-8")
-        self.assertIn('name="qty"', html)
-        self.assertIn('value="3"', html)
+        # first add
+        self.client.post(url, {"qty": 1})
+        # second add
+        self.client.post(url, {"qty": 1})
+
+        cart = Cart.objects.first()
+        item = cart.items.get(product=self.product)
+        self.assertEqual(item.qty, 2)
+
