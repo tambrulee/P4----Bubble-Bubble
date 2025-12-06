@@ -4,6 +4,7 @@
 <h1>Your Cart</h1>
 
 {% if cart.items.all %}
+<div class="table-responsive">
 <table class="table align-middle">
   <thead>
     <tr>
@@ -43,7 +44,7 @@
     {% endfor %}
   </tbody>
 </table>
-
+</div>
 <div class="d-flex justify-content-between align-items-center">
   <a href="{% url 'catalog:product_list' %}" class="btn btn-continue">
     Continue shopping
