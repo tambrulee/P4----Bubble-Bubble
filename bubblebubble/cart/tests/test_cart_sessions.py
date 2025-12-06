@@ -18,8 +18,12 @@ class CartSessionTests(TestCase):
             username="alice", email="alice@example.com", password="secret"
         )
         self.product = Product.objects.create(
-            name="Test Product",
-            price=10,          # adjust if you use Decimal
+            title="Test Product",
+            product_type=Product.CANDLE,   # or Product.SOAP, doesn’t matter
+            description="Test description",
+            scent="Lavender",
+            weight_g=200,
+            price="10.00",                 # string is fine for DecimalField
             stock_qty=10,
             active=True,
         )

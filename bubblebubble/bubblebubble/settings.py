@@ -55,11 +55,12 @@ INSTALLED_APPS = [
     # local apps
     'accounts',
     'catalog',
-    'cart',
     'checkout',
     'reviews',
     #csv import export
     'import_export',
+    # cart app config to register signals
+    "cart.apps.CartConfig",
 ]
 
 MIDDLEWARE = [
