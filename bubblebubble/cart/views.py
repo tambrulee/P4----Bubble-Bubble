@@ -22,21 +22,26 @@ def add_to_cart(request, product_id):
     except (TypeError, ValueError):
         qty = 1
 
-    qty = max(1, qty)  # min 1
-    qty = min(qty, product.stock_qty)  # cap at stock
+    qty = max(1, qty)                   # at least 1
+    qty = min(qty, product.stock_qty)   # cap at stock
 
-    item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        product=product,
+    )
 
-    # Increment existing quantity, also capped by stock
-    new_qty = item.qty + qty
-    if new_qty > product.stock_qty:
-        new_qty = product.stock_qty
+    if created:
+        # FIRST time this product is added: just use the requested qty
+        item.qty = qty
+    else:
+        # Subsequent adds: increment, still capped by stock
+        new_qty = item.qty + qty
+        if new_qty > product.stock_qty:
+            new_qty = product.stock_qty
+        item.qty = new_qty
 
-    item.qty = new_qty
     item.save()
-
     return redirect("cart:view")
-
 
 
 @require_POST
