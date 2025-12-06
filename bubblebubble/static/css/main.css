@@ -199,25 +199,41 @@ footer .text-muted {
    NAVBAR LAYOUT LIKE REFERENCE
    =============================== */
 
+/* Navbar base */
 .bb-navbar {
+  background-color: #F3E2E5;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
-  background-color: #F3E2E5;
 }
 
-/* Left-side burger icon button */
+/* Keep container as positioning context */
+.bb-navbar .container {
+  position: relative;
+}
+
+/* Absolutely centred brand, independent of burger + icons */
+.bb-brand-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Left-side burger */
 .bb-icon-button {
   background: transparent;
   box-shadow: none;
+  padding: 0;
+  margin-right: 0.5rem;
 }
 
 .bb-icon {
   font-size: 1.4rem;
   line-height: 1;
-  color: #6b3552; /* darker version of theme for icons */
+  color: #6b3552; /* darker accent */
 }
 
-/* Right-side icon links */
+/* Right-side icons */
 .bb-nav-icons .bb-icon-link {
   display: inline-flex;
   align-items: center;
@@ -226,7 +242,11 @@ footer .text-muted {
   text-decoration: none;
 }
 
-.bb-nav-icons .bb-icon-link:hover .bb-icon {
+.bb-nav-icons .bb-icon-link .bb-icon i {
+  font-size: 1.2rem;
+}
+
+.bb-nav-icons .bb-icon-link:hover .bb-icon i {
   color: #EC297C;
 }
 
@@ -239,7 +259,7 @@ footer .text-muted {
   color: #EC297C;
 }
 
-/* Main nav links (collapse section) */
+/* Collapsed nav links (when burger opened) */
 .bb-main-links .nav-link {
   padding: 0.4rem 0.9rem;
   margin: 0 0.15rem;
@@ -255,6 +275,18 @@ footer .text-muted {
   background-color: #ffffff;
   color: #EC297C;
 }
+
+/* Make sure things don't overflow on very small screens */
+@media (max-width: 575.98px) {
+  .bb-navbar img {
+    height: 46px; /* slightly smaller logo on tiny screens */
+  }
+
+  .bb-nav-icons .bb-icon-link {
+    margin-left: 0.5rem;
+  }
+}
+
 
 /* ===============================
    SCROLLING PROMOTION BAR
@@ -295,4 +327,3 @@ footer .text-muted {
     animation-duration: 28s;
   }
 }
-

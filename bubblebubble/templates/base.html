@@ -24,28 +24,31 @@
 <body>
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light navbar-pink bb-navbar sticky-top">
-  <div class="container d-flex align-items-center">
+<nav class="navbar navbar-light navbar-pink bb-navbar sticky-top">
+  <div class="container bb-nav-grid">
 
-    <!-- Left: menu / burger -->
-    <button class="navbar-toggler border-0 bb-icon-button me-2" type="button"
-            data-bs-toggle="collapse" data-bs-target="#mainNav"
-            aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="bb-icon">☰</span>
-    </button>
+    <!-- LEFT: burger (always visible) -->
+    <div class="bb-nav-left">
+      <button class="navbar-toggler border-0 bb-icon-button" type="button"
+              data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="bb-icon">☰</span>
+      </button>
+    </div>
 
-    <!-- Center: logo / brand -->
-    <a class="navbar-brand mx-auto d-flex flex-column align-items-center" href="{% url 'catalog:product_list' %}">
-      <img src="{% static 'img/logo.png' %}" alt="BubbleBubble" style="height:60px;">
-      <!-- Optional wordmark text under logo -->
-      <!-- <span class="brand-wordmark mt-1">BubbleBubble</span> -->
-    </a>
+    <!-- CENTER: logo -->
+    <div class="bb-nav-center">
+      <a class="navbar-brand d-flex flex-column align-items-center"
+         href="{% url 'catalog:product_list' %}">
+        <img src="{% static 'img/logo.png' %}" alt="BubbleBubble" style="height:60px;">
+      </a>
+    </div>
 
-    <!-- Right: icons (search, account, cart) -->
-    <div class="d-flex align-items-center ms-auto bb-nav-icons">
+    <!-- RIGHT: icons -->
+    <div class="bb-nav-right bb-nav-icons">
       <a href="#" class="bb-icon-link d-none d-md-inline-flex" title="Search">
         <span class="bb-icon">
-          <i class="fa-solid fa-magnifying-glass"> </i>
+          <i class="fa-solid fa-magnifying-glass"></i>
         </span>
       </a>
 
@@ -65,14 +68,18 @@
 
       <a href="{% url 'cart:view' %}" class="bb-icon-link" title="Cart">
         <span class="bb-icon">
-          <i class="fa-regular fa-cart-shopping"></i>
+          <i class="fa-solid fa-cart-shopping"></i>
         </span>
       </a>
     </div>
 
-    <!-- Collapsible nav for links (shown on mobile, optional on desktop) -->
-    <div class="collapse navbar-collapse bb-main-links" id="mainNav">
-      <ul class="navbar-nav mx-auto">
+  </div>
+
+  <!-- DROPDOWN MENU BAR UNDER HEADER -->
+  <div class="bb-main-links collapse" id="mainNav">
+    <div class="container">
+      <ul class="navbar-nav mx-auto flex-lg-row flex-column
+                 align-items-lg-center text-center">
         <li class="nav-item">
           <a class="nav-link" href="{% url 'catalog:product_list' %}">Shop All</a>
         </li>
@@ -87,9 +94,10 @@
         </li>
       </ul>
     </div>
-
   </div>
 </nav>
+
+
 
 <!-- Scrolling bar -->
 <div class="bb-promo-bar">
