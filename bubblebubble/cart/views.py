@@ -16,24 +16,42 @@ def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id, active=True)
     cart = get_or_create_cart(request)
 
-    form = AddToCartForm(request.POST, max_stock=product.stock_qty)
-    if form.is_valid():
-        qty = form.cleaned_data["qty"]
-        item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-        item.qty = min(item.qty + qty, product.stock_qty)
-        item.save()
+    # Read qty from POST; default to 1 if missing/bad
+    try:
+        qty = int(request.POST.get("qty", 1))
+    except (TypeError, ValueError):
+        qty = 1
+
+    qty = max(1, qty)  # min 1
+    qty = min(qty, product.stock_qty)  # cap at stock
+
+    item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+    # Increment existing quantity, also capped by stock
+    new_qty = item.qty + qty
+    if new_qty > product.stock_qty:
+        new_qty = product.stock_qty
+
+    item.qty = new_qty
+    item.save()
+
     return redirect("cart:view")
+
 
 
 @require_POST
 def update_item(request, item_id):
     cart = get_or_create_cart(request)
     item = get_object_or_404(CartItem, pk=item_id, cart=cart)
+
     try:
         qty = int(request.POST.get("qty", 1))
-    except ValueError:
+    except (TypeError, ValueError):
         qty = 1
-    qty = max(1, min(qty, item.product.stock_qty))
+
+    qty = max(1, qty)
+    qty = min(qty, item.product.stock_qty)
+
     item.qty = qty
     item.save()
     return redirect("cart:view")
@@ -45,3 +63,4 @@ def remove_item(request, item_id):
     item = get_object_or_404(CartItem, pk=item_id, cart=cart)
     item.delete()
     return redirect("cart:view")
+

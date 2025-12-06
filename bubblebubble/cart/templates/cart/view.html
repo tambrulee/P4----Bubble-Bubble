@@ -22,11 +22,12 @@
         <form method="post" action="{% url 'cart:update' item.id %}" class="d-flex">
           {% csrf_token %}
           <input type="number"
-                 name="qty"
-                 value="{{ item.qty }}"
-                 min="1"
-                 max="{{ item.product.stock_qty }}"
-                 class="form-control form-control-sm me-2">
+            name="qty"
+            value="{{ item.qty }}"
+            min="1"
+            max="{{ item.product.stock_qty }}"
+            class="form-control form-control-sm me-2 cart-qty-input">
+
           <button class="btn btn-sm btn-outline-secondary" type="submit">Update</button>
         </form>
       </td>

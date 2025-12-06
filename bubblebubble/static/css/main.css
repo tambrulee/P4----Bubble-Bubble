@@ -132,3 +132,16 @@ footer .text-muted {
   border-top-left-radius: 0.85rem;
   border-top-right-radius: 0.85rem;
 }
+
+/* Cart quantity input */
+.cart-qty-input {
+  width: 70px;              /* give it an explicit width */
+  text-align: center;
+  padding-right: 0;         /* keeps arrows tight to the right */
+}
+
+/* Optional: tidy native number spinners a bit */
+.cart-qty-input::-webkit-outer-spin-button,
+.cart-qty-input::-webkit-inner-spin-button {
+  margin: 0;
+}
