@@ -1,4 +1,6 @@
-/* ====== Global styles ====== */
+/* ====================================
+   GLOBAL
+   ==================================== */
 
 body {
   background-color: #ffffff;
@@ -8,7 +10,7 @@ body {
 
 /* Accent headings */
 h1, .h1, h2, .h2, h3, .h3 {
-  color: #EC297C; /* bright pink accent */
+  color: #EC297C;
 }
 
 /* Links */
@@ -19,249 +21,94 @@ a:hover {
   color: #c41f63;
 }
 
-/* ====== Navbar ====== */
+/* ====================================
+   NAVBAR + HEADER
+   ==================================== */
 
 .navbar-pink {
   background-color: #F3E2E5; /* soft blush pink */
   border-bottom: 1px solid #f0c9d4;
 }
 
-.navbar-pink .navbar-brand,
-.navbar-pink .nav-link,
-.navbar-pink .navbar-text {
-  color: #EC297C;
-  font-weight: 500;
-}
-
-.navbar-pink .nav-link:hover,
-.navbar-pink .nav-link:focus {
-  color: #c41f63;
-}
-
-.navbar-pink .nav-link.active {
-  text-decoration: underline;
-}
-
-/* Mobile navbar toggler icon visibility */
-.navbar-pink .navbar-toggler {
-  border-color: rgba(0,0,0,0.1);
-}
-.navbar-pink .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0,0,0,.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-}
-
-/* ====== Buttons ====== */
-
-.btn-primary {
-  background-color: #EC297C;
-  border-color: #EC297C;
-}
-
-.btn-primary:hover,
-.btn-primary:focus {
-  background-color: #c41f63;
-  border-color: #c41f63;
-}
-
-.btn-outline-primary {
-  color: #EC297C;
-  border-color: #EC297C;
-}
-
-.btn-outline-primary:hover,
-.btn-outline-primary:focus {
-  color: #ffffff;
-  background-color: #EC297C;
-  border-color: #EC297C;
-}
-
-/* ====== Cards / product tiles ====== */
-
-.card {
-  border-radius: 0.85rem;
-  border-color: #f7cddd;
-}
-
-.card-img-top {
-  border-top-left-radius: 0.85rem;
-  border-top-right-radius: 0.85rem;
-}
-
-.card-title {
-  color: #EC297C;
-}
-
-/* Small chips for product meta */
-.product-meta {
-  font-size: 0.8rem;
-  color: #777;
-}
-
-/* Price highlight */
-.product-price {
-  font-weight: 600;
-  color: #EC297C;
-}
-
-/* ====== Reviews / stars ====== */
-
-.review-stars {
-  color: #EC297C;
-}
-
-/* ====== Footer ====== */
-
-footer {
-  background-color: #F3E2E5;
-}
-
-footer .text-muted {
-  color: #a5748a !important;
-}
-
-
-/* ===============================
-   Product List Card Image Fix
-   =============================== */
-
-.card-img-top {
-  height: 240px;               /* adjust this if you want shorter/taller cards */
-  width: 100%;
-  object-fit: cover;           /* crops while keeping proportions */
-  object-position: center;     /* keeps focal point centered */
-  border-top-left-radius: 0.85rem;
-  border-top-right-radius: 0.85rem;
-}
-
-/* Cart quantity input */
-.cart-qty-input {
-  width: 70px;              /* give it an explicit width */
-  text-align: center;
-  padding-right: 0;         /* keeps arrows tight to the right */
-}
-
-/* Optional: tidy native number spinners a bit */
-.cart-qty-input::-webkit-outer-spin-button,
-.cart-qty-input::-webkit-inner-spin-button {
-  margin: 0;
-}
-
-/* ===============================
-   THEMED BUTTONS FOR CART PAGE
-   =============================== */
-
-/* Update button (subtle) */
-.btn-update {
-  border-color: #EC297C;
-  color: #EC297C;
-}
-.btn-update:hover {
-  background-color: #EC297C;
-  color: #ffffff;
-  border-color: #EC297C;
-}
-
-/* Remove button (danger but on-brand) */
-.btn-remove {
-  border-color: #EC297C;
-  color: #EC297C;
-}
-.btn-remove:hover {
-  background-color: #EC297C;
-  color: #ffffff;
-}
-
-/* Continue shopping */
-.btn-continue {
-  background-color: #F3E2E5;
-  color: #EC297C;
-  border: none;
-  font-weight: 500;
-}
-.btn-continue:hover {
-  background-color: #e4c7d1;
-  color: #c41f63;
-}
-
-/* Checkout button (primary action) */
-.btn-checkout {
-  background-color: #EC297C;
-  border-color: #EC297C;
-  color: #ffffff;
-}
-.btn-checkout:hover {
-  background-color: #c41f63;
-  border-color: #c41f63;
-  color: #ffffff;
-}
-
-/* ===============================
-   NAVBAR LAYOUT LIKE REFERENCE
-   =============================== */
-
-/* Navbar base */
+/* Main navbar wrapper */
 .bb-navbar {
   background-color: #F3E2E5;
-  padding-top: 0.6rem;
-  padding-bottom: 0.6rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
-/* Keep container as positioning context */
-.bb-navbar .container {
-  position: relative;
+/* 3-column grid: left (burger), center (logo), right (icons) */
+.bb-nav-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
 }
 
-/* Absolutely centred brand, independent of burger + icons */
-.bb-brand-center {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.bb-nav-left {
+  justify-self: start;
 }
 
-/* Left-side burger */
+.bb-nav-center {
+  justify-self: center;
+}
+
+.bb-nav-right {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.15rem; /* remove any browser default spacing */
+
+}
+
+/* Burger */
 .bb-icon-button {
   background: transparent;
   box-shadow: none;
   padding: 0;
-  margin-right: 0.5rem;
 }
 
+/* Generic icon style */
 .bb-icon {
   font-size: 1.4rem;
   line-height: 1;
-  color: #6b3552; /* darker accent */
+  color: #6b3552;
 }
 
-/* Right-side icons */
+/* Right-hand icon buttons */
 .bb-nav-icons .bb-icon-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 0.75rem;
+  margin: 0rem;
   text-decoration: none;
 }
 
-.bb-nav-icons .bb-icon-link .bb-icon i {
-  font-size: 1.2rem;
+.bb-nav-icons .bb-icon-link .fa-solid,
+.bb-nav-icons .bb-icon-link .fa-regular {
+  font-size: 0.95rem;   /* slimmer + nicer spacing */
 }
 
-.bb-nav-icons .bb-icon-link:hover .bb-icon i {
+@media (max-width: 575.98px) {
+  .bb-nav-icons .bb-icon-link .fa-solid,
+  .bb-nav-icons .bb-icon-link .fa-regular {
+    font-size: 0.95rem; /* perfect for mobile */
+  }
+}
+
+
+.bb-nav-icons .bb-icon-link:hover .fa-solid,
+.bb-nav-icons .bb-icon-link:hover .fa-regular {
   color: #EC297C;
 }
 
-/* Optional text brand wordmark under logo */
-.brand-wordmark {
-  font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #EC297C;
+/* Menu bar under header */
+.bb-main-links {
+  background-color: #F3E2E5;
 }
 
-/* Collapsed nav links (when burger opened) */
 .bb-main-links .nav-link {
-  padding: 0.4rem 0.9rem;
+  padding: 0.6rem 1rem;
   margin: 0 0.15rem;
   border-radius: 999px;
   font-size: 0.9rem;
@@ -276,24 +123,40 @@ footer .text-muted {
   color: #EC297C;
 }
 
-/* Make sure things don't overflow on very small screens */
+/* Optional text brand wordmark under logo */
+.brand-wordmark {
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #EC297C;
+}
+
+/* Mobile tweaks */
 @media (max-width: 575.98px) {
   .bb-navbar img {
-    height: 46px; /* slightly smaller logo on tiny screens */
+    height: 48px; /* slightly smaller logo on tiny screens */
   }
 
   .bb-nav-icons .bb-icon-link {
-    margin-left: 0.5rem;
+    margin-left: 0.1rem; /* tighter spacing */
   }
 }
 
+/* Mobile navbar toggler icon visibility (Bootstrap default override) */
+.navbar-pink .navbar-toggler {
+  border-color: rgba(0,0,0,0.1);
+}
+.navbar-pink .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0,0,0,.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
 
-/* ===============================
-   SCROLLING PROMOTION BAR
-   =============================== */
+/* ====================================
+   PROMO BAR
+   ==================================== */
 
 .bb-promo-bar {
-  background-color: #EC297C;   /* strong accent bar */
+  background-color: #EC297C;
   color: #ffffff;
   font-size: 0.9rem;
   overflow: hidden;
@@ -303,7 +166,7 @@ footer .text-muted {
 .bb-promo-track {
   display: inline-block;
   padding: 0.45rem 0;
-  padding-left: 100%;          /* start off-screen to the right */
+  padding-left: 100%;
   animation: bb-promo-scroll 22s linear infinite;
 }
 
@@ -311,19 +174,173 @@ footer .text-muted {
   margin: 0 3rem;
 }
 
-/* Simple marquee-style scroll */
 @keyframes bb-promo-scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-/* On very small screens, slow it down a bit */
 @media (max-width: 576px) {
   .bb-promo-track {
     animation-duration: 28s;
+  }
+}
+
+/* ====================================
+   BUTTONS
+   ==================================== */
+
+.btn-primary {
+  background-color: #EC297C;
+  border-color: #EC297C;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #c41f63;
+  border-color: #c41f63;
+}
+
+.btn-outline-primary {
+  color: #EC297C;
+  border-color: #EC297C;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  color: #ffffff;
+  background-color: #EC297C;
+  border-color: #EC297C;
+}
+
+/* Cart-specific buttons */
+
+.btn-update {
+  border-color: #EC297C;
+  color: #EC297C;
+}
+.btn-update:hover {
+  background-color: #EC297C;
+  color: #ffffff;
+  border-color: #EC297C;
+}
+
+.btn-remove {
+  border-color: #EC297C;
+  color: #EC297C;
+}
+.btn-remove:hover {
+  background-color: #EC297C;
+  color: #ffffff;
+}
+
+.btn-continue {
+  background-color: #F3E2E5;
+  color: #EC297C;
+  border: none;
+  font-weight: 500;
+}
+.btn-continue:hover {
+  background-color: #e4c7d1;
+  color: #c41f63;
+}
+
+.btn-checkout {
+  background-color: #EC297C;
+  border-color: #EC297C;
+  color: #ffffff;
+}
+.btn-checkout:hover {
+  background-color: #c41f63;
+  border-color: #c41f63;
+  color: #ffffff;
+}
+
+/* ====================================
+   CARDS & PRODUCT LIST
+   ==================================== */
+
+.card {
+  border-radius: 0.85rem;
+  border-color: #f7cddd;
+}
+
+.card-img-top {
+  height: 240px;        /* consistent tile height */
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-top-left-radius: 0.85rem;
+  border-top-right-radius: 0.85rem;
+}
+
+.card-title {
+  color: #EC297C;
+}
+
+.product-meta {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.product-price {
+  font-weight: 600;
+  color: #EC297C;
+}
+
+/* ====================================
+   CART
+   ==================================== */
+
+.cart-qty-input {
+  width: 70px;
+  text-align: center;
+  padding-right: 0;
+}
+
+.cart-qty-input::-webkit-outer-spin-button,
+.cart-qty-input::-webkit-inner-spin-button {
+  margin: 0;
+}
+
+/* ====================================
+   REVIEWS
+   ==================================== */
+
+.review-stars {
+  color: #EC297C;
+}
+
+/* ====================================
+   FOOTER
+   ==================================== */
+
+footer {
+  background-color: #F3E2E5;
+}
+
+footer .text-muted {
+  color: #a5748a !important;
+}
+
+
+/* Reduce left/right padding just for the navbar */
+.bb-navbar .container {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+/* Even tighter on mobile */
+@media (max-width: 575.98px) {
+  .bb-navbar .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.bb-nav-right {
+  gap: 0.50rem;   /* was 0.2rem */
+}
+
+@media (max-width: 575.98px) {
+  .bb-nav-right {
+    gap: 0.25rem;
   }
 }

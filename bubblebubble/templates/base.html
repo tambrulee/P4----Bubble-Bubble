@@ -46,32 +46,24 @@
 
     <!-- RIGHT: icons -->
     <div class="bb-nav-right bb-nav-icons">
-      <a href="#" class="bb-icon-link d-none d-md-inline-flex" title="Search">
-        <span class="bb-icon">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </span>
-      </a>
+  <a href="#" class="bb-icon-link" title="Search">
+    <span class="bb-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+  </a>
 
-      {% if user.is_authenticated %}
-        <a href="#" class="bb-icon-link d-none d-md-inline-flex" title="My account">
-          <span class="bb-icon">
-            <i class="fa-regular fa-user"></i>
-          </span>
-        </a>
-      {% else %}
-        <a href="/accounts/login/" class="bb-icon-link d-none d-md-inline-flex" title="Login">
-          <span class="bb-icon">
-            <i class="fa-regular fa-user"></i>
-          </span>
-        </a>
-      {% endif %}
+  {% if user.is_authenticated %}
+    <a href="#" class="bb-icon-link" title="My account">
+      <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
+    </a>
+  {% else %}
+    <a href="/accounts/login/" class="bb-icon-link" title="Login">
+      <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
+    </a>
+  {% endif %}
 
-      <a href="{% url 'cart:view' %}" class="bb-icon-link" title="Cart">
-        <span class="bb-icon">
-          <i class="fa-solid fa-cart-shopping"></i>
-        </span>
-      </a>
-    </div>
+  <a href="{% url 'cart:view' %}" class="bb-icon-link" title="Cart">
+    <span class="bb-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+  </a>
+</div>
 
   </div>
 
