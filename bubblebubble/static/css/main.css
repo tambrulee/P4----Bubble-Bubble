@@ -194,3 +194,105 @@ footer .text-muted {
   border-color: #c41f63;
   color: #ffffff;
 }
+
+/* ===============================
+   NAVBAR LAYOUT LIKE REFERENCE
+   =============================== */
+
+.bb-navbar {
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+  background-color: #F3E2E5;
+}
+
+/* Left-side burger icon button */
+.bb-icon-button {
+  background: transparent;
+  box-shadow: none;
+}
+
+.bb-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #6b3552; /* darker version of theme for icons */
+}
+
+/* Right-side icon links */
+.bb-nav-icons .bb-icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.75rem;
+  text-decoration: none;
+}
+
+.bb-nav-icons .bb-icon-link:hover .bb-icon {
+  color: #EC297C;
+}
+
+/* Optional text brand wordmark under logo */
+.brand-wordmark {
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #EC297C;
+}
+
+/* Main nav links (collapse section) */
+.bb-main-links .nav-link {
+  padding: 0.4rem 0.9rem;
+  margin: 0 0.15rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #b0587f;
+}
+
+.bb-main-links .nav-link:hover,
+.bb-main-links .nav-link:focus {
+  background-color: #ffffff;
+  color: #EC297C;
+}
+
+/* ===============================
+   SCROLLING PROMOTION BAR
+   =============================== */
+
+.bb-promo-bar {
+  background-color: #EC297C;   /* strong accent bar */
+  color: #ffffff;
+  font-size: 0.9rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.bb-promo-track {
+  display: inline-block;
+  padding: 0.45rem 0;
+  padding-left: 100%;          /* start off-screen to the right */
+  animation: bb-promo-scroll 22s linear infinite;
+}
+
+.bb-promo-track span {
+  margin: 0 3rem;
+}
+
+/* Simple marquee-style scroll */
+@keyframes bb-promo-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* On very small screens, slow it down a bit */
+@media (max-width: 576px) {
+  .bb-promo-track {
+    animation-duration: 28s;
+  }
+}
+
