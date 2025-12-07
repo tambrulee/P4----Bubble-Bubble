@@ -1,15 +1,19 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.contrib.auth import login
+
+from .forms import EmailUserCreationForm
 
 
 def signup(request):
+    next_url = request.GET.get("next") or "catalog:product_list"
+
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = EmailUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            # redirect to login after successful signup
-            return redirect("login")
+            user = form.save()
+            login(request, user)
+            return redirect(next_url)
     else:
-        form = UserCreationForm()
+        form = EmailUserCreationForm()
+
     return render(request, "accounts/signup.html", {"form": form})
