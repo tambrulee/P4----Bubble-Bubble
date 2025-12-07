@@ -51,14 +51,25 @@
   </a>
 
   {% if user.is_authenticated %}
-    <a href="#" class="bb-icon-link" title="My account">
-      <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
-    </a>
-  {% else %}
-    <a href="/accounts/login/" class="bb-icon-link" title="Login">
-      <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
-    </a>
-  {% endif %}
+  <!-- ACCOUNT ICON -->
+  <a href="#" class="bb-icon-link" title="My account">
+    <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
+  </a>
+
+  <!-- LOGOUT ICON -->
+  <a href="{% url 'logout' %}?next={{ request.get_full_path }}" 
+     class="bb-icon-link" title="Logout">
+    <span class="bb-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+  </a>
+
+{% else %}
+  <!-- LOGIN ICON -->
+  <a href="{% url 'login' %}?next={{ request.get_full_path }}"
+     class="bb-icon-link" title="Login">
+    <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
+  </a>
+{% endif %}
+
 
   <a href="{% url 'cart:view' %}" class="bb-icon-link" title="Cart">
     <span class="bb-icon"><i class="fa-solid fa-cart-shopping"></i></span>

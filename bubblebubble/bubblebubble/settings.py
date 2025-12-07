@@ -60,8 +60,10 @@ INSTALLED_APPS = [
     #csv import export
     'import_export',
     # cart app config to register signals
-    "cart.apps.CartConfig",
+    'cart.apps.CartConfig'
 ]
+
+LOGIN_REDIRECT_URL = "/cart/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
