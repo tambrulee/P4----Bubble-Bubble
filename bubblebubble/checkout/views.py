@@ -1,29 +1,38 @@
 import stripe
 from decimal import Decimal
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseBadRequest
+
 from cart.utils import get_or_create_cart
 from .models import Order, OrderItem
+from .forms import CheckoutForm
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-@login_required
+
 def checkout_summary(request):
     cart = get_or_create_cart(request)
     if not cart.items.exists():
         return redirect("cart:view")
+
+    # Pre-fill email if user is logged in
+    initial = {}
+    if request.user.is_authenticated and getattr(request.user, "email", None):
+        initial["email"] = request.user.email
+
+    form = CheckoutForm(initial=initial)
+
     context = {
         "cart": cart,
         "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
+        "form": form,
     }
     return render(request, "checkout/summary.html", context)
 
 
-@login_required
 def start_checkout(request):
     if request.method != "POST":
         return HttpResponseBadRequest("POST required")
@@ -32,9 +41,36 @@ def start_checkout(request):
     if not cart.items.exists():
         return HttpResponseBadRequest("Cart is empty")
 
-    # Build order
+    form = CheckoutForm(request.POST)
+    if not form.is_valid():
+        # Re-render the summary page with errors
+        context = {
+            "cart": cart,
+            "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
+            "form": form,
+        }
+        return render(request, "checkout/summary.html", context, status=400)
+
+    data = form.cleaned_data
+    full_name = data["full_name"]
+    email = data["email"]
+    address_line1 = data.get("address_line1")
+    address_line2 = data.get("address_line2")
+    city = data.get("city")
+    postcode = data.get("postcode")
+
     total = Decimal("0.00")
-    order = Order.objects.create(user=request.user, total=Decimal("0.00"))
+
+    order = Order.objects.create(
+        user=request.user if request.user.is_authenticated else None,
+        total=Decimal("0.00"),
+        full_name=full_name,
+        email=email,
+        address_line1=address_line1 or "",
+        address_line2=address_line2 or "",
+        city=city or "",
+        postcode=postcode or "",
+    )
 
     line_items = []
     for item in cart.items.select_related("product"):
@@ -50,16 +86,16 @@ def start_checkout(request):
             unit_price=unit_price,
         )
 
-        line_items.append({
-            "price_data": {
-                "currency": settings.STRIPE_CURRENCY,
-                "product_data": {
-                    "name": p.title,
+        line_items.append(
+            {
+                "price_data": {
+                    "currency": settings.STRIPE_CURRENCY,
+                    "product_data": {"name": p.title},
+                    "unit_amount": int(unit_price * 100),
                 },
-                "unit_amount": int(unit_price * 100),  # decimal -> pennies
-            },
-            "quantity": qty,
-        })
+                "quantity": qty,
+            }
+        )
 
     order.total = total
     order.save()
@@ -72,20 +108,27 @@ def start_checkout(request):
             reverse("checkout:success")
         ) + "?session_id={CHECKOUT_SESSION_ID}",
         cancel_url=request.build_absolute_uri(reverse("checkout:summary")),
-        customer_email=request.user.email or None,
+        customer_email=email or (
+            getattr(request.user, "email", None)
+            if request.user.is_authenticated
+            else None
+        ),
         metadata={
             "order_id": str(order.id),
-            "user_id": str(request.user.id),
+            "user_id": str(request.user.id)
+            if request.user.is_authenticated
+            else "",
         },
     )
 
     order.stripe_session_id = session.id
     order.save()
 
-    return JsonResponse({"sessionId": session.id})
+    # Send the customer to Stripe Checkout
+    return redirect(session.url)
 
 
-@login_required
+
 def checkout_success(request):
     session_id = request.GET.get("session_id")
     if not session_id:
@@ -96,21 +139,20 @@ def checkout_success(request):
     except Exception:
         return redirect("catalog:product_list")
 
+    # No longer rely on user being logged in
     order = Order.objects.filter(
         stripe_session_id=session.id,
-        user=request.user
     ).first()
 
     if order and order.status != Order.PAID:
         order.status = Order.PAID
         order.save()
-        # clear cart
+        # clear cart (guest or logged-in: based on session)
         cart = get_or_create_cart(request)
         cart.items.all().delete()
 
     return render(request, "checkout/success.html", {"order": order})
 
 
-@login_required
 def checkout_cancel(request):
     return render(request, "checkout/cancel.html")
