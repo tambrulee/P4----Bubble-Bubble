@@ -175,7 +175,7 @@ def send_order_confirmation_email(order):
     if not order.email:
         return  # nothing to send to
 
-    subject = f"Your BubbleBubble order #{order.id}"
+    subject = f"Your BubbleBubble Order #{order.id}"
 
     context = {"order": order}
     message = render_to_string("checkout/emails/order_confirmation.txt", context)

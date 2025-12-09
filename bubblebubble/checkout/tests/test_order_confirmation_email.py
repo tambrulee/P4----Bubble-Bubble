@@ -8,7 +8,7 @@ from django.core import mail
 
 from catalog.models import Product
 from cart.models import Cart, CartItem
-from checkout.models import Order
+from checkout.models import Order, OrderItem
 
 
 @override_settings(
@@ -46,6 +46,15 @@ class CheckoutSuccessEmailTests(TestCase):
             full_name="Test Customer",
             email="customer@example.com",
         )
+
+        # 🔹 Add an OrderItem so it appears in the confirmation email
+        OrderItem.objects.create(
+            order=self.order,
+            product=self.product,
+            qty=2,
+            unit_price=Decimal("12.50"),
+        )
+
 
     @patch("checkout.views.stripe.checkout.Session.retrieve")
     def test_checkout_success_marks_order_paid_clears_cart_and_sends_email(
