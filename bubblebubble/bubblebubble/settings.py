@@ -129,7 +129,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# AUTH_USER_MODEL = "accounts.CustomUser"
+# Email settings
+DEFAULT_FROM_EMAIL = "noreply@bubblebubble.shop"
+
+# For development: print emails to console
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
 # Internationalization

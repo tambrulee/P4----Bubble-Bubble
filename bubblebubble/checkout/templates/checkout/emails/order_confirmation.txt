@@ -1,0 +1,15 @@
+Hi {{ order.full_name|default:"there" }},
+
+Thank you for your order with BubbleBubble.
+
+Order number: {{ order.id }}
+
+Items:
+{% for item in order.items.all %}
+- {{ item.product.title }} x {{ item.qty }} — £{{ item.subtotal }}
+{% endfor %}
+
+Total: £{{ order.total }}
+
+Love,
+BubbleBubble

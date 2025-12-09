@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <body>
+    <p>Hi {{ order.full_name|default:"there" }},</p>
+
+    <p>Thank you for your order with <strong>BubbleBubble</strong> ✨</p>
+
+    <p><strong>Order number:</strong> {{ order.id }}<br>
+       <strong>Status:</strong> {{ order.get_status_display }}</p>
+
+    <p><strong>Items:</strong></p>
+    <ul>
+      {% for item in order.items.all %}
+        <li>{{ item.product.title }} × {{ item.qty }} — £{{ item.subtotal }}</li>
+      {% endfor %}
+    </ul>
+
+    <p><strong>Total:</strong> £{{ order.total }}</p>
+
+    <p>We'll email you again when your order has been dispatched.</p>
+
+    <p>Love,<br>BubbleBubble</p>
+  </body>
+</html>

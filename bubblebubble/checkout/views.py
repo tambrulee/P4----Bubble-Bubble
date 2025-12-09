@@ -9,6 +9,11 @@ from cart.utils import get_or_create_cart
 from .models import Order, OrderItem
 from .forms import CheckoutForm
 
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -139,7 +144,6 @@ def checkout_success(request):
     except Exception:
         return redirect("catalog:product_list")
 
-    # No longer rely on user being logged in
     order = Order.objects.filter(
         stripe_session_id=session.id,
     ).first()
@@ -147,12 +151,46 @@ def checkout_success(request):
     if order and order.status != Order.PAID:
         order.status = Order.PAID
         order.save()
+
         # clear cart (guest or logged-in: based on session)
         cart = get_or_create_cart(request)
         cart.items.all().delete()
 
+        # send confirmation email
+        send_order_confirmation_email(order)
+
     return render(request, "checkout/success.html", {"order": order})
+
 
 
 def checkout_cancel(request):
     return render(request, "checkout/cancel.html")
+
+# --- New function added to send order confirmation email ---
+def send_order_confirmation_email(order):
+    """
+    Send a confirmation email to the customer for the given order.
+    Safe to call only once per order.
+    """
+    if not order.email:
+        return  # nothing to send to
+
+    subject = f"Your BubbleBubble order #{order.id}"
+
+    context = {"order": order}
+    message = render_to_string("checkout/emails/order_confirmation.txt", context)
+    try:
+        html_message = render_to_string(
+            "checkout/emails/order_confirmation.html", context
+        )
+    except Exception:
+        html_message = None
+
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [order.email],
+        html_message=html_message,
+    )
+
