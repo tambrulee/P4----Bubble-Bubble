@@ -20,9 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('shop_manager/', admin.site.urls),
      # App URLs
-    path('', include('catalog.urls')),          # make catalog the homepage
+    path('', include('catalog.urls')),
     path('cart/', include('cart.urls')),
     path('checkout/', include('checkout.urls')),
     path('reviews/', include('reviews.urls')),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls')),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

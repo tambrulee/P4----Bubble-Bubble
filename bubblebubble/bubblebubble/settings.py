@@ -42,7 +42,7 @@ STRIPE_CURRENCY = "gbp"
 SECRET_KEY = 'django-insecure-xjlgbpis#n!qaxg6o0lq1)p3pw^cyv5d4ibu*%yb8#2xe%rz7a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
