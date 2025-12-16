@@ -13,6 +13,9 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 
+from .services import deduct_stock_for_order
+
+
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -23,7 +26,6 @@ def checkout_summary(request):
     if not cart.items.exists():
         return redirect("cart:view")
 
-    # Pre-fill email if user is logged in
     initial = {}
     if request.user.is_authenticated and getattr(request.user, "email", None):
         initial["email"] = request.user.email
@@ -144,19 +146,17 @@ def checkout_success(request):
     except Exception:
         return redirect("catalog:product_list")
 
-    order = Order.objects.filter(
-        stripe_session_id=session.id,
-    ).first()
+    order = Order.objects.filter(stripe_session_id=session.id).first()
 
     if order and order.status != Order.PAID:
         order.status = Order.PAID
-        order.save()
+        order.save(update_fields=["status"])
 
-        # clear cart (guest or logged-in: based on session)
+        deduct_stock_for_order(order.id) 
+
         cart = get_or_create_cart(request)
         cart.items.all().delete()
 
-        # send confirmation email
         send_order_confirmation_email(order)
 
     return render(request, "checkout/success.html", {"order": order})

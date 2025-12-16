@@ -7,13 +7,23 @@ from checkout.models import Order
 
 from .forms import ProductForm, ProductImageForm
 
+from django.conf import settings
+
 
 @staff_member_required
 def dashboard(request):
+    low_qs = Product.objects.filter(
+        active=True,
+        stock_qty__lte=settings.LOW_STOCK_THRESHOLD
+    ).order_by("stock_qty", "title")
+
     return render(request, "owner/dashboard.html", {
         "product_count": Product.objects.count(),
         "inactive_count": Product.objects.filter(active=False).count(),
         "pending_orders": Order.objects.filter(status=Order.PENDING).count(),
+        "low_stock_count": low_qs.count(),
+        "low_stock": low_qs[:10],
+        "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
 
 
@@ -21,7 +31,10 @@ def dashboard(request):
 @staff_member_required
 def products(request):
     qs = Product.objects.annotate(image_count=Count("images")).order_by("title")
-    return render(request, "owner/products.html", {"products": qs})
+    return render(request, "owner/products.html", {
+        "products": qs,
+        "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
+    })
 
 
 @staff_member_required
@@ -90,3 +103,4 @@ def orders(request):
 def order_detail(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     return render(request, "owner/order_detail.html", {"order": order})
+

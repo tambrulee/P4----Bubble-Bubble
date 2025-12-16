@@ -24,7 +24,9 @@
           <form method="post" action="{% url 'cart:add' p.id %}">
             {% csrf_token %}
             <input type="hidden" name="qty" value="1">
-            <button class="btn btn-sm btn-primary" type="submit">Add</button>
+            <button class="btn btn-primary" {% if product.stock_qty == 0 %}disabled{% endif %}>
+              Add to cart
+            </button>
           </form>
         </div>
       </div>

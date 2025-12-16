@@ -35,6 +35,13 @@
 
     <p>{{ product.description }}</p>
 
+      {% if product.stock_qty == 0 %}
+    <span class="badge text-bg-secondary">Out of stock</span>
+  {% elif product.stock_qty <= LOW_STOCK_THRESHOLD %}
+    <span class="badge text-bg-warning">Only {{ product.stock_qty }} left</span>
+  {% endif %}
+
+
     <hr class="my-4">
 
   <h2 class="h5">Reviews</h2>
@@ -71,7 +78,10 @@
         <span class="input-group-text">Qty</span>
         <input type="number" name="qty" value="1" min="1" max="{{ product.stock_qty }}" class="form-control">
       </div>
-      <button type="submit" class="btn btn-primary">Add to cart</button>
+        <button class="btn btn-primary" {% if product.stock_qty == 0 %}disabled{% endif %}>
+          Add to cart
+        </button>
+
     </form>
   </div>
 </div>

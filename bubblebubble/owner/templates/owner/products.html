@@ -41,6 +41,11 @@
           </a>
         </td>
       </tr>
+
+            {% if p.stock_qty <= LOW_STOCK_THRESHOLD %}
+        <span class="badge text-bg-warning">Low</span>
+      {% endif %}
+
       {% endfor %}
     </tbody>
   </table>
