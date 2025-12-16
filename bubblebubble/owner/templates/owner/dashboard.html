@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h3 mb-3">Owner Dashboard</h1>
+
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card p-3">
+      <div class="fw-semibold">Products</div>
+      <div class="display-6">{{ product_count }}</div>
+      <a class="btn btn-sm btn-outline-primary mt-2" href="{% url 'owner_products' %}">Manage products</a>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card p-3">
+      <div class="fw-semibold">Inactive</div>
+      <div class="display-6">{{ inactive_count }}</div>
+      <a class="btn btn-sm btn-outline-primary mt-2" href="{% url 'owner_products' %}">Review</a>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card p-3">
+      <div class="fw-semibold">Pending orders</div>
+      <div class="display-6">{{ pending_orders }}</div>
+      <a class="btn btn-sm btn-outline-primary mt-2" href="{% url 'owner_orders' %}">View orders</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h3 mb-3">Orders</h1>
+
+<div class="table-responsive">
+  <table class="table align-middle">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td>#{{ o.id }}</td>
+        <td>{{ o.created_at|date:"d M Y H:i" }}</td>
+        <td>{{ o.full_name|default:o.email|default:"Guest" }}</td>
+        <td>£{{ o.total }}</td>
+        <td>
+          {% if o.status == "PAID" %}
+            <span class="badge text-bg-success">Paid</span>
+          {% elif o.status == "PENDING" %}
+            <span class="badge text-bg-warning">Pending</span>
+          {% else %}
+            <span class="badge text-bg-danger">Failed</span>
+          {% endif %}
+        </td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-secondary" href="{% url 'owner_order_detail' o.id %}">View</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

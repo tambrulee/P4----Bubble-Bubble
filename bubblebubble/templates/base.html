@@ -27,6 +27,13 @@
 
 <!-- Navigation -->
 <nav class="navbar navbar-light navbar-pink bb-navbar sticky-top">
+  <!-- User Nav -->
+    {% if user.is_staff %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'owner_dashboard' %}">Owner</a>
+  </li>
+  {% endif %}
+
   <div class="container bb-nav-grid">
 
     <!-- LEFT: burger (always visible) -->
