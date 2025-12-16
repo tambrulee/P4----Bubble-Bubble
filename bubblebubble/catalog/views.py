@@ -15,3 +15,6 @@ def product_detail(request, slug):
         "product": product,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
+
+def about(request):
+    return render(request, "catalog/about.html")
