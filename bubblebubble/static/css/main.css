@@ -3,38 +3,34 @@
    ==================================== */
 
 body {
-  background-color: #ffffff;
+  background-color: #f6f4f0;
   color: #333333;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* Accent headings */
 h1, .h1, h2, .h2, h3, .h3 {
-  color: #EC297C;
+  color: #29403e;
 }
 
 /* Links */
 a {
-  color: #EC297C;
+  color: #29403e;
 }
 a:hover {
-  color: #c41f63;
+  color: #618280;
 }
 
 /* ====================================
    NAVBAR + HEADER
    ==================================== */
 
-.navbar-pink {
-  background-color: #F3E2E5; /* soft blush pink */
-  border-bottom: 1px solid #f0c9d4;
-}
-
 /* Main navbar wrapper */
 .bb-navbar {
-  background-color: #F3E2E5;
+  background-color: #618280;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  border-bottom: 1px solid #7A8F7A;
 }
 
 /* 3-column grid: left (burger), center (logo), right (icons) */
@@ -72,7 +68,7 @@ a:hover {
 .bb-icon {
   font-size: 1.4rem;
   line-height: 1;
-  color: #6b3552;
+  color: #f6f4f0;
 }
 
 /* Right-hand icon buttons */
@@ -97,14 +93,10 @@ a:hover {
 }
 
 
-.bb-nav-icons .bb-icon-link:hover .fa-solid,
-.bb-nav-icons .bb-icon-link:hover .fa-regular {
-  color: #EC297C;
-}
 
 /* Menu bar under header */
 .bb-main-links {
-  background-color: #F3E2E5;
+  background-color: #618280;
 }
 
 .bb-main-links .nav-link {
@@ -114,13 +106,13 @@ a:hover {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #b0587f;
+  color: #f6f4f0;
 }
 
 .bb-main-links .nav-link:hover,
 .bb-main-links .nav-link:focus {
-  background-color: #ffffff;
-  color: #EC297C;
+  background-color: #f6f4f0;
+  color: #29403e;
 }
 
 /* Optional text brand wordmark under logo */
@@ -129,7 +121,7 @@ a:hover {
   font-size: 0.9rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #EC297C;
+  color: #29403e;
 }
 
 /* Mobile tweaks */
@@ -156,8 +148,8 @@ a:hover {
    ==================================== */
 
 .bb-promo-bar {
-  background-color: #EC297C;
-  color: #ffffff;
+  background-color: #29403e;
+  color: #f6f4f0;
   font-size: 0.9rem;
   overflow: hidden;
   white-space: nowrap;
@@ -190,67 +182,67 @@ a:hover {
    ==================================== */
 
 .btn-primary {
-  background-color: #EC297C;
-  border-color: #EC297C;
+  background-color: #29403e;
+  border-color: #29403e;
 }
 .btn-primary:hover,
 .btn-primary:focus {
-  background-color: #c41f63;
-  border-color: #c41f63;
+  background-color: #618280;
+  border-color: #618280;
 }
 
 .btn-outline-primary {
-  color: #EC297C;
-  border-color: #EC297C;
+  color: #29403e;
+  border-color: #29403e;
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-  color: #ffffff;
-  background-color: #EC297C;
-  border-color: #EC297C;
+  color: #f6f4f0;
+  background-color: #29403e;
+  border-color: #29403e;
 }
 
 /* Cart-specific buttons */
 
 .btn-update {
-  border-color: #EC297C;
-  color: #EC297C;
+  border-color: #29403e;
+  color: #29403e;
 }
 .btn-update:hover {
-  background-color: #EC297C;
-  color: #ffffff;
-  border-color: #EC297C;
+  background-color: #29403e;
+  color: #f6f4f0;
+  border-color: #29403e;
 }
 
 .btn-remove {
-  border-color: #EC297C;
-  color: #EC297C;
+  border-color: #29403e;
+  color: #29403e;
 }
 .btn-remove:hover {
-  background-color: #EC297C;
-  color: #ffffff;
+  background-color: #29403e;
+  color: #f6f4f0;
 }
 
 .btn-continue {
   background-color: #F3E2E5;
-  color: #EC297C;
+  color: #29403e;
   border: none;
   font-weight: 500;
 }
 .btn-continue:hover {
   background-color: #e4c7d1;
-  color: #c41f63;
+  color: #618280;
 }
 
 .btn-checkout {
-  background-color: #EC297C;
-  border-color: #EC297C;
-  color: #ffffff;
+  background-color: #29403e;
+  border-color: #29403e;
+  color: #f6f4f0;
 }
 .btn-checkout:hover {
-  background-color: #c41f63;
-  border-color: #c41f63;
-  color: #ffffff;
+  background-color: #618280;
+  border-color: #618280;
+  color: #f6f4f0;
 }
 
 /* ====================================
@@ -259,7 +251,7 @@ a:hover {
 
 .card {
   border-radius: 0.85rem;
-  border-color: #f7cddd;
+  border-color: #f6f4f0;
 }
 
 .card-img-top {
@@ -272,7 +264,7 @@ a:hover {
 }
 
 .card-title {
-  color: #EC297C;
+  color: #29403e;
 }
 
 .product-meta {
@@ -282,7 +274,7 @@ a:hover {
 
 .product-price {
   font-weight: 600;
-  color: #EC297C;
+  color: #29403e;
 }
 
 /* ====================================
@@ -305,7 +297,7 @@ a:hover {
    ==================================== */
 
 .review-stars {
-  color: #EC297C;
+  color: #29403e;
 }
 
 /* ====================================
@@ -313,11 +305,11 @@ a:hover {
    ==================================== */
 
 footer {
-  background-color: #F3E2E5;
+  background-color: #b2c4c2;
 }
 
 footer .text-muted {
-  color: #a5748a !important;
+  color: #29403e !important;
 }
 
 
