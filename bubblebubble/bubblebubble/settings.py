@@ -22,12 +22,13 @@ load_dotenv(BASE_DIR / ".env")
 
 # Media files
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = BASE_DIR.parent / "media"
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]  # where logo, favicon, custom css/js live
-STATIC_ROOT = BASE_DIR / "staticfiles"    # for collectstatic in production
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Stripe settings
 
@@ -42,9 +43,35 @@ STRIPE_CURRENCY = "gbp"
 SECRET_KEY = 'django-insecure-xjlgbpis#n!qaxg6o0lq1)p3pw^cyv5d4ibu*%yb8#2xe%rz7a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        # Logs 500s + tracebacks for request errors
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        # Helpful for catching template issues etc.
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
+}
 
 
 # Application definition
@@ -72,6 +99,7 @@ LOGIN_REDIRECT_URL = "/cart/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -163,7 +191,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

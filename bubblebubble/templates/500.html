@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+
+        <h1 class="display-5 mb-3">Something went a bit… bubbly</h1>
+
+        <p class="lead mb-4">
+          We hit a snag on our side. Please try again in a moment.
+        </p>
+
+        <p class="text-muted mb-4">
+          If it keeps happening, feel free to contact us — we’ll get it sorted.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3">
+          <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">
+            Back to Shop
+          </a>
+          <a href="/" class="btn btn-outline-secondary">
+            Return Home
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
