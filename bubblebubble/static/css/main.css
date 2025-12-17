@@ -224,14 +224,14 @@ a:hover {
 }
 
 .btn-continue {
-  background-color: #F3E2E5;
+  background-color: #618280;
   color: #29403e;
   border: none;
   font-weight: 500;
 }
 .btn-continue:hover {
-  background-color: #e4c7d1;
-  color: #618280;
+  background-color: #29403e;
+  color: #f6f4f0;
 }
 
 .btn-checkout {
