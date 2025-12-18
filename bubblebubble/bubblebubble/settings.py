@@ -25,7 +25,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR.parent / "media"
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "/static/"
+STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -43,7 +43,7 @@ STRIPE_CURRENCY = "gbp"
 SECRET_KEY = 'django-insecure-xjlgbpis#n!qaxg6o0lq1)p3pw^cyv5d4ibu*%yb8#2xe%rz7a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
