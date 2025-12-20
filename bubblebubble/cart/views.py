@@ -4,7 +4,8 @@ from .models import CartItem
 from .forms import AddToCartForm
 from .utils import get_or_create_cart
 from catalog.models import Product
-
+from django.http import JsonResponse
+from django.contrib import messages
 
 def view_cart(request):
     cart = get_or_create_cart(request)
@@ -69,3 +70,29 @@ def remove_item(request, item_id):
     item.delete()
     return redirect("cart:view")
 
+
+
+def add(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    qty = int(request.POST.get("qty", 1))
+
+    cart = get_or_create_cart(request)
+
+    cart_count = sum(i.qty for i in cart.items.all())
+
+    added_msg = f"Added {qty} × {product.title} to your cart."
+
+    is_ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
+
+    if is_ajax:
+        return JsonResponse({
+            "ok": True,
+            "message": added_msg,
+            "cart_count": cart_count,
+            "product_id": product.id,
+            "qty_added": qty,
+        })
+
+    messages.success(request, added_msg)
+    # keep your current behaviour for non-JS users
+    return redirect("cart:view")
