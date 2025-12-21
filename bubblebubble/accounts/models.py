@@ -1,12 +1,28 @@
-# from django.contrib.auth.models import AbstractUser
+# accounts/models.py
+from django.conf import settings
 from django.db import models
 
-# class CustomUser(AbstractUser):
-#     # make email required + unique
-#     email = models.EmailField(unique=True)
+class ShippingAddress(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="shipping_addresses",
+    )
+    label = models.CharField(max_length=50, default="Home")  # "Home", "Work", etc.
+    full_name = models.CharField(max_length=100, blank=True)
+    address_line1 = models.CharField(max_length=255)
+    address_line2 = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100)
+    postcode = models.CharField(max_length=20)
 
-#     USERNAME_FIELD = "email"
-#     REQUIRED_FIELDS = []  # removes requirement for username
+    is_default = models.BooleanField(default=False)
 
-#     def __str__(self):
-#         return self.email
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.label} ({self.postcode})"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.is_default:
+            ShippingAddress.objects.filter(user=self.user).exclude(pk=self.pk).update(is_default=False)

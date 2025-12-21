@@ -7,10 +7,22 @@ class Order(models.Model):
     PENDING = "PENDING"
     PAID = "PAID"
     FAILED = "FAILED"
+    NEW = "NEW"
+    DISPATCHED = "DISPATCHED"
+    DELIVERED = "DELIVERED"
+    CANCELLED = "CANCELLED"
+
     STATUS_CHOICES = [
         (PENDING, "Pending"),
         (PAID, "Paid"),
         (FAILED, "Failed"),
+    ]
+
+    FULFILMENT_CHOICES = [
+        (NEW, "New"),
+        (DISPATCHED, "Dispatched"),
+        (DELIVERED, "Delivered"),
+        (CANCELLED, "Cancelled"),
     ]
 
     # user now optional – allows guest orders
@@ -39,6 +51,16 @@ class Order(models.Model):
     stripe_session_id = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     stock_deducted = models.BooleanField(default=False)
+
+    fulfilment_status = models.CharField(
+        max_length=12,
+        choices=FULFILMENT_CHOICES,
+        default=NEW,
+    )
+
+    dispatched_at = models.DateTimeField(null=True, blank=True)
+    delivered_at = models.DateTimeField(null=True, blank=True)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         who = self.user or self.email or "guest"

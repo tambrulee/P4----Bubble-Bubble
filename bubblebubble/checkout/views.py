@@ -4,22 +4,15 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseBadRequest
-
 from cart.utils import get_or_create_cart
 from .models import Order, OrderItem
 from .forms import CheckoutForm
-
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
-
 from .services import deduct_stock_for_order
 
-
-
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
 
 def checkout_summary(request):
     cart = get_or_create_cart(request)
