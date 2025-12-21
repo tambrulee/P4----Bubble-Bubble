@@ -59,10 +59,12 @@
         </a>
 
         <!-- LOGOUT ICON -->
-        <a href="{% url 'logout' %}?next={{ request.get_full_path }}"
-           class="bb-icon-link" title="Logout">
+        <a href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}"
+          class="bb-icon-link" title="Logout">
           <span class="bb-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
         </a>
+
+
       {% else %}
         <!-- LOGIN ICON -->
         <a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}"
