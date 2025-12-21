@@ -65,7 +65,7 @@
         </a>
       {% else %}
         <!-- LOGIN ICON -->
-        <a href="{% url 'login' %}?next={{ request.get_full_path }}"
+        <a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}"
            class="bb-icon-link" title="Login">
           <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
         </a>

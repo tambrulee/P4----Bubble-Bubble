@@ -336,3 +336,13 @@ footer .text-muted {
     gap: 0.25rem;
   }
 }
+
+/* Email reset */
+.card input[type="text"],
+.card input[type="email"],
+.card input[type="password"]{
+  width: 100%;
+  padding: .5rem .75rem;
+  border: 1px solid #dee2e6;
+  border-radius: .5rem;
+}

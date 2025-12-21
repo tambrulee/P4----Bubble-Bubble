@@ -10,7 +10,6 @@ urlpatterns = [
     # Serve media locally even when DEBUG=False
     path("media/<path:path>", serve, {"document_root": settings.MEDIA_ROOT}),
 
-
     # App URLs
     path("", include("catalog.urls")),
     path("cart/", include("cart.urls")),
@@ -19,8 +18,8 @@ urlpatterns = [
     path("", include("owner.urls")),
 
     # Auth (login/logout/password reset)
-    path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/", include("accounts.urls")),
+    
 ]
 
 # Serve media locally even when DEBUG=False

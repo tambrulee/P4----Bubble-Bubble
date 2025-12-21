@@ -1,6 +1,6 @@
 Hi {{ order.full_name|default:"there" }},
 
-Thank you for your order with BubbleBubble.
+Thank you for your order with Moon & Moss.
 
 Order number: {{ order.id }}
 
@@ -12,4 +12,4 @@ Items:
 Total: £{{ order.total }}
 
 Love,
-BubbleBubble
+Moon & Moss
