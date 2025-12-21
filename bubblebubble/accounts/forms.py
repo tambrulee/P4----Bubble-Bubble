@@ -10,12 +10,22 @@ class EmailUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("email",)  # only expose email; username handled internally
+        fields = ("email",)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+
+        # Since we store email in username too, we must ensure uniqueness
+        if User.objects.filter(username__iexact=email).exists() or User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError(
+                "An account with this email already exists. Try logging in instead."
+            )
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        email = self.cleaned_data["email"]
-        user.username = email  # use email as the username under the hood
+        email = self.cleaned_data["email"]  # already cleaned + lowercased
+        user.username = email               # keep username unique
         user.email = email
         if commit:
             user.save()
