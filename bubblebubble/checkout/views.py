@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 from .services import deduct_stock_for_order
+from accounts.models import ShippingAddress 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -20,10 +21,25 @@ def checkout_summary(request):
         return redirect("cart:view")
 
     initial = {}
-    if request.user.is_authenticated and getattr(request.user, "email", None):
-        initial["email"] = request.user.email
 
-    form = CheckoutForm(initial=initial)
+    if request.user.is_authenticated:
+        # email
+        if getattr(request.user, "email", None):
+            initial["email"] = request.user.email
+
+        # prefill from default saved address (optional but feels great)
+        default_addr = (
+            ShippingAddress.objects.filter(user=request.user, is_default=True).first()
+            or ShippingAddress.objects.filter(user=request.user).order_by("-created_at").first()
+        )
+        if default_addr:
+            initial.setdefault("full_name", default_addr.full_name)
+            initial.setdefault("address_line1", default_addr.address_line1)
+            initial.setdefault("address_line2", default_addr.address_line2)
+            initial.setdefault("city", default_addr.city)
+            initial.setdefault("postcode", default_addr.postcode)
+
+    form = CheckoutForm(initial=initial, user=request.user)
 
     context = {
         "cart": cart,
@@ -33,6 +49,9 @@ def checkout_summary(request):
     return render(request, "checkout/summary.html", context)
 
 
+
+from accounts.models import ShippingAddress  # <-- add
+
 def start_checkout(request):
     if request.method != "POST":
         return HttpResponseBadRequest("POST required")
@@ -41,9 +60,8 @@ def start_checkout(request):
     if not cart.items.exists():
         return HttpResponseBadRequest("Cart is empty")
 
-    form = CheckoutForm(request.POST)
+    form = CheckoutForm(request.POST, user=request.user)
     if not form.is_valid():
-        # Re-render the summary page with errors
         context = {
             "cart": cart,
             "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
@@ -52,12 +70,23 @@ def start_checkout(request):
         return render(request, "checkout/summary.html", context, status=400)
 
     data = form.cleaned_data
+
+    # base values from form
     full_name = data["full_name"]
     email = data["email"]
-    address_line1 = data.get("address_line1")
-    address_line2 = data.get("address_line2")
-    city = data.get("city")
-    postcode = data.get("postcode")
+    address_line1 = data.get("address_line1") or ""
+    address_line2 = data.get("address_line2") or ""
+    city = data.get("city") or ""
+    postcode = data.get("postcode") or ""
+
+    # if user picked a saved address, overwrite shipping fields with it
+    saved = data.get("saved_address") if request.user.is_authenticated else None
+    if saved:
+        full_name = saved.full_name or full_name
+        address_line1 = saved.address_line1
+        address_line2 = saved.address_line2 or ""
+        city = saved.city
+        postcode = saved.postcode
 
     total = Decimal("0.00")
 
@@ -66,10 +95,10 @@ def start_checkout(request):
         total=Decimal("0.00"),
         full_name=full_name,
         email=email,
-        address_line1=address_line1 or "",
-        address_line2=address_line2 or "",
-        city=city or "",
-        postcode=postcode or "",
+        address_line1=address_line1,
+        address_line2=address_line2,
+        city=city,
+        postcode=postcode,
     )
 
     line_items = []
@@ -98,7 +127,22 @@ def start_checkout(request):
         )
 
     order.total = total
-    order.save()
+    order.save(update_fields=["total"])
+
+    # Save address if requested and they DIDN'T pick an existing one
+    if request.user.is_authenticated and data.get("save_address") and not saved:
+        addr, created = ShippingAddress.objects.get_or_create(
+            user=request.user,
+            address_line1=address_line1,
+            address_line2=address_line2,
+            city=city,
+            postcode=postcode,
+            defaults={"label": "Home", "full_name": full_name},
+        )
+        # if no default exists, set this as default
+        if not ShippingAddress.objects.filter(user=request.user, is_default=True).exists():
+            addr.is_default = True
+            addr.save(update_fields=["is_default"])
 
     session = stripe.checkout.Session.create(
         mode="payment",
@@ -122,11 +166,9 @@ def start_checkout(request):
     )
 
     order.stripe_session_id = session.id
-    order.save()
+    order.save(update_fields=["stripe_session_id"])
 
-    # Send the customer to Stripe Checkout
     return redirect(session.url)
-
 
 
 def checkout_success(request):
@@ -143,9 +185,17 @@ def checkout_success(request):
 
     if order and order.status != Order.PAID:
         order.status = Order.PAID
-        order.save(update_fields=["status"])
+        # NEW fulfilment tag
+        if hasattr(order, "fulfilment_status") and not order.fulfilment_status:
+            order.fulfilment_status = Order.NEW
 
-        deduct_stock_for_order(order.id) 
+        # even if it's already set, this keeps it consistent:
+        if hasattr(Order, "NEW"):
+            order.fulfilment_status = Order.NEW
+
+        order.save(update_fields=["status", "fulfilment_status"])
+
+        deduct_stock_for_order(order.id)
 
         cart = get_or_create_cart(request)
         cart.items.all().delete()
@@ -153,7 +203,6 @@ def checkout_success(request):
         send_order_confirmation_email(order)
 
     return render(request, "checkout/success.html", {"order": order})
-
 
 
 def checkout_cancel(request):

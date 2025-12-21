@@ -28,6 +28,13 @@
       {{ form.non_field_errors }}
 
       <div class="row g-3">
+        {% if user.is_authenticated and form.saved_address %}
+        <div class="col-12">
+          <label class="form-label">Saved address</label>
+          {{ form.saved_address }}
+          <div class="form-text">Pick one to use it, or type a new address below.</div>
+        </div>
+        {% endif %}
 
         <div class="col-12">
           <div class="input-group">
@@ -93,6 +100,15 @@
       </div>
 
       <hr class="my-4">
+
+        {% if user.is_authenticated and form.save_address %}
+        <div class="form-check mb-3">
+          {{ form.save_address }}
+          <label class="form-check-label" for="{{ form.save_address.id_for_label }}">
+            Save this address for next time
+          </label>
+        </div>
+      {% endif %}
 
       <button type="submit" class="btn btn-primary w-100 btn-lg">
         Continue to payment
