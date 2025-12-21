@@ -346,3 +346,8 @@ footer .text-muted {
   border: 1px solid #dee2e6;
   border-radius: .5rem;
 }
+
+.form-text {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
