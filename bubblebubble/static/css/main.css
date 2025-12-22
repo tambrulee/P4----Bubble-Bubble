@@ -25,6 +25,11 @@ a:hover {
    NAVBAR + HEADER
    ==================================== */
 
+.bb-logo {
+  height: 100px;   /* try 80–100px */
+  width: auto;
+}
+
 /* Main navbar wrapper */
 .bb-navbar {
   background-color: #6D8675;
