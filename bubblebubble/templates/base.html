@@ -91,30 +91,16 @@
   <div class="bb-main-links collapse" id="mainNav">
     <div class="container">
       <ul class="navbar-nav mx-auto flex-lg-row flex-column align-items-lg-center text-center">
-
-        {% if user.is_staff %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'owner_dashboard' %}">Admin Dashboard</a>
-          </li>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-          <a class="nav-link" href="{% url 'accounts:my_orders' %}">My Orders</a>
-        {% endif %}
-
-
         <li class="nav-item">
           <a class="nav-link" href="{% url 'catalog:product_list' %}">Shop All</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">New In</a>
+          <a class="nav-link" href="{% url 'catalog:about' %}">Our Story</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Gifts</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'catalog:about' %}">About</a>
-        </li>
+        <!-- Locked down and does not appear unless logged in -->
+        {% if user.is_authenticated %}
+          <a class="nav-link" href="{% url 'accounts:my_orders' %}">My Orders</a>
+        {% endif %}
       </ul>
     </div>
   </div>
