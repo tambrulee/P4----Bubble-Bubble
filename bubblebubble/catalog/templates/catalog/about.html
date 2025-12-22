@@ -2,26 +2,36 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5">
-  <div class="container">
 
-    <!-- Page Header -->
-    <div class="row justify-content-center mb-4">
-      <div class="col-lg-8 text-center">
-        <h1 class="mb-3">About Moon &amp; Moss</h1>
-        <p class="lead mb-0">
+<!-- HERO -->
+<section class="bb-hero">
+  <div class="bb-hero-bg bb-hero-our-story">
+    <div class="container h-100 d-flex align-items-center">
+      <div class="bb-hero-card">
+        <h1 class="bb-hero-title mb-3">Our Story</h1>
+        <p class="bb-hero-sub mb-4">
           Organic soaps inspired by nature, comfort, and quiet rituals.
         </p>
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">
+          Shop Soaps
+        </a>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Main Content Card -->
+<!-- BODY -->
+<section class="py-5 bb-story-body">
+
+  <div class="container">
+
     <div class="row justify-content-center">
       <div class="col-lg-9">
-        <div class="card shadow-sm border-0">
+
+        <div class="card shadow-sm border-0 bb-card">
           <div class="card-body p-4 p-md-5">
 
-            <p>
+            <p class="lead">
               Moon &amp; Moss was created from a love of simple rituals — the kind that slow you down
               and bring you back to yourself.
             </p>
@@ -44,19 +54,19 @@
 
             <div class="row g-3">
               <div class="col-md-4">
-                <div class="p-3 rounded bg-light h-100">
+                <div class="p-3 rounded bb-pill h-100">
                   <h5 class="mb-2">Small-batch</h5>
                   <p class="mb-0">Made in limited runs with care and attention to detail.</p>
                 </div>
               </div>
               <div class="col-md-4">
-                <div class="p-3 rounded bg-light h-100">
+                <div class="p-3 rounded bb-pill h-100">
                   <h5 class="mb-2">Organic</h5>
                   <p class="mb-0">Thoughtfully chosen ingredients with a gentle, skin-friendly feel.</p>
                 </div>
               </div>
               <div class="col-md-4">
-                <div class="p-3 rounded bg-light h-100">
+                <div class="p-3 rounded bb-pill h-100">
                   <h5 class="mb-2">Sensory</h5>
                   <p class="mb-0">Scents and textures designed to feel like a quiet moment to yourself.</p>
                 </div>
@@ -75,12 +85,10 @@
           </div>
         </div>
 
-        <!-- Optional CTA Row -->
-        <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center mt-4">
-          <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">
-            Shop Soaps
+        <div class="d-flex justify-content-center mt-4">
+          <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-secondary rounded-pill px-4">
+            Browse the full collection
           </a>
-          
         </div>
 
       </div>
@@ -88,4 +96,5 @@
 
   </div>
 </section>
+
 {% endblock %}
