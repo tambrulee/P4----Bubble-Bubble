@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 from django.views.static import serve
 
 urlpatterns = [
-    path("shop_manager/", admin.site.urls),
+    path("admin/", admin.site.urls),
+    # path("shop_manager/", admin.site.urls),
 
     # Serve media locally even when DEBUG=False
     path("media/<path:path>", serve, {"document_root": settings.MEDIA_ROOT}),

@@ -21,6 +21,13 @@ class Product(models.Model):
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # NEW
+    tags = models.CharField(
+        max_length=250,
+        blank=True,
+        help_text="Comma-separated tags, e.g. winter, woody, refillable"
+    )
+
     class Meta:
         ordering = ["title"]
 
