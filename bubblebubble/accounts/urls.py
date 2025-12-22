@@ -40,4 +40,8 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
+#   User order history
+    path("orders/", views.my_orders, name="my_orders"),
+    path("orders/<int:order_id>/", views.my_order_detail, name="my_order_detail"),
+
 ]
