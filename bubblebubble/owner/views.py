@@ -1,14 +1,20 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Count
-
 from catalog.models import Product, ProductImage
 from checkout.models import Order
-
 from .forms import ProductForm, ProductImageForm
-
 from django.conf import settings
-
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Sum, Count, Avg
+from django.utils import timezone
+from datetime import timedelta
+from checkout.models import Order
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import get_object_or_404, redirect
+from django.utils import timezone
+from django.views.decorators.http import require_POST
+from checkout.models import Order
 
 @staff_member_required
 def dashboard(request):
@@ -104,3 +110,53 @@ def order_detail(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     return render(request, "owner/order_detail.html", {"order": order})
 
+
+# ---------- Analytics ----------
+@staff_member_required
+def owner_analytics(request):
+    now = timezone.now()
+    d7 = now - timedelta(days=7)
+    d30 = now - timedelta(days=30)
+
+    paid = Order.objects.filter(status="PAID")
+
+    ctx = {
+        "rev_7": paid.filter(created_at__gte=d7).aggregate(v=Sum("total"))["v"] or 0,
+        "rev_30": paid.filter(created_at__gte=d30).aggregate(v=Sum("total"))["v"] or 0,
+        "orders_7": paid.filter(created_at__gte=d7).count(),
+        "orders_30": paid.filter(created_at__gte=d30).count(),
+        "aov_30": paid.filter(created_at__gte=d30).aggregate(v=Avg("total"))["v"] or 0,
+        "pending": Order.objects.filter(status="PENDING").count(),
+    }
+    return render(request, "owner/analytics.html", ctx)
+
+
+
+
+@staff_member_required
+@require_POST
+def owner_order_set_fulfilment(request, order_id, fulfilment):
+    order = get_object_or_404(Order, pk=order_id)
+
+    allowed = {Order.DISPATCHED, Order.DELIVERED, Order.CANCELLED}
+    if fulfilment not in allowed:
+        return redirect("owner_orders")
+
+    order.fulfilment_status = fulfilment
+
+    # timestamps
+    now = timezone.now()
+    if fulfilment == Order.DISPATCHED:
+        order.dispatched_at = now
+    elif fulfilment == Order.DELIVERED:
+        order.delivered_at = now
+    elif fulfilment == Order.CANCELLED:
+        order.cancelled_at = now
+
+    order.save(update_fields=[
+        "fulfilment_status",
+        "dispatched_at",
+        "delivered_at",
+        "cancelled_at",
+    ])
+    return redirect("owner_orders")

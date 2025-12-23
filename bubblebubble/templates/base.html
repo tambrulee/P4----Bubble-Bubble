@@ -41,7 +41,7 @@
     <!-- CENTER: logo -->
     <div class="bb-nav-center">
       <a class="navbar-brand d-flex flex-column align-items-center"
-        href="{% url 'catalog:product_list' %}">
+        href="{% url 'catalog:home' %}">
         <img src="{% static 'img/logo.png' %}" alt="Moon & Moss" class="bb-logo">
       </a>
     </div>
@@ -91,8 +91,14 @@
   <div class="bb-main-links collapse" id="mainNav">
     <div class="container">
       <ul class="navbar-nav mx-auto flex-lg-row flex-column align-items-lg-center text-center">
+
+        {% if user.is_staff %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'owner_dashboard' %}">Admin Dashboard</a>
+          </li>
+        {% endif %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'catalog:product_list' %}">Shop All</a>
+          <a class="nav-link" href="{% url 'catalog:home' %}">Shop All</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'catalog:about' %}">Our Story</a>

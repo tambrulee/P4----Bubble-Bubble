@@ -10,10 +10,12 @@
         <th>Date</th>
         <th>Customer</th>
         <th>Total</th>
-        <th>Status</th>
-        <th></th>
+        <th>Payment</th>
+        <th>Fulfilment</th>
+        <th class="text-end"></th>
       </tr>
     </thead>
+
     <tbody>
       {% for o in orders %}
       <tr>
@@ -21,6 +23,8 @@
         <td>{{ o.created_at|date:"d M Y H:i" }}</td>
         <td>{{ o.full_name|default:o.email|default:"Guest" }}</td>
         <td>£{{ o.total }}</td>
+
+        {# Payment status (your existing field) #}
         <td>
           {% if o.status == "PAID" %}
             <span class="badge text-bg-success">Paid</span>
@@ -30,9 +34,51 @@
             <span class="badge text-bg-danger">Failed</span>
           {% endif %}
         </td>
-        <td class="text-end">
-          <a class="btn btn-sm btn-outline-secondary" href="{% url 'owner_order_detail' o.id %}">View</a>
+
+        {# Fulfilment status (the field we’re updating) #}
+        <td>
+          {% if o.fulfilment_status == "NEW" %}
+            <span class="badge text-bg-secondary">New</span>
+          {% elif o.fulfilment_status == "DISPATCHED" %}
+            <span class="badge text-bg-info">Dispatched</span>
+          {% elif o.fulfilment_status == "DELIVERED" %}
+            <span class="badge text-bg-success">Delivered</span>
+          {% elif o.fulfilment_status == "CANCELLED" %}
+            <span class="badge text-bg-dark">Cancelled</span>
+          {% else %}
+            <span class="badge text-bg-light">—</span>
+          {% endif %}
         </td>
+
+        <td class="text-end">
+          <div class="d-inline-flex gap-1">
+
+            {# Only show fulfilment actions if paid (optional but sensible) #}
+            {% if o.status == "PAID" %}
+
+              {% if o.fulfilment_status == "NEW" %}
+                <form method="post" action="{% url 'owner_order_set_fulfilment' o.id 'DISPATCHED' %}">
+                  {% csrf_token %}
+                  <button class="btn btn-sm btn-mm" type="submit">Mark dispatched</button>
+                </form>
+              {% endif %}
+
+              {% if o.fulfilment_status != "DELIVERED" and o.fulfilment_status != "CANCELLED" %}
+                <form method="post" action="{% url 'owner_order_set_fulfilment' o.id 'DELIVERED' %}">
+                  {% csrf_token %}
+                  <button class="btn btn-sm btn-mm-outline" type="submit">Mark delivered</button>
+                </form>
+              {% endif %}
+
+            {% endif %}
+
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'owner_order_detail' o.id %}">View</a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" class="text-muted py-4">No orders yet.</td>
       </tr>
       {% endfor %}
     </tbody>

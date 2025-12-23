@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section class="py-4">
+  <div class="container">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-3">
+      <div>
+        <h1 class="h3 mb-1">Shop All</h1>
+        <p class="text-muted mb-0">Browse the full range — soaps, refillables, and seasonal drops.</p>
+      </div>
+
+      {# Optional: simple “quick links” to category pages if you have them #}
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:product_list' %}">All</a>
+        <a
+          class="btn btn-sm {% if active_tag == 'winter' %}btn-primary{% else %}btn-outline-secondary{% endif %}"
+          href="{% url 'catalog:product_list' %}?tag=winter">
+          Winter Isles
+        </a>
+
+        <a
+          class="btn btn-sm {% if active_tag == 'refillable' %}btn-primary{% else %}btn-outline-secondary{% endif %}"
+          href="{% url 'catalog:product_list' %}?tag=refillable">
+          Refillables
+        </a>
+
+        {% if active_tag %}
+          <a class="btn btn-sm btn-outline-danger"
+            href="{% url 'catalog:product_list' %}">
+            Clear filter
+          </a>
+        {% endif %}
+
+      </div>
+    </div>
+
+    <div class="row g-3">
+      {% for p in products %}
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          {% if p.images.first %}
+            <img src="{{ p.images.first.image.url }}" class="card-img-top" alt="{{ p.images.first.alt_text }}">
+          {% endif %}
+
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title mb-1">{{ p.title }}</h5>
+            <p class="card-text product-meta mb-2">
+              {{ p.scent }} • {{ p.weight_g }}g • {{ p.get_product_type_display }}
+            </p>
+            <p class="mb-2 product-price">£{{ p.price }}</p>
+
+            <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
+              <a href="{% url 'catalog:product_detail' p.slug %}" class="btn btn-sm btn-outline-primary">
+                View
+              </a>
+
+              <form method="post" action="{% url 'cart:add' p.id %}" class="m-0">
+                {% csrf_token %}
+                <input type="hidden" name="qty" value="1">
+                <button class="btn btn-primary" {% if p.stock_qty == 0 %}disabled{% endif %}>
+                  Add to cart
+                </button>
+              </form>
+            </div>
+
+            {% if p.stock_qty == 0 %}
+              <p class="small text-muted mt-2 mb-0">Out of stock</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% empty %}
+        <p>No products yet.</p>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

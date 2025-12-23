@@ -13,4 +13,10 @@ urlpatterns = [
 
     path("owner/orders/", views.orders, name="owner_orders"),
     path("owner/orders/<int:order_id>/", views.order_detail, name="owner_order_detail"),
+        path(
+        "orders/<int:order_id>/fulfilment/<str:fulfilment>/",
+        views.owner_order_set_fulfilment,
+        name="owner_order_set_fulfilment",
+    ),
 ]
+

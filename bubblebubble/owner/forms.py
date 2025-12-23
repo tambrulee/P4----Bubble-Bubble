@@ -1,7 +1,6 @@
 from django import forms
 from catalog.models import Product, ProductImage
 
-
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
@@ -14,7 +13,36 @@ class ProductForm(forms.ModelForm):
             "price",
             "stock_qty",
             "active",
+            "tags",   # 👈 add this
         ]
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "product_type": forms.Select(attrs={"class": "form-select"}),
+            "description": forms.Textarea(attrs={
+                "class": "form-control",
+                "rows": 4,
+            }),
+            "scent": forms.TextInput(attrs={"class": "form-control"}),
+            "weight_g": forms.NumberInput(attrs={"class": "form-control"}),
+            "price": forms.NumberInput(attrs={
+                "class": "form-control",
+                "step": "0.01",
+            }),
+            "stock_qty": forms.NumberInput(attrs={"class": "form-control"}),
+            "tags": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "e.g. winter, woody, refillable",
+            }),
+        }
+    def clean_tags(self):
+        tags = self.cleaned_data.get("tags", "")
+        cleaned = ", ".join(
+            t.strip().lower()
+            for t in tags.split(",")
+            if t.strip()
+        )
+        return cleaned
+
 
 
 class ProductImageForm(forms.ModelForm):
