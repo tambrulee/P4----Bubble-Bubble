@@ -6,18 +6,16 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = [
             "title",
-            "product_type",
             "description",
             "scent",
             "weight_g",
             "price",
             "stock_qty",
             "active",
-            "tags",   # 👈 add this
+            "tags",
         ]
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
-            "product_type": forms.Select(attrs={"class": "form-select"}),
             "description": forms.Textarea(attrs={
                 "class": "form-control",
                 "rows": 4,

@@ -3,16 +3,9 @@ from django.utils.text import slugify
 
 
 class Product(models.Model):
-    CANDLE = "CANDLE"
-    SOAP = "SOAP"
-    TYPES = [
-        (CANDLE, "Candle"),
-        (SOAP, "Soap"),
-    ]
-
+   
     title = models.CharField(max_length=160)
     slug = models.SlugField(max_length=180, unique=True, blank=True)
-    product_type = models.CharField(max_length=12, choices=TYPES)
     description = models.TextField(blank=True)
     scent = models.CharField(max_length=50, help_text="e.g. Lavender, Citrus")
     weight_g = models.PositiveIntegerField(help_text="Net weight in grams")

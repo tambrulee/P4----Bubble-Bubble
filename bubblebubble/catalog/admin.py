@@ -22,12 +22,12 @@ def activate_products(modeladmin, request, queryset):
 @admin.register(Product)
 class ProductAdmin(ImportExportModelAdmin):
     resource_class = ProductResource
-    list_display = ("title", "product_type", "scent", "price", "stock_qty", "active")
-    list_filter = ("product_type", "scent", "active")
+    list_display = ("title", "scent", "price", "stock_qty", "active")
+    list_filter = ("scent", "active")
     search_fields = ("title", "scent", "description")
     prepopulated_fields = {"slug": ("title",)}
-    inlines = [ProductImageInline]                 # ✅ attach inline
-    actions = [activate_products, deactivate_products]  # ✅ bulk actions
+    inlines = [ProductImageInline]                
+    actions = [activate_products, deactivate_products] 
 
 
 @admin.register(ProductImage)
