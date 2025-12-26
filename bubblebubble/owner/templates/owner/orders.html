@@ -1,7 +1,44 @@
 {% extends "base.html" %}
 {% block content %}
 <h1 class="h3 mb-3">Orders</h1>
+<!-- Tabs -->
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'new' %}active{% endif %}"
+       href="?tab=new">
+      New orders <span class="badge text-bg-secondary">{{ counts.new }}</span>
+    </a>
+  </li>
 
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'dispatched' %}active{% endif %}"
+       href="?tab=dispatched">
+      Dispatched <span class="badge text-bg-secondary">{{ counts.dispatched }}</span>
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'delivered' %}active{% endif %}"
+       href="?tab=delivered">
+      Delivered <span class="badge text-bg-secondary">{{ counts.delivered }}</span>
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'abandoned' %}active{% endif %}"
+       href="?tab=abandoned">
+      Abandoned checkouts <span class="badge text-bg-secondary">{{ counts.abandoned }}</span>
+    </a>
+  </li>
+
+  <li class="nav-item ms-auto">
+    <a class="nav-link {% if tab == 'all' %}active{% endif %}"
+       href="?tab=all">
+      All <span class="badge text-bg-secondary">{{ counts.all }}</span>
+    </a>
+  </li>
+</ul>
+<!-- Order table -->
 <div class="table-responsive">
   <table class="table align-middle">
     <thead>

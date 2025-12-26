@@ -101,8 +101,38 @@ def product_image_delete(request, image_id):
 # ---------- Orders ----------
 @staff_member_required
 def orders(request):
-    qs = Order.objects.all().order_by("-created_at")
-    return render(request, "owner/orders.html", {"orders": qs})
+    tab = request.GET.get("tab", "new")
+
+    base = Order.objects.all().order_by("-created_at")
+
+    if tab == "all":
+        qs = base
+    elif tab == "new":
+        # Paid orders that still need dispatching
+        qs = base.filter(status=Order.PAID, fulfilment_status=Order.NEW)
+    elif tab == "dispatched":
+        qs = base.filter(status=Order.PAID, fulfilment_status=Order.DISPATCHED)
+    elif tab == "delivered":
+        qs = base.filter(status=Order.PAID, fulfilment_status=Order.DELIVERED)
+    elif tab == "abandoned":
+        # “Started checkout” orders that never became paid
+        qs = base.filter(status=Order.PENDING)
+    else:
+        qs = base
+
+    counts = {
+        "all": base.count(),
+        "new": base.filter(status=Order.PAID, fulfilment_status=Order.NEW).count(),
+        "dispatched": base.filter(status=Order.PAID, fulfilment_status=Order.DISPATCHED).count(),
+        "delivered": base.filter(status=Order.PAID, fulfilment_status=Order.DELIVERED).count(),
+        "abandoned": base.filter(status=Order.PENDING).count(),
+    }
+
+    return render(request, "owner/orders.html", {
+        "orders": qs,
+        "tab": tab,
+        "counts": counts,
+    })
 
 
 @staff_member_required

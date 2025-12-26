@@ -24,7 +24,7 @@ def signup(request):
 def my_orders(request):
     orders = (
         Order.objects
-        .filter(user=request.user)
+        .filter(user=request.user, status=Order.PAID)
         .order_by("-created_at")
     )
     return render(request, "accounts/my_orders.html", {"orders": orders})
