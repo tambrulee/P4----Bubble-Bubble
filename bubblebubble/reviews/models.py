@@ -9,7 +9,7 @@ class Review(models.Model):
     rating = models.PositiveSmallIntegerField()
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    verified_purchase = models.BooleanField(default=False)
+    # verified_purchase = models.BooleanField(default=False)
     order = models.ForeignKey(Order, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
