@@ -32,16 +32,51 @@ def home(request):
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
 
+SCENT_FAMILIES = [
+    ("earthy", "Earthy"),
+    ("herbal", "Herbal"),
+    ("fruity", "Fruity"),
+    ("cocoa", "Cocoa"),
+    ("coffee", "Coffee"),
+    ("honey", "Honey"),
+    ("oat", "Oat"),
+    ("floral", "Floral"),
+]
 
+RANGES = [
+    ("winter", "Winter Isles"),
+    ("refillable", "Refillables"),
+]
 
 def product_list(request):
-    tag = request.GET.get("tag")
-    sort = request.GET.get("sort", "newest")
+    range_tag = request.GET.get("range", "").strip().lower()
+    scent_family = request.GET.get("scent_family", "").strip().lower()
+    price_min = request.GET.get("price_min", "").strip()
+    price_max = request.GET.get("price_max", "").strip()
+    sort = request.GET.get("sort", "newest").strip().lower()
 
     qs = Product.objects.filter(active=True)
 
-    if tag:
-        qs = qs.filter(tags__icontains=tag)
+    # Range filter (tags)
+    if range_tag:
+        qs = qs.filter(tags__icontains=range_tag)
+
+    # Scent family filter (tags)
+    if scent_family:
+        qs = qs.filter(tags__icontains=scent_family)
+
+    # Price range
+    try:
+        if price_min != "":
+            qs = qs.filter(price__gte=price_min)
+    except ValueError:
+        pass
+
+    try:
+        if price_max != "":
+            qs = qs.filter(price__lte=price_max)
+    except ValueError:
+        pass
 
     # Sorting
     if sort == "price_asc":
@@ -49,20 +84,29 @@ def product_list(request):
     elif sort == "price_desc":
         qs = qs.order_by("-price", "-created_at")
     elif sort == "popularity":
-        qs = qs.order_by("-created_at") 
-        qs = qs.annotate(review_count=Count("reviews")).order_by("-review_count", "-created_at")
+        # Only use this if you have a related reviews name "reviews".
+        # Otherwise fallback to newest.
+        try:
+            qs = qs.annotate(review_count=Count("reviews")).order_by("-review_count", "-created_at")
+        except Exception:
+            qs = qs.order_by("-created_at")
     else:
-        # newest (default)
         sort = "newest"
         qs = qs.order_by("-created_at")
 
     return render(request, "catalog/shop_all.html", {
         "products": qs,
-        "active_tag": tag,
-        "active_sort": sort,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
-    })
 
+        "active_range": range_tag,
+        "active_scent_family": scent_family,
+        "active_price_min": price_min,
+        "active_price_max": price_max,
+        "active_sort": sort,
+
+        "RANGES": RANGES,
+        "SCENT_FAMILIES": SCENT_FAMILIES,
+    })
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, active=True)
