@@ -17,6 +17,73 @@
   </div>
 </section>
 
+{% if tag == "refillable" %}
+<section class="py-4 bg-light">
+  <div class="container">
+    <div class="row g-4">
+
+      {# HOW REFILLABLES WORK #}
+      <div class="col-lg-6">
+        <h2 class="h4 mb-2">How refillables work</h2>
+        <p class="text-muted">
+          Our refillable soaps are designed to be reused again and again.
+          Buy the main bottle once, then top up with refills whenever you run low.
+        </p>
+
+        <ul class="list-unstyled mt-3">
+          <li class="d-flex gap-2 mb-2">
+            <span aria-hidden="true">🧴</span>
+            <span>Buy the reusable bottle once</span>
+          </li>
+          <li class="d-flex gap-2 mb-2">
+            <span aria-hidden="true">♻️</span>
+            <span>Refill using lightweight refill packs</span>
+          </li>
+          <li class="d-flex gap-2">
+            <span aria-hidden="true">🌍</span>
+            <span>Reduce plastic waste over time</span>
+          </li>
+        </ul>
+      </div>
+
+      {# WASTE SAVING BENEFIT #}
+      <div class="col-lg-6">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h3 class="h5 mb-2">Why refilling matters</h3>
+            <p class="text-muted mb-3">
+              Refilling creates significantly less waste than replacing bottles.
+            </p>
+
+            <div class="d-flex flex-column gap-2">
+              <div class="d-flex justify-content-between">
+                <span>Bottles bought</span>
+                <strong>5</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span>Reusable bottle kept</span>
+                <strong>1</strong>
+              </div>
+              <hr class="my-2">
+              <div class="d-flex justify-content-between">
+                <span>Plastic bottles avoided</span>
+                <strong>4</strong>
+              </div>
+            </div>
+
+            <p class="small text-muted mt-3 mb-0">
+              Exact savings vary, but refilling always reduces single-use plastic.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
 <section class="py-3">
   <div class="container">
     <div class="row g-3">

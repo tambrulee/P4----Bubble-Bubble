@@ -33,8 +33,28 @@
           </a>
         {% endif %}
 
+        <form method="get" class="d-flex align-items-center gap-2">
+      {% if active_tag %}
+        <input type="hidden" name="tag" value="{{ active_tag }}">
+      {% endif %}
+
+      <label class="small text-muted mb-0" for="sort">Sort</label>
+      <select id="sort" name="sort" class="form-select form-select-sm" style="max-width: 220px;" onchange="this.form.submit()">
+        <option value="newest" {% if active_sort == "newest" %}selected{% endif %}>Newest</option>
+        <option value="price_asc" {% if active_sort == "price_asc" %}selected{% endif %}>Price: low to high</option>
+        <option value="price_desc" {% if active_sort == "price_desc" %}selected{% endif %}>Price: high to low</option>
+        <option value="popularity" {% if active_sort == "popularity" %}selected{% endif %}>Popularity</option>
+      </select>
+
+      <noscript>
+        <button class="btn btn-sm btn-outline-secondary" type="submit">Apply</button>
+      </noscript>
+    </form>
+
       </div>
     </div>
+
+
 
     <div class="row g-3">
       {% for p in products %}

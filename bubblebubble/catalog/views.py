@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from .models import Product
+from django.db.models import Count
 
 def home(request):
     best_sellers = (
@@ -31,21 +32,37 @@ def home(request):
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
 
+
+
 def product_list(request):
     tag = request.GET.get("tag")
+    sort = request.GET.get("sort", "newest")
 
-    products = Product.objects.filter(active=True)
+    qs = Product.objects.filter(active=True)
 
     if tag:
-        products = products.filter(tags__icontains=tag)
+        qs = qs.filter(tags__icontains=tag)
 
-    products = products.order_by("-created_at")
+    # Sorting
+    if sort == "price_asc":
+        qs = qs.order_by("price", "-created_at")
+    elif sort == "price_desc":
+        qs = qs.order_by("-price", "-created_at")
+    elif sort == "popularity":
+        qs = qs.order_by("-created_at") 
+        qs = qs.annotate(review_count=Count("reviews")).order_by("-review_count", "-created_at")
+    else:
+        # newest (default)
+        sort = "newest"
+        qs = qs.order_by("-created_at")
 
     return render(request, "catalog/shop_all.html", {
-        "products": products,
+        "products": qs,
         "active_tag": tag,
+        "active_sort": sort,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
+
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, active=True)
