@@ -47,8 +47,9 @@ class VerifiedPurchaseTests(TestCase):
         self.client.login(username="u1", password="pass12345")
         url = reverse("reviews:from_order", args=[self.order.id, self.product.id])
 
-        resp = self.client.post(url, data={"rating": 5, "comment": "Great!"}, follow=True)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.client.post(url, data={"rating": 5, "comment": "Great!"})
+        self.assertEqual(resp.status_code, 302)
 
         r = Review.objects.get(user=self.user, product=self.product)
         self.assertTrue(r.verified_purchase)
+

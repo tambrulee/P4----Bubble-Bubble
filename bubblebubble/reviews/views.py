@@ -40,48 +40,37 @@ def add_review(request, slug):
 
     return render(request, "reviews/add_review.html", {"product": product, "form": form})
 
-
-
 @login_required
 def review_from_order(request, order_id, product_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
 
-    # Restrict to completed/paid orders (use whatever you consider “completed”)
-    if order.status != Order.PAID:
-        messages.error(request, "You can only review items from completed orders.")
-        return redirect("accounts:order_detail", order_id=order.id)  # adjust URL name if different
+    if order.fulfilment_status != Order.DELIVERED:
+        messages.error(request, "You can only review items after delivery.")
+        return redirect("accounts:my_order_detail", order.id)
 
     product = get_object_or_404(Product, id=product_id, active=True)
 
-    # Ensure product is in that order
     if not OrderItem.objects.filter(order=order, product=product).exists():
         messages.error(request, "That product isn’t part of this order.")
-        return redirect("accounts:order_detail", order_id=order.id)
+        return redirect("accounts:my_order_detail", order.id)
 
-    review, _ = Review.objects.get_or_create(
-        user=request.user,
-        product=product,
-        defaults={"verified_purchase": True, "order": order},
-    )
-
-    # If an existing review existed (created via old route), upgrade it
-    review.verified_purchase = True
-    if review.order_id is None:
-        review.order = order
+    existing = Review.objects.filter(user=request.user, product=product).first()
 
     if request.method == "POST":
-        form = ReviewForm(request.POST, instance=review)
+        form = ReviewForm(request.POST, instance=existing)
         if form.is_valid():
-            r = form.save(commit=False)
-            r.user = request.user
-            r.product = product
-            r.verified_purchase = True
-            r.order = order
-            r.save()
+            review = form.save(commit=False)
+            review.user = request.user
+            review.product = product
+            review.verified_purchase = True
+            # only if you added this field:
+            if hasattr(review, "order_id"):
+                review.order = order
+            review.save()
             messages.success(request, "Your review has been saved.")
-            return redirect("accounts:order_detail", order_id=order.id)
+            return redirect("accounts:my_order_detail", order.id)
     else:
-        form = ReviewForm(instance=review)
+        form = ReviewForm(instance=existing)
 
     return render(request, "reviews/add_review.html", {
         "product": product,
