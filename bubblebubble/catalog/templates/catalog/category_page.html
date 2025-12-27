@@ -124,10 +124,14 @@
                 View
               </a>
 
-              <form method="post" action="{% url 'cart:add' p.id %}" class="m-0">
+              <form method="post"
+                    action="{% url 'cart:add_to_cart' product.id %}"
+                    class="js-add-to-cart">
                 {% csrf_token %}
                 <input type="hidden" name="qty" value="1">
-                <button class="btn btn-primary" {% if p.stock_qty == 0 %}disabled{% endif %}>
+
+                <button type="submit" class="btn btn-primary"
+                        {% if product.stock_qty == 0 %}disabled{% endif %}>
                   Add to cart
                 </button>
               </form>

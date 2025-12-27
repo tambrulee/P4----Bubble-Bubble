@@ -72,15 +72,20 @@
       {% endif %}
 
       <!-- CART ICON + BADGE -->
-      <a href="{% url 'cart:view' %}" class="bb-icon-link position-relative" title="Cart">
+      <a href="{% url 'cart:view' %}"
+        class="bb-icon-link position-relative"
+        title="Cart"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#miniCart"
+        aria-controls="miniCart">
         <span class="bb-icon"><i class="fa-solid fa-cart-shopping"></i></span>
 
-        <!-- badge updates via JS -->
         <span id="cart-count"
               class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger {% if cart_count|default:0|add:0 <= 0 %}d-none{% endif %}">
           {{ cart_count|default:0 }}
         </span>
       </a>
+
     </div>
   </div>
 
@@ -142,6 +147,26 @@
   {% block content %}{% endblock %}
 </main>
 
+<!-- MINI CART OFFCANVAS -->
+    <div class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="miniCart"
+      aria-labelledby="miniCartLabel"
+      data-mini-url="{% url 'cart:mini' %}">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="miniCartLabel">Your cart</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body">
+      <div id="mini-cart-content">
+        <div class="text-muted">Loading…</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
 <footer class="border-top mt-4 py-3">
   <div class="container text-muted small d-flex justify-content-between">
     <span>© {{ now|default:"2025" }} Moon & Moss</span>
@@ -153,6 +178,7 @@
 <script src="https://js.stripe.com/v3/"></script>
 <!-- External cart AJAX JS -->
 <script src="{% static 'js/cart.js' %}"></script>
+
 
 {% block extra_js %}{% endblock %}
 {% block scripts %}{% endblock %}
