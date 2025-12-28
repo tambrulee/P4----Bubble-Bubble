@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Payment successful</h1>
+
+{% if order %}
+  <p>Thank you, {{ order.user.username }}. Your order #{{ order.id }} has been paid.</p>
+  <p>Total: £{{ order.total }}</p>
+{% else %}
+  <p>Your payment was successful.</p>
+{% endif %}
+
+<a href="{% url 'catalog:product_list' %}" class="btn btn-primary mt-3">Continue shopping</a>
+{% endblock %}
