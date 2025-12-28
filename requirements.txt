@@ -15,4 +15,3 @@ lxml==6.0.2
 html5lib==1.1
 tinycss2==1.4.0
 cssselect2==0.8.0
-python-dotenv==1.0.1
