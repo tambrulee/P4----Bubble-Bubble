@@ -1,1 +1,1 @@
-web: gunicorn bubblebubble.wsgi
+web: gunicorn bubblebubble.bubblebubble.wsgi
