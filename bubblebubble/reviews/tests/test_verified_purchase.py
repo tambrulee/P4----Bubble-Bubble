@@ -8,9 +8,11 @@ from reviews.models import Review
 
 User = get_user_model()
 
+
 class VerifiedPurchaseTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="u1", password="pass12345")
+        self.user = User.objects.create_user(
+            username="u1", password="pass12345")
 
         self.product = Product.objects.create(
             title="Test Soap",
@@ -45,11 +47,12 @@ class VerifiedPurchaseTests(TestCase):
 
     def test_review_from_order_sets_verified_purchase_true(self):
         self.client.login(username="u1", password="pass12345")
-        url = reverse("reviews:from_order", args=[self.order.id, self.product.id])
+        url = reverse(
+            "reviews:from_order", args=[self.order.id, self.product.id])
 
-        resp = self.client.post(url, data={"rating": 5, "comment": "Great!"})
+        resp = self.client.post(
+            url, data={"rating": 5, "comment": "Great!"})
         self.assertEqual(resp.status_code, 302)
 
         r = Review.objects.get(user=self.user, product=self.product)
         self.assertTrue(r.verified_purchase)
-

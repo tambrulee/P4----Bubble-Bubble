@@ -1,6 +1,5 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, redirect, render
-from django.db.models import Count
 from catalog.models import Product, ProductImage
 from checkout.models import Order
 from .forms import ProductForm, ProductImageForm
@@ -8,8 +7,8 @@ from django.conf import settings
 from django.db.models import Sum, Count, Avg
 from django.utils import timezone
 from datetime import timedelta
-from django.utils import timezone
 from django.views.decorators.http import require_POST
+
 
 @staff_member_required
 def dashboard(request):
@@ -20,8 +19,10 @@ def dashboard(request):
 
     return render(request, "owner/dashboard.html", {
         "product_count": Product.objects.count(),
-        "inactive_count": Product.objects.filter(active=False).count(),
-        "pending_orders": Order.objects.filter(status=Order.PENDING).count(),
+        "inactive_count": Product.objects.filter(
+            active=False).count(),
+        "pending_orders": Order.objects.filter(
+            status=Order.PENDING).count(),
         "low_stock_count": low_qs.count(),
         "low_stock": low_qs[:10],
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
@@ -31,7 +32,8 @@ def dashboard(request):
 # ---------- Products ----------
 @staff_member_required
 def products(request):
-    qs = Product.objects.annotate(image_count=Count("images")).order_by("title")
+    qs = Product.objects.annotate(
+        image_count=Count("images")).order_by("title")
     return render(request, "owner/products.html", {
         "products": qs,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
@@ -44,7 +46,9 @@ def product_create(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         return redirect("owner_products")
-    return render(request, "owner/product_form.html", {"form": form, "mode": "Create"})
+    return render(
+        request, "owner/product_form.html", {
+            "form": form, "mode": "Create"})
 
 
 @staff_member_required
@@ -54,7 +58,9 @@ def product_edit(request, pk):
     if request.method == "POST" and form.is_valid():
         form.save()
         return redirect("owner_products")
-    return render(request, "owner/product_form.html", {"form": form, "mode": "Edit", "product": product})
+    return render(
+        request, "owner/product_form.html", {
+            "form": form, "mode": "Edit", "product": product})
 
 
 @staff_member_required
@@ -71,7 +77,8 @@ def product_images(request, pk):
     product = get_object_or_404(Product, pk=pk)
     images = product.images.all().order_by("-id")
 
-    form = ProductImageForm(request.POST or None, request.FILES or None)
+    form = ProductImageForm(
+        request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         img = form.save(commit=False)
         img.product = product
@@ -104,23 +111,31 @@ def orders(request):
         qs = base
     elif tab == "new":
         # Paid orders that still need dispatching
-        qs = base.filter(status=Order.PAID, fulfilment_status=Order.NEW)
+        qs = base.filter(
+            status=Order.PAID, fulfilment_status=Order.NEW)
     elif tab == "dispatched":
-        qs = base.filter(status=Order.PAID, fulfilment_status=Order.DISPATCHED)
+        qs = base.filter(
+            status=Order.PAID, fulfilment_status=Order.DISPATCHED)
     elif tab == "delivered":
-        qs = base.filter(status=Order.PAID, fulfilment_status=Order.DELIVERED)
+        qs = base.filter(
+            status=Order.PAID, fulfilment_status=Order.DELIVERED)
     elif tab == "abandoned":
         # “Started checkout” orders that never became paid
-        qs = base.filter(status=Order.PENDING)
+        qs = base.filter(
+            status=Order.PENDING)
     else:
         qs = base
 
     counts = {
         "all": base.count(),
-        "new": base.filter(status=Order.PAID, fulfilment_status=Order.NEW).count(),
-        "dispatched": base.filter(status=Order.PAID, fulfilment_status=Order.DISPATCHED).count(),
-        "delivered": base.filter(status=Order.PAID, fulfilment_status=Order.DELIVERED).count(),
-        "abandoned": base.filter(status=Order.PENDING).count(),
+        "new": base.filter(
+            status=Order.PAID, fulfilment_status=Order.NEW).count(),
+        "dispatched": base.filter(
+            status=Order.PAID, fulfilment_status=Order.DISPATCHED).count(),
+        "delivered": base.filter(
+            status=Order.PAID, fulfilment_status=Order.DELIVERED).count(),
+        "abandoned": base.filter(
+            status=Order.PENDING).count(),
     }
 
     return render(request, "owner/orders.html", {
@@ -146,16 +161,19 @@ def owner_analytics(request):
     paid = Order.objects.filter(status="PAID")
 
     ctx = {
-        "rev_7": paid.filter(created_at__gte=d7).aggregate(v=Sum("total"))["v"] or 0,
-        "rev_30": paid.filter(created_at__gte=d30).aggregate(v=Sum("total"))["v"] or 0,
-        "orders_7": paid.filter(created_at__gte=d7).count(),
-        "orders_30": paid.filter(created_at__gte=d30).count(),
-        "aov_30": paid.filter(created_at__gte=d30).aggregate(v=Avg("total"))["v"] or 0,
+        "rev_7": paid.filter(
+            created_at__gte=d7).aggregate(v=Sum("total"))["v"] or 0,
+        "rev_30": paid.filter(
+            created_at__gte=d30).aggregate(v=Sum("total"))["v"] or 0,
+        "orders_7": paid.filter(
+            created_at__gte=d7).count(),
+        "orders_30": paid.filter(
+            created_at__gte=d30).count(),
+        "aov_30": paid.filter(
+            created_at__gte=d30).aggregate(v=Avg("total"))["v"] or 0,
         "pending": Order.objects.filter(status="PENDING").count(),
     }
     return render(request, "owner/analytics.html", ctx)
-
-
 
 
 @staff_member_required

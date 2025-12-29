@@ -1,10 +1,11 @@
 from django import forms
 from catalog.models import Product, ProductImage
 
+
 class ProductForm(forms.ModelForm):
 
     class Meta:
-        
+
         model = Product
         fields = [
             "title",
@@ -34,6 +35,7 @@ class ProductForm(forms.ModelForm):
                 "placeholder": "e.g. winter, woody, refillable",
             }),
         }
+
     def clean_tags(self):
         tags = self.cleaned_data.get("tags", "")
         cleaned = ", ".join(
@@ -42,6 +44,7 @@ class ProductForm(forms.ModelForm):
             if t.strip()
         )
         return cleaned
+
 
 class ProductImageForm(forms.ModelForm):
     class Meta:

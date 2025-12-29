@@ -6,9 +6,8 @@ from checkout.models import OrderItem, Order
 from .forms import ReviewForm
 from .models import Review
 
+
 @login_required
-
-
 def add_review(request, slug):
     product = get_object_or_404(Product, slug=slug, active=True)
     # Check if user has a PAID order containing this product
@@ -41,13 +40,12 @@ def add_review(request, slug):
         form = ReviewForm(instance=existing)
 
     return render(
-        
+
         request, "reviews/add_review.html", {
             "product": product, "form": form})
 
+
 @login_required
-
-
 def review_from_order(request, order_id, product_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
     if order.fulfilment_status != Order.DELIVERED:
@@ -84,4 +82,3 @@ def review_from_order(request, order_id, product_id):
         "order": order,
         "form": form,
     })
-

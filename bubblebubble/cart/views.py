@@ -120,6 +120,7 @@ def mini_cart(request):
         "cart_total": str(total),
     })
 
+
 @require_POST
 def update_item(request, item_id):
     cart = get_or_create_cart(request)

@@ -1,14 +1,17 @@
 cat > .flake8 <<'EOF'
 [flake8]
-max-line-length = 88
+max-line-length = 79
 exclude =
     .git,
     __pycache__,
-    */migrations/*,
     .venv,
     venv,
     env,
     node_modules,
-    manage.py,
-    bubblebubble/settings.py
-
+    static,
+    media,
+    .pytest_cache,
+    */migrations/*,
+    *.pyc
+per-file-ignores =
+    */migrations/*:E501
