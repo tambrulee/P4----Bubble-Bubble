@@ -2,7 +2,9 @@ from django import forms
 from catalog.models import Product, ProductImage
 
 class ProductForm(forms.ModelForm):
+
     class Meta:
+        
         model = Product
         fields = [
             "title",
@@ -40,8 +42,6 @@ class ProductForm(forms.ModelForm):
             if t.strip()
         )
         return cleaned
-
-
 
 class ProductImageForm(forms.ModelForm):
     class Meta:

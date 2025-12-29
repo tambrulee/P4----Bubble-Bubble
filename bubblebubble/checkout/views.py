@@ -3,13 +3,12 @@ from decimal import Decimal
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 from cart.utils import get_or_create_cart
 from .models import Order, OrderItem
 from .forms import CheckoutForm
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.conf import settings
 from .services import deduct_stock_for_order
 from accounts.models import ShippingAddress 
 
@@ -48,9 +47,6 @@ def checkout_summary(request):
     }
     return render(request, "checkout/summary.html", context)
 
-
-
-from accounts.models import ShippingAddress  # <-- add
 
 def start_checkout(request):
     if request.method != "POST":

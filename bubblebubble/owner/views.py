@@ -5,16 +5,11 @@ from catalog.models import Product, ProductImage
 from checkout.models import Order
 from .forms import ProductForm, ProductImageForm
 from django.conf import settings
-from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Sum, Count, Avg
 from django.utils import timezone
 from datetime import timedelta
-from checkout.models import Order
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.views.decorators.http import require_POST
-from checkout.models import Order
 
 @staff_member_required
 def dashboard(request):
