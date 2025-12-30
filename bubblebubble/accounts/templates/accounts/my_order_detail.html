@@ -1,74 +1,59 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container py-4">
-
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Order #{{ order.id }}</h1>
-    <a class="btn btn-outline-secondary" href="{% url 'accounts:my_orders' %}">Back</a>
-  </div>
-
-  <div class="card p-3 mb-3">
-    <div class="row g-2">
-      <div class="col-md-6">
-        <div class="fw-semibold">Delivery address</div>
-        <div>{{ order.full_name }}</div>
-        <div>{{ order.address_line1 }}</div>
-        {% if order.address_line2 %}<div>{{ order.address_line2 }}</div>{% endif %}
-        <div>{{ order.city }}, {{ order.postcode }}</div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="fw-semibold">Order status</div>
-        <div>{{ order.get_status_display }}</div>
-        <div class="text-muted small">Placed: {{ order.created_at|date:"d M Y H:i" }}</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card p-3">
-    <div class="d-flex justify-content-between align-items-start gap-3">
-      <div>
-        <h2 class="h5 mb-1">Items</h2>
-      </div>
-      <div class="text-end fw-semibold">
-        Total: £{{ order.total|floatformat:2 }}
-      </div>
-    </div>
-
-    <hr class="my-3">
-
-    <ul class="list-group list-group-flush">
-      {% for item in order.items.all %}
-        <li class="list-group-item">
-          <div class="d-flex justify-content-between align-items-start gap-3">
-            <div>
-              <div class="fw-semibold">{{ item.product.title }}</div>
-              <div class="text-muted small">
-                Qty: {{ item.qty }} • £{{ item.subtotal|floatformat:2 }}
-              </div>
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="h3 mb-0">Order #{{ order.id }}</h1>
+            <a class="btn btn-outline-secondary"
+               href="{% url 'accounts:my_orders' %}">Back</a>
+        </div>
+        <div class="card p-3 mb-3">
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <div class="fw-semibold">Delivery address</div>
+                    <div>{{ order.full_name }}</div>
+                    <div>{{ order.address_line1 }}</div>
+                    {% if order.address_line2 %}<div>{{ order.address_line2 }}</div>{% endif %}
+                    <div>{{ order.city }}, {{ order.postcode }}</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="fw-semibold">Order status</div>
+                    <div>{{ order.get_status_display }}</div>
+                    <div class="text-muted small">Placed: {{ order.created_at|date:"d M Y H:i" }}</div>
+                </div>
             </div>
-
-            <div class="text-end d-flex flex-column align-items-end gap-2">
-              <a class="btn btn-sm btn-outline-secondary"
-                 href="{% url 'catalog:product_detail' item.product.slug %}">
-                View product
-              </a>
-
-              {% if order.fulfilment_status == "DELIVERED" %}
-                <a class="btn btn-sm btn-outline-primary"
-                  href="{% url 'reviews:from_order' order.id item.product.id %}">
-                  Write / edit review
-                </a>
-              {% else %}
-                <span class="text-muted small">Review available after delivery</span>
-              {% endif %}
-
+        </div>
+        <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <h2 class="h5 mb-1">Items</h2>
+                </div>
+                <div class="text-end fw-semibold">Total: £{{ order.total|floatformat:2 }}</div>
             </div>
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-
-</div>
+            <hr class="my-3">
+            <ul class="list-group list-group-flush">
+                {% for item in order.items.all %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start gap-3">
+                            <div>
+                                <div class="fw-semibold">{{ item.product.title }}</div>
+                                <div class="text-muted small">Qty: {{ item.qty }} • £{{ item.subtotal|floatformat:2 }}</div>
+                            </div>
+                            <div class="text-end d-flex flex-column align-items-end gap-2">
+                                <a class="btn btn-sm btn-outline-secondary"
+                                   href="{% url 'catalog:product_detail' item.product.slug %}">View product</a>
+                                {% if order.fulfilment_status == "DELIVERED" %}
+                                    <a class="btn btn-sm btn-outline-primary"
+                                       href="{% url 'reviews:from_order' order.id item.product.id %}">
+                                        Write / edit review
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted small">Review available after delivery</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}

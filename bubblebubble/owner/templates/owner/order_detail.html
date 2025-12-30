@@ -1,38 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h3 mb-0">Order #{{ order.id }}</h1>
-  <a class="btn btn-outline-secondary" href="{% url 'owner_orders' %}">Back</a>
-</div>
-
-<div class="card p-3 mb-3">
-  <div class="row g-2">
-    <div class="col-md-6">
-      <div class="fw-semibold">Customer</div>
-      <div>{{ order.full_name|default:"(guest)" }}</div>
-      <div class="text-muted">{{ order.email }}</div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Order #{{ order.id }}</h1>
+        <a class="btn btn-outline-secondary" href="{% url 'owner_orders' %}">Back</a>
     </div>
-    <div class="col-md-6">
-      <div class="fw-semibold">Payment status</div>
-      <div>{{ order.get_status_display }}</div>
-      <div class="text-muted small">Stripe session: {{ order.stripe_session_id|default:"-" }}</div>
+    <div class="card p-3 mb-3">
+        <div class="row g-2">
+            <div class="col-md-6">
+                <div class="fw-semibold">Customer</div>
+                <div>{{ order.full_name|default:"(guest)" }}</div>
+                <div class="text-muted">{{ order.email }}</div>
+            </div>
+            <div class="col-md-6">
+                <div class="fw-semibold">Payment status</div>
+                <div>{{ order.get_status_display }}</div>
+                <div class="text-muted small">Stripe session: {{ order.stripe_session_id|default:"-" }}</div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-
-<div class="card p-3">
-  <h2 class="h5">Items</h2>
-  <ul class="list-group list-group-flush">
-    {% for item in order.items.all %}
-      <li class="list-group-item d-flex justify-content-between">
-        <span>{{ item.product.title }} × {{ item.qty }}</span>
-        <span>£{{ item.subtotal }}</span>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <div class="d-flex justify-content-end mt-3 fw-semibold">
-    Total: £{{ order.total }}
-  </div>
-</div>
+    <div class="card p-3">
+        <h2 class="h5">Items</h2>
+        <ul class="list-group list-group-flush">
+            {% for item in order.items.all %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>{{ item.product.title }} × {{ item.qty }}</span>
+                    <span>£{{ item.subtotal }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="d-flex justify-content-end mt-3 fw-semibold">Total: £{{ order.total }}</div>
+    </div>
 {% endblock %}

@@ -7,3 +7,6 @@
 # PEP8 (Python)
 
 - [Flake 8](/readme_docs/pep8_flake8.md)
+
+# CSS
+- [W3C CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_input)

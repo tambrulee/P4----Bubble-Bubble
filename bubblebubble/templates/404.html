@@ -1,35 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
-<section class="py-5">
-  <div class="container">
-
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center">
-
-        <h1 class="display-4 mb-3">Lost in the moss</h1>
-
-        <p class="lead mb-4">
-          The page you’re looking for seems to have wandered off.
-        </p>
-
-        <p class="mb-4 text-muted">
-          It might have moved, been renamed, or simply doesn’t exist.
-        </p>
-
-        <div class="d-flex justify-content-center gap-3">
-          <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">
-            Shop Soaps
-          </a>
-          <a href="/" class="btn btn-outline-secondary">
-            Return Home
-          </a>
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h1 class="display-4 mb-3">Lost in the moss</h1>
+                    <p class="lead mb-4">The page you’re looking for seems to have wandered off.</p>
+                    <p class="mb-4 text-muted">It might have moved, been renamed, or simply doesn’t exist.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Shop Soaps</a>
+                        <a href="/" class="btn btn-outline-secondary">Return Home</a>
+                    </div>
+                </div>
+            </div>
         </div>
-
-      </div>
-    </div>
-
-  </div>
-</section>
+    </section>
 {% endblock %}

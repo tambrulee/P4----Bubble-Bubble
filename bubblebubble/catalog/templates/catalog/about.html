@@ -1,100 +1,77 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
-
-<!-- HERO -->
-<section class="bb-hero">
-  <div class="bb-hero-bg bb-hero-our-story">
-    <div class="container h-100 d-flex align-items-center">
-      <div class="bb-hero-card">
-        <h1 class="bb-hero-title mb-3">Our Story</h1>
-        <p class="bb-hero-sub mb-4">
-          Organic soaps inspired by nature, comfort, and quiet rituals.
-        </p>
-        <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">
-          Shop Soaps
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- BODY -->
-<section class="py-5 bb-story-body">
-
-  <div class="container">
-
-    <div class="row justify-content-center">
-      <div class="col-lg-9">
-
-        <div class="card shadow-sm border-0 bb-card">
-          <div class="card-body p-4 p-md-5">
-
-            <p class="lead">
-              Moon &amp; Moss was created from a love of simple rituals — the kind that slow you down
-              and bring you back to yourself.
-            </p>
-
-            <p>
-              We make small-batch, organic soaps inspired by nature, comfort, and quiet moments.
-              From woodland scents like cedarwood and pine, to soft florals and indulgent blends that
-              feel almost edible, each bar is designed to turn everyday washing into something a little
-              more intentional.
-            </p>
-
-            <p>
-              Our soaps are made using thoughtfully sourced ingredients, chosen for both their scent and
-              their purpose. We believe skincare should be gentle, honest, and rooted in nature — without
-              feeling dull or overly worthy. That’s why you’ll find both straightforward, single-note bars
-              and more playful, dessert-inspired blends sitting side by side in our range.
-            </p>
-
-            <hr class="my-4">
-
-            <div class="row g-3">
-              <div class="col-md-4">
-                <div class="p-3 rounded bb-pill h-100">
-                  <h5 class="mb-2">Small-batch</h5>
-                  <p class="mb-0">Made in limited runs with care and attention to detail.</p>
+    <!-- HERO -->
+    <section class="bb-hero">
+        <div class="bb-hero-bg bb-hero-our-story">
+            <div class="container h-100 d-flex align-items-center">
+                <div class="bb-hero-card">
+                    <h1 class="bb-hero-title mb-3">Our Story</h1>
+                    <p class="bb-hero-sub mb-4">Organic soaps inspired by nature, comfort, and quiet rituals.</p>
+                    <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">Shop Soaps</a>
                 </div>
-              </div>
-              <div class="col-md-4">
-                <div class="p-3 rounded bb-pill h-100">
-                  <h5 class="mb-2">Organic</h5>
-                  <p class="mb-0">Thoughtfully chosen ingredients with a gentle, skin-friendly feel.</p>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="p-3 rounded bb-pill h-100">
-                  <h5 class="mb-2">Sensory</h5>
-                  <p class="mb-0">Scents and textures designed to feel like a quiet moment to yourself.</p>
-                </div>
-              </div>
             </div>
-
-            <hr class="my-4">
-
-            <p class="mb-0">
-              Moon &amp; Moss is about balance: the wild and the soft, the practical and the indulgent,
-              the everyday and the ritual. Whether it’s the calm of <em>Lavender Moon</em>, the warmth of
-              <em>Honey Cinnamon</em>, or the freshness of <em>Organic Mint</em>, we hope each bar brings
-              a quiet moment of comfort into your day.
-            </p>
-
-          </div>
         </div>
-
-        <div class="d-flex justify-content-center mt-4">
-          <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-secondary rounded-pill px-4">
-            Browse the full collection
-          </a>
+    </section>
+    <!-- BODY -->
+    <section class="py-5 bb-story-body">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="card shadow-sm border-0 bb-card">
+                        <div class="card-body p-4 p-md-5">
+                            <p class="lead">
+                                Moon &amp; Moss was created from a love of simple rituals — the kind that slow you down
+                                and bring you back to yourself.
+                            </p>
+                            <p>
+                                We make small-batch, organic soaps inspired by nature, comfort, and quiet moments.
+                                From woodland scents like cedarwood and pine, to soft florals and indulgent blends that
+                                feel almost edible, each bar is designed to turn everyday washing into something a little
+                                more intentional.
+                            </p>
+                            <p>
+                                Our soaps are made using thoughtfully sourced ingredients, chosen for both their scent and
+                                their purpose. We believe skincare should be gentle, honest, and rooted in nature — without
+                                feeling dull or overly worthy. That’s why you’ll find both straightforward, single-note bars
+                                and more playful, dessert-inspired blends sitting side by side in our range.
+                            </p>
+                            <hr class="my-4">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded bb-pill h-100">
+                                        <h5 class="mb-2">Small-batch</h5>
+                                        <p class="mb-0">Made in limited runs with care and attention to detail.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded bb-pill h-100">
+                                        <h5 class="mb-2">Organic</h5>
+                                        <p class="mb-0">Thoughtfully chosen ingredients with a gentle, skin-friendly feel.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded bb-pill h-100">
+                                        <h5 class="mb-2">Sensory</h5>
+                                        <p class="mb-0">Scents and textures designed to feel like a quiet moment to yourself.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                            <p class="mb-0">
+                                Moon &amp; Moss is about balance: the wild and the soft, the practical and the indulgent,
+                                the everyday and the ritual. Whether it’s the calm of <em>Lavender Moon</em>, the warmth of
+                                <em>Honey Cinnamon</em>, or the freshness of <em>Organic Mint</em>, we hope each bar brings
+                                a quiet moment of comfort into your day.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <a href="{% url 'catalog:product_list' %}"
+                           class="btn btn-outline-secondary rounded-pill px-4">Browse the full collection</a>
+                    </div>
+                </div>
+            </div>
         </div>
-
-      </div>
-    </div>
-
-  </div>
-</section>
-
+    </section>
 {% endblock %}

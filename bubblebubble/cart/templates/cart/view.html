@@ -1,66 +1,56 @@
 {% extends "base.html" %}
 {% block content %}
-
-<h1>Your Cart</h1>
-
-{% if cart.items.all %}
-<div class="table-responsive">
-<table class="table align-middle">
-  <thead>
-    <tr>
-      <th>Product</th>
-      <th style="width:120px;">Qty</th>
-      <th>Price</th>
-      <th>Subtotal</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in cart.items.all %}
-    <tr>
-      <td>{{ item.product.title }}</td>
-      <td>
-        <form method="post" action="{% url 'cart:update' item.id %}" class="d-flex">
-          {% csrf_token %}
-          <input type="number"
-            name="qty"
-            value="{{ item.qty }}"
-            min="1"
-            max="{{ item.product.stock_qty }}"
-            class="form-control form-control-sm me-2 cart-qty-input">
-
-          <button class="btn btn-sm btn-update" type="submit">Update</button>
-        </form>
-      </td>
-      <td>£{{ item.product.price }}</td>
-      <td>£{{ item.subtotal }}</td>
-      <td>
-        <form method="post" action="{% url 'cart:remove' item.id %}">
-          {% csrf_token %}
-          <button class="btn btn-sm btn-remove" type="submit">Remove</button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-</div>
-<div class="d-flex justify-content-between align-items-center">
-  <a href="{% url 'catalog:product_list' %}" class="btn btn-continue">
-    Continue shopping
-  </a>
-  <div class="text-end">
-    <h4>Total: £{{ cart.total }}</h4>
-    <a href="{% url 'checkout:summary' %}" class="btn btn-checkout">
-      Checkout
-    </a>
-
-  </div>
-</div>
-
-{% else %}
-<p>Your cart is empty.</p>
-<a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Back to shop</a>
-{% endif %}
-
+    <h1>Your Cart</h1>
+    {% if cart.items.all %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th style="width:120px;">Qty</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart.items.all %}
+                        <tr>
+                            <td>{{ item.product.title }}</td>
+                            <td>
+                                <form method="post" action="{% url 'cart:update' item.id %}" class="d-flex">
+                                    {% csrf_token %}
+                                    <input type="number"
+                                           name="qty"
+                                           value="{{ item.qty }}"
+                                           min="1"
+                                           max="{{ item.product.stock_qty }}"
+                                           class="form-control form-control-sm me-2 cart-qty-input">
+                                    <button class="btn btn-sm btn-update" type="submit">Update</button>
+                                </form>
+                            </td>
+                            <td>£{{ item.product.price }}</td>
+                            <td>£{{ item.subtotal }}</td>
+                            <td>
+                                <form method="post" action="{% url 'cart:remove' item.id %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-remove" type="submit">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="{% url 'catalog:product_list' %}" class="btn btn-continue">Continue shopping</a>
+            <div class="text-end">
+                <h4>Total: £{{ cart.total }}</h4>
+                <a href="{% url 'checkout:summary' %}" class="btn btn-checkout">Checkout</a>
+            </div>
+        </div>
+    {% else %}
+        <p>Your cart is empty.</p>
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Back to shop</a>
+    {% endif %}
 {% endblock %}
