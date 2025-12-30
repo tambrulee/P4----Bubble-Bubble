@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+.env
+
+# build / generated
+staticfiles/
+dist/
+build/
+
+# deps
+node_modules/
+
+# optional: other generated dirs
+.coverage
