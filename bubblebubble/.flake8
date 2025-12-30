@@ -1,4 +1,3 @@
-cat > .flake8 <<'EOF'
 [flake8]
 exclude =
     .git,
@@ -9,13 +8,10 @@ exclude =
     node_modules,
     static,
     media,
+    staticfiles,
     .pytest_cache,
-    */migrations/*,
+    migrations,
     *.pyc
-    
-per-file-ignores =
-    */migrations/*:E501
 
 extend-ignore = E203, W503
-
-max-line-length = 120
+max-line-length = 100
