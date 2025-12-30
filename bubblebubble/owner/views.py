@@ -8,6 +8,45 @@ from django.db.models import Sum, Count, Avg
 from django.utils import timezone
 from datetime import timedelta
 from django.views.decorators.http import require_POST
+from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.urls import reverse
+from django.views.decorators.http import require_http_methods
+
+
+@staff_member_required
+@require_http_methods(["GET", "POST"])
+def owner_login(request):
+    # Already logged in
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect("owner_dashboard")
+        # Logged in but not staff -> boot them out
+        logout(request)
+        messages.error(request, "Staff access only.")
+        return redirect("owner_login")
+
+    form = AuthenticationForm(request, data=request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        user = form.get_user()
+        login(request, user)
+
+        if not user.is_staff:
+            logout(request)
+            messages.error(request, "Staff access only.")
+            return redirect("owner_login")
+
+        # Respect ?next=... if present, but keep it inside /owner/
+        next_url = request.GET.get("next")
+        if next_url and next_url.startswith("/owner/"):
+            return redirect(next_url)
+
+        messages.success(request, "Welcome back.")
+        return redirect("owner_dashboard")
+
+    return render(request, "owner/login.html", {"form": form})
 
 
 @staff_member_required

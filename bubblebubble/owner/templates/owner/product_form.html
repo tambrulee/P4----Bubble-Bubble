@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "owner/base_owner.html" %}
 {% block content %}
 
 <div class="container py-4" style="max-width: 900px;">
@@ -70,7 +70,7 @@
 
         {% if product %}
           <a class="btn btn-sm btn-outline-secondary"
-             href="{% url 'owner_product_images' product.pk %}">
+             href="{% url 'owner:owner_product_images' product.pk %}">
             Manage gallery
           </a>
         {% endif %}

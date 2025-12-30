@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "owner/base_owner.html" %}
 {% block content %}
 
 <h1 class="h3 mb-4">Owner dashboard</h1>
@@ -19,7 +19,7 @@
 
   <!-- Inactive -->
   <div class="col-md-4">
-    <a href="{% url 'owner_products' %}" class="text-decoration-none text-dark">
+    <a href="{% url 'owner:owner_products' %}" class="text-decoration-none text-dark">
       <div class="card p-3 h-100 shadow-sm {% if inactive_count %}border-warning{% endif %}">
         <div class="fw-semibold text-muted">Inactive products</div>
         <div class="display-6">
@@ -38,7 +38,7 @@
 
   <!-- Orders -->
   <div class="col-md-4">
-    <a href="{% url 'owner_orders' %}" class="text-decoration-none text-dark">
+    <a href="{% url 'owner:owner_orders' %}" class="text-decoration-none text-dark">
       <div class="card p-3 h-100 shadow-sm {% if pending_orders %}border-primary{% endif %}">
         <div class="fw-semibold text-muted">Orders pending dispatch</div>
         <div class="display-6">{{ pending_orders }}</div>

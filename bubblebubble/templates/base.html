@@ -19,92 +19,106 @@
   </head>
   <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-light navbar-pink bb-navbar sticky-top">
-      <div class="container bb-nav-grid">
-        <!-- LEFT: burger (always visible) -->
-        <div class="bb-nav-left">
-          <button class="navbar-toggler border-0 bb-icon-button"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#mainNav"
-                  aria-controls="mainNav"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation">
-            <span class="bb-icon">☰</span>
-          </button>
-        </div>
-        <!-- CENTER: logo -->
-        <div class="bb-nav-center">
-          <a class="navbar-brand d-flex flex-column align-items-center"
-             href="{% url 'catalog:home' %}">
-            <img src="{% static 'img/logo.png' %}" alt="Moon & Moss" class="bb-logo">
-          </a>
-        </div>
-        <!-- RIGHT: icons -->
-        <div class="bb-nav-right bb-nav-icons">
-          {% if user.is_authenticated %}
-            <!-- ACCOUNT ICON -->
-            <a href="#" class="bb-icon-link" title="My account">
-              <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
-            </a>
-            <!-- LOGOUT ICON -->
-            <a href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}"
-               class="bb-icon-link"
-               title="Logout">
-              <span class="bb-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
-            </a>
-          {% else %}
-            <!-- LOGIN ICON -->
-            <a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}"
-               class="bb-icon-link"
-               title="Login">
-              <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
-            </a>
-          {% endif %}
-          <!-- CART ICON + BADGE -->
-          <a href="{% url 'cart:view' %}"
-             class="bb-icon-link position-relative"
-             title="Cart"
-             data-bs-toggle="offcanvas"
-             data-bs-target="#miniCart"
-             aria-controls="miniCart">
-            <span class="bb-icon"><i class="fa-solid fa-cart-shopping"></i></span>
-            <span id="cart-count"
-                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger {% if cart_count|default:0|add:0 <= 0 %}d-none{% endif %}">
-              {{ cart_count|default:0 }}
-            </span>
-          </a>
-        </div>
-      </div>
-      <!-- DROPDOWN MENU BAR UNDER HEADER -->
-      <div class="bb-main-links collapse" id="mainNav">
-        <div class="container">
-          <ul class="navbar-nav mx-auto flex-lg-row flex-column align-items-lg-center text-center">
-            {% if user.is_staff %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'owner_dashboard' %}">Admin Dashboard</a>
-              </li>
-            {% endif %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'catalog:product_list' %}">Shop All</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'catalog:winter_isles' %}">Winter Isles</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'catalog:refillables' %}">Refillables</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'catalog:about' %}">Our Story</a>
-            </li>
-            <!-- Locked down and does not appear unless logged in -->
-            {% if user.is_authenticated %}
-              <a class="nav-link" href="{% url 'accounts:my_orders' %}">My Orders</a>
-            {% endif %}
-          </ul>
-        </div>
-      </div>
-    </nav>
+<nav class="navbar navbar-light navbar-pink bb-navbar sticky-top">
+  <div class="container bb-nav-grid">
+
+    <!-- LEFT: burger (mobile only) -->
+    <div class="bb-nav-left d-lg-none">
+      <button class="navbar-toggler border-0 bb-icon-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#mainNav"
+              aria-controls="mainNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="bb-icon">☰</span>
+      </button>
+    </div>
+
+    <!-- CENTER: logo -->
+    <div class="bb-nav-center">
+      <a class="navbar-brand d-flex flex-column align-items-center"
+         href="{% url 'catalog:home' %}">
+        <img src="{% static 'img/logo.png' %}" alt="Moon & Moss" class="bb-logo">
+      </a>
+    </div>
+
+    <!-- RIGHT: icons -->
+    <div class="bb-nav-right bb-nav-icons">
+      {% if user.is_authenticated %}
+        <a href="#" class="bb-icon-link" title="My account">
+          <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
+        </a>
+        <a href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}"
+           class="bb-icon-link"
+           title="Logout">
+          <span class="bb-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+        </a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}"
+           class="bb-icon-link"
+           title="Login">
+          <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
+        </a>
+      {% endif %}
+
+      <!-- CART ICON + BADGE -->
+      <a href="{% url 'cart:view' %}"
+         class="bb-icon-link position-relative"
+         title="Cart"
+         data-bs-toggle="offcanvas"
+         data-bs-target="#miniCart"
+         aria-controls="miniCart">
+        <span class="bb-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+        <span id="cart-count"
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger {% if cart_count|default:0|add:0 <= 0 %}d-none{% endif %}">
+          {{ cart_count|default:0 }}
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <!-- MAIN LINKS
+       - mobile: collapses under header (burger opens it)
+       - desktop: always visible (CSS forces it open + horizontal)
+  -->
+  <div class="bb-main-links navbar-collapse collapse" id="mainNav">
+    <div class="container">
+      <ul class="navbar-nav mx-auto bb-nav-links text-center">
+
+        {% if user.is_staff %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'owner_dashboard' %}">Admin Dashboard</a>
+          </li>
+        {% endif %}
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'catalog:product_list' %}">Shop All</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'catalog:winter_isles' %}">Winter Isles</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'catalog:refillables' %}">Refillables</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'catalog:about' %}">Our Story</a>
+        </li>
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:my_orders' %}">My Orders</a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
     <!-- Scrolling bar -->
     <div class="bb-promo-bar">
       <div class="bb-promo-track">

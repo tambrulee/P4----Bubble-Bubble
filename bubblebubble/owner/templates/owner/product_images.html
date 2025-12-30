@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "owner/base_owner.html" %}
 {% block content %}
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
@@ -6,7 +6,7 @@
       <div class="text-muted">{{ product.title }}</div>
     </div>
     <a class="btn btn-outline-secondary"
-      href="{% url 'owner_product_edit' product.pk %}">
+      href="{% url 'owner:owner_product_edit' product.pk %}">
       Back to product
     </a>
   </div>
@@ -25,7 +25,7 @@
           <div class="card-body p-2">
             <div class="small text-truncate">{{ img.alt_text|default:"(no alt text)" }}</div>
             <a class="btn btn-sm btn-outline-danger w-100 mt-2"
-               href="{% url 'owner_product_image_delete' img.pk %}">Delete</a>
+               href="{% url 'owner:owner_product_image_delete' img.pk %}">Delete</a>
           </div>
         </div>
       </div>

@@ -22,51 +22,51 @@ a:hover {
 }
 
 /* ====================================
-   NAVBAR + HEADER
+   NAVBAR + HEADER (CLEAN)
    ==================================== */
 
-.bb-logo {
-  height: 100px;   /* try 80–100px */
-  width: auto;
-}
-
-/* Main navbar wrapper */
 .bb-navbar {
   background-color: #6D8675;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding: 0.5rem 0;
   border-bottom: 1px solid #7A8F7A;
 }
 
-/* 3-column grid: left (burger), center (logo), right (icons) */
+/* Slightly tighter container padding just for navbar */
+.bb-navbar .container {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+/* Logo */
+.bb-logo {
+  height: 100px;
+  width: auto;
+  display: block;
+}
+
+/* Top row layout: burger | logo | icons */
 .bb-nav-grid {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 44px auto 1fr;
   align-items: center;
 }
 
-.bb-nav-left {
-  justify-self: start;
-}
-
-.bb-nav-center {
-  justify-self: center;
-}
-
-.bb-nav-right {
+.bb-nav-left   { justify-self: start; }
+.bb-nav-center { justify-self: center; }
+.bb-nav-right  {
   justify-self: end;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.15rem; /* remove any browser default spacing */
-
+  gap: 0.5rem;
 }
 
-/* Burger */
+/* Burger button */
 .bb-icon-button {
   background: transparent;
-  box-shadow: none;
+  border: 0;
   padding: 0;
+  box-shadow: none;
 }
 
 /* Generic icon style */
@@ -76,37 +76,34 @@ a:hover {
   color: #f6f4f0;
 }
 
-/* Right-hand icon buttons */
+/* Right-hand icon links */
 .bb-nav-icons .bb-icon-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0rem;
   text-decoration: none;
 }
 
+/* Font Awesome icons inside nav */
 .bb-nav-icons .bb-icon-link .fa-solid,
 .bb-nav-icons .bb-icon-link .fa-regular {
-  font-size: 0.95rem;   /* slimmer + nicer spacing */
+  font-size: 0.95rem;
 }
-
-@media (max-width: 575.98px) {
-  .bb-nav-icons .bb-icon-link .fa-solid,
-  .bb-nav-icons .bb-icon-link .fa-regular {
-    font-size: 0.95rem; /* perfect for mobile */
-  }
-}
-
-
 
 /* Menu bar under header */
 .bb-main-links {
   background-color: #6D8675;
 }
 
+/* Nav list default (mobile = stacked) */
+.bb-main-links .navbar-nav {
+  padding: 0.75rem 0;
+}
+
+/* Link pills */
 .bb-main-links .nav-link {
   padding: 0.6rem 1rem;
-  margin: 0 0.15rem;
+  margin: 0.15rem 0;       /* vertical rhythm on mobile */
   border-radius: 999px;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -120,38 +117,66 @@ a:hover {
   color: #29403e;
 }
 
-/* Optional text brand wordmark under logo */
-.brand-wordmark {
-  font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #29403e;
-}
-
-/* Mobile tweaks */
+/* Small screens tweaks */
 @media (max-width: 575.98px) {
-  .bb-navbar img {
-    height: 48px; /* slightly smaller logo on tiny screens */
+  .bb-navbar .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
-  .bb-nav-icons .bb-icon-link {
-    margin-left: 0.1rem; /* tighter spacing */
+  .bb-logo {
+    height: 48px;
+  }
+
+  .bb-nav-right {
+    gap: 0.25rem;
   }
 }
 
-/* Mobile navbar toggler icon visibility (Bootstrap default override) */
+/* Desktop behaviour */
+@media (min-width: 992px) {
+  /* Hide burger, rebalance grid */
+  .bb-nav-left {
+    display: none;
+  }
 
-.navbar-pink .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0,0,0,.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  /* Top row becomes: logo left | icons right */
+  .bb-nav-grid {
+    grid-template-columns: auto 1fr;
+  }
+
+  .bb-nav-center {
+    justify-self: start;
+  }
+
+  .bb-nav-right {
+    justify-self: end;
+  }
+
+  /* Force menu visible on desktop (override Bootstrap collapse) */
+  #mainNav {
+    display: block !important;
+    height: auto !important;
+    visibility: visible !important;
+  }
+
+  /* Desktop links go horizontal + centered */
+  .bb-main-links .navbar-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 0 0.75rem;
+  }
+
+  /* Remove vertical margins once horizontal */
+  .bb-main-links .nav-link {
+    margin: 0;
+  }
 }
 
-.navbar-toggler:focus,
-.navbar-toggler:active,
-.navbar-toggler:focus-visible {
-  outline: none;
-  box-shadow: none;
-}
 
 
 /* ====================================
@@ -321,31 +346,6 @@ footer {
 
 footer .text-muted {
   color: #29403e !important;
-}
-
-
-/* Reduce left/right padding just for the navbar */
-.bb-navbar .container {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-
-/* Even tighter on mobile */
-@media (max-width: 575.98px) {
-  .bb-navbar .container {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-  }
-}
-
-.bb-nav-right {
-  gap: 0.50rem;   /* was 0.2rem */
-}
-
-@media (max-width: 575.98px) {
-  .bb-nav-right {
-    gap: 0.25rem;
-  }
 }
 
 /* Email reset */
