@@ -1,43 +1,75 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1 class="h3 mb-3">Orders</h1>
-  <!-- Tabs -->
-  <ul class="nav nav-tabs mb-3">
-    <li class="nav-item">
-      <a class="nav-link {% if tab == 'new' %}active{% endif %}"
-         href="?tab=new">
-        New orders <span class="badge text-bg-secondary">{{ counts.new }}</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link {% if tab == 'dispatched' %}active{% endif %}"
-         href="?tab=dispatched">
-        Dispatched <span class="badge text-bg-secondary">{{ counts.dispatched }}</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link {% if tab == 'delivered' %}active{% endif %}"
-         href="?tab=delivered">
-        Delivered <span class="badge text-bg-secondary">{{ counts.delivered }}</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link {% if tab == 'abandoned' %}active{% endif %}"
-         href="?tab=abandoned">
-        Abandoned checkouts <span class="badge text-bg-secondary">{{ counts.abandoned }}</span>
-      </a>
-    </li>
-    <li class="nav-item ms-auto">
-      <a class="nav-link {% if tab == 'all' %}active{% endif %}"
-         href="?tab=all">
-        All <span class="badge text-bg-secondary">{{ counts.all }}</span>
-      </a>
-    </li>
-  </ul>
-  <!-- Order table -->
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div>
+    <h1 class="h3 mb-0">Orders</h1>
+    <div class="text-muted small">Track paid orders, fulfilment and abandoned checkouts</div>
+  </div>
+      <a href="{% url 'owner_dashboard' %}" class="btn btn-sm btn-outline-secondary mb-2">
+      ← Back to dashboard
+    </a>
+</div>
+
+<!-- Tabs -->
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'new' %}active{% endif %}" href="?tab=new">
+      New
+      {% if counts.new %}
+        <span class="badge text-bg-primary ms-1">{{ counts.new }}</span>
+      {% else %}
+        <span class="badge text-bg-light border ms-1">0</span>
+      {% endif %}
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'dispatched' %}active{% endif %}" href="?tab=dispatched">
+      Dispatched
+      {% if counts.dispatched %}
+        <span class="badge text-bg-info ms-1">{{ counts.dispatched }}</span>
+      {% else %}
+        <span class="badge text-bg-light border ms-1">0</span>
+      {% endif %}
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'delivered' %}active{% endif %}" href="?tab=delivered">
+      Delivered
+      {% if counts.delivered %}
+        <span class="badge text-bg-success ms-1">{{ counts.delivered }}</span>
+      {% else %}
+        <span class="badge text-bg-light border ms-1">0</span>
+      {% endif %}
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'abandoned' %}active{% endif %}" href="?tab=abandoned">
+      Abandoned
+      {% if counts.abandoned %}
+        <span class="badge text-bg-warning ms-1">{{ counts.abandoned }}</span>
+      {% else %}
+        <span class="badge text-bg-light border ms-1">0</span>
+      {% endif %}
+    </a>
+  </li>
+
+  <li class="nav-item ms-auto">
+    <a class="nav-link {% if tab == 'all' %}active{% endif %}" href="?tab=all">
+      All
+      <span class="badge text-bg-secondary ms-1">{{ counts.all }}</span>
+    </a>
+  </li>
+</ul>
+
+<!-- Table -->
+<div class="card shadow-sm">
   <div class="table-responsive">
-    <table class="table align-middle">
-      <thead>
+    <table class="table align-middle mb-0">
+      <thead class="table-light">
         <tr>
           <th>ID</th>
           <th>Date</th>
@@ -45,17 +77,30 @@
           <th>Total</th>
           <th>Payment</th>
           <th>Fulfilment</th>
-          <th class="text-end"></th>
+          <th class="text-end">Actions</th>
         </tr>
       </thead>
+
       <tbody>
         {% for o in orders %}
           <tr>
-            <td>#{{ o.id }}</td>
-            <td>{{ o.created_at|date:"d M Y H:i" }}</td>
-            <td>{{ o.full_name|default:o.email|default:"Guest" }}</td>
-            <td>£{{ o.total }}</td>
-            {# Payment status (your existing field) #}
+            <td class="fw-semibold">#{{ o.id }}</td>
+
+            <td>
+              {{ o.created_at|date:"d M Y" }}
+              <div class="text-muted small">{{ o.created_at|date:"H:i" }}</div>
+            </td>
+
+            <td>
+              {{ o.full_name|default:o.email|default:"Guest" }}
+              {% if o.email %}
+                <div class="text-muted small text-truncate" style="max-width: 260px;">{{ o.email }}</div>
+              {% endif %}
+            </td>
+
+            <td class="fw-semibold">£{{ o.total }}</td>
+
+            <!-- Payment -->
             <td>
               {% if o.status == "PAID" %}
                 <span class="badge text-bg-success">Paid</span>
@@ -65,7 +110,8 @@
                 <span class="badge text-bg-danger">Failed</span>
               {% endif %}
             </td>
-            {# Fulfilment status (the field we’re updating) #}
+
+            <!-- Fulfilment -->
             <td>
               {% if o.fulfilment_status == "NEW" %}
                 <span class="badge text-bg-secondary">New</span>
@@ -76,12 +122,18 @@
               {% elif o.fulfilment_status == "CANCELLED" %}
                 <span class="badge text-bg-dark">Cancelled</span>
               {% else %}
-                <span class="badge text-bg-light">—</span>
+                <span class="badge text-bg-light border">—</span>
               {% endif %}
             </td>
+
+            <!-- Actions -->
             <td class="text-end">
-              <div class="d-inline-flex gap-1">
-                {# Only show fulfilment actions if paid (optional but sensible) #}
+              <div class="btn-group" role="group" aria-label="Order actions">
+                <a class="btn btn-sm btn-outline-secondary"
+                   href="{% url 'owner_order_detail' o.id %}">
+                  View
+                </a>
+
                 {% if o.status == "PAID" %}
                   {% if o.fulfilment_status == "NEW" %}
                     <form method="post"
@@ -90,6 +142,7 @@
                       <button class="btn btn-sm btn-mm" type="submit">Mark dispatched</button>
                     </form>
                   {% endif %}
+
                   {% if o.fulfilment_status != "DELIVERED" and o.fulfilment_status != "CANCELLED" %}
                     <form method="post"
                           action="{% url 'owner_order_set_fulfilment' o.id 'DELIVERED' %}">
@@ -98,17 +151,31 @@
                     </form>
                   {% endif %}
                 {% endif %}
-                <a class="btn btn-sm btn-outline-secondary"
-                   href="{% url 'owner_order_detail' o.id %}">View</a>
               </div>
+
+              {% if o.status != "PAID" %}
+                <div class="text-muted small mt-1">Fulfilment locked (not paid)</div>
+              {% endif %}
             </td>
           </tr>
+
         {% empty %}
           <tr>
-            <td colspan="7" class="text-muted py-4">No orders yet.</td>
+            <td colspan="7" class="text-center text-muted py-5">
+              {% if tab == 'new' %}
+                🎉 No new orders — all caught up.
+              {% elif tab == 'abandoned' %}
+                No abandoned checkouts right now.
+              {% else %}
+                No orders found in this view.
+              {% endif %}
+            </td>
           </tr>
         {% endfor %}
       </tbody>
+
     </table>
   </div>
+</div>
+
 {% endblock %}

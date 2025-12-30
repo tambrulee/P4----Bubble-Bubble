@@ -5,7 +5,10 @@
       <h1 class="h3 mb-0">Images</h1>
       <div class="text-muted">{{ product.title }}</div>
     </div>
-    <a class="btn btn-outline-secondary" href="{% url 'owner_products' %}">Back</a>
+    <a class="btn btn-outline-secondary"
+      href="{% url 'owner_product_edit' product.pk %}">
+      Back to product
+    </a>
   </div>
   <form method="post" enctype="multipart/form-data" class="card p-3 mb-3">
     {% csrf_token %}
