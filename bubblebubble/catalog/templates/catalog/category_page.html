@@ -1,121 +1,121 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    {% load tag_extras %}
-    <section class="bb-hero-wrap my-4">
-        <div class="container">
-            <div class="card border-0 shadow-sm overflow-hidden">
-                <div class="position-relative">
-                    <img src="{% static hero_image %}"
-                         class="d-block w-100 bb-hero-img"
-                         alt="{{ page_title }}">
-                    <div class="bb-hero-overlay">
-                        <h1 class="bb-hero-title">{{ page_title }}</h1>
-                        <p class="bb-hero-text mb-0">{{ page_description }}</p>
-                    </div>
-                </div>
-            </div>
+  {% load tag_extras %}
+  <section class="bb-hero-wrap my-4">
+    <div class="container">
+      <div class="card border-0 shadow-sm overflow-hidden">
+        <div class="position-relative">
+          <img src="{% static hero_image %}"
+               class="d-block w-100 bb-hero-img"
+               alt="{{ page_title }}">
+          <div class="bb-hero-overlay">
+            <h1 class="bb-hero-title">{{ page_title }}</h1>
+            <p class="bb-hero-text mb-0">{{ page_description }}</p>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 {% if tag == "refillable" %}
-    <section class="py-4 bg-light">
-        <div class="container">
-            <div class="row g-4">
-                {# HOW REFILLABLES WORK #}
-                <div class="col-lg-6">
-                    <h2 class="h4 mb-2">How refillables work</h2>
-                    <p class="text-muted">
-                        Our refillable soaps are designed to be reused again and again.
-                        Buy the main bottle once, then top up with refills whenever you run low.
-                    </p>
-                    <ul class="list-unstyled mt-3">
-                        <li class="d-flex gap-2 mb-2">
-                            <span aria-hidden="true">🧴</span>
-                            <span>Buy the reusable bottle once</span>
-                        </li>
-                        <li class="d-flex gap-2 mb-2">
-                            <span aria-hidden="true">♻️</span>
-                            <span>Refill using lightweight refill packs</span>
-                        </li>
-                        <li class="d-flex gap-2">
-                            <span aria-hidden="true">🌍</span>
-                            <span>Reduce plastic waste over time</span>
-                        </li>
-                    </ul>
-                </div>
-                {# WASTE SAVING BENEFIT #}
-                <div class="col-lg-6">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="card-body">
-                            <h3 class="h5 mb-2">Why refilling matters</h3>
-                            <p class="text-muted mb-3">Refilling creates significantly less waste than replacing bottles.</p>
-                            <div class="d-flex flex-column gap-2">
-                                <div class="d-flex justify-content-between">
-                                    <span>Bottles bought</span>
-                                    <strong>5</strong>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Reusable bottle kept</span>
-                                    <strong>1</strong>
-                                </div>
-                                <hr class="my-2">
-                                <div class="d-flex justify-content-between">
-                                    <span>Plastic bottles avoided</span>
-                                    <strong>4</strong>
-                                </div>
-                            </div>
-                            <p class="small text-muted mt-3 mb-0">Exact savings vary, but refilling always reduces single-use plastic.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <section class="py-4 bg-light">
+    <div class="container">
+      <div class="row g-4">
+        {# HOW REFILLABLES WORK #}
+        <div class="col-lg-6">
+          <h2 class="h4 mb-2">How refillables work</h2>
+          <p class="text-muted">
+            Our refillable soaps are designed to be reused again and again.
+            Buy the main bottle once, then top up with refills whenever you run low.
+          </p>
+          <ul class="list-unstyled mt-3">
+            <li class="d-flex gap-2 mb-2">
+              <span aria-hidden="true">🧴</span>
+              <span>Buy the reusable bottle once</span>
+            </li>
+            <li class="d-flex gap-2 mb-2">
+              <span aria-hidden="true">♻️</span>
+              <span>Refill using lightweight refill packs</span>
+            </li>
+            <li class="d-flex gap-2">
+              <span aria-hidden="true">🌍</span>
+              <span>Reduce plastic waste over time</span>
+            </li>
+          </ul>
         </div>
-    </section>
+        {# WASTE SAVING BENEFIT #}
+        <div class="col-lg-6">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+              <h3 class="h5 mb-2">Why refilling matters</h3>
+              <p class="text-muted mb-3">Refilling creates significantly less waste than replacing bottles.</p>
+              <div class="d-flex flex-column gap-2">
+                <div class="d-flex justify-content-between">
+                  <span>Bottles bought</span>
+                  <strong>5</strong>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>Reusable bottle kept</span>
+                  <strong>1</strong>
+                </div>
+                <hr class="my-2">
+                <div class="d-flex justify-content-between">
+                  <span>Plastic bottles avoided</span>
+                  <strong>4</strong>
+                </div>
+              </div>
+              <p class="small text-muted mt-3 mb-0">Exact savings vary, but refilling always reduces single-use plastic.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endif %}
 <section class="py-3">
-    <div class="container">
-        <div class="row g-3">
-            {% for p in products %}
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="card h-100 shadow-sm">
-                        {% if p.images.first %}
-                            <img src="{{ p.images.first.image.url }}"
-                                 class="card-img-top"
-                                 alt="{{ p.images.first.alt_text }}">
-                        {% endif %}
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title mb-1">{{ p.title }}</h5>
-                            <!-- Badges -->
-                            <div class="d-flex flex-wrap gap-1 mb-2">
-                                {% if p.tags|has_tag:"bestseller" %}<span class="badge bg-dark">Best Selling</span>{% endif %}
-                                {% if p.tags|has_tag:"limited" %}<span class="badge bg-warning text-dark">Limited Edition</span>{% endif %}
-                                {% if p.tags|has_tag:"refillable" %}<span class="badge bg-success">Refillable</span>{% endif %}
-                            </div>
-                            <h5 class="card-title mb-1">{{ p.title }}</h5>
-                            <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
-                            <p class="mb-2 product-price">£{{ p.price }}</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
-                                <a href="{% url 'catalog:product_detail' p.slug %}"
-                                   class="btn btn-sm btn-outline-primary">View</a>
-                                <form method="post"
-                                      action="{% url 'cart:add_to_cart' product.id %}"
-                                      class="js-add-to-cart">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="qty" value="1">
-                                    <button type="submit"
-                                            class="btn btn-primary"
-                                            {% if product.stock_qty == 0 %}disabled{% endif %}>Add to cart</button>
-                                </form>
-                            </div>
-                            {% if p.stock_qty == 0 %}<p class="small text-muted mt-2 mb-0">Out of stock</p>{% endif %}
-                        </div>
-                    </div>
-                </div>
-            {% empty %}
-                <p class="text-muted">No products in this range yet.</p>
-            {% endfor %}
+  <div class="container">
+    <div class="row g-3">
+      {% for p in products %}
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card h-100 shadow-sm">
+            {% if p.images.first %}
+              <img src="{{ p.images.first.image.url }}"
+                   class="card-img-top"
+                   alt="{{ p.images.first.alt_text }}">
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title mb-1">{{ p.title }}</h5>
+              <!-- Badges -->
+              <div class="d-flex flex-wrap gap-1 mb-2">
+                {% if p.tags|has_tag:"bestseller" %}<span class="badge bg-dark">Best Selling</span>{% endif %}
+                {% if p.tags|has_tag:"limited" %}<span class="badge bg-warning text-dark">Limited Edition</span>{% endif %}
+                {% if p.tags|has_tag:"refillable" %}<span class="badge bg-success">Refillable</span>{% endif %}
+              </div>
+              <h5 class="card-title mb-1">{{ p.title }}</h5>
+              <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
+              <p class="mb-2 product-price">£{{ p.price }}</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
+                <a href="{% url 'catalog:product_detail' p.slug %}"
+                   class="btn btn-sm btn-outline-primary">View</a>
+                <form method="post"
+                      action="{% url 'cart:add_to_cart' product.id %}"
+                      class="js-add-to-cart">
+                  {% csrf_token %}
+                  <input type="hidden" name="qty" value="1">
+                  <button type="submit"
+                          class="btn btn-primary"
+                          {% if product.stock_qty == 0 %}disabled{% endif %}>Add to cart</button>
+                </form>
+              </div>
+              {% if p.stock_qty == 0 %}<p class="small text-muted mt-2 mb-0">Out of stock</p>{% endif %}
+            </div>
+          </div>
         </div>
+      {% empty %}
+        <p class="text-muted">No products in this range yet.</p>
+      {% endfor %}
     </div>
+  </div>
 </section>
 {% endblock %}

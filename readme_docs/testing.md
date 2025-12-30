@@ -1,5 +1,5 @@
 # Django
-- Installation
+- [DJLint - Django/HTML Template Linting](/readme_docs/djlint.md)
 
 # Heroku
 - [Installation & Deployment](/readme_docs/deployment_testing_documentation.md)

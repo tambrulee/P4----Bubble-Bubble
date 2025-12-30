@@ -1,114 +1,114 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1 class="h3 mb-3">Orders</h1>
-    <!-- Tabs -->
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <a class="nav-link {% if tab == 'new' %}active{% endif %}"
-               href="?tab=new">
-                New orders <span class="badge text-bg-secondary">{{ counts.new }}</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {% if tab == 'dispatched' %}active{% endif %}"
-               href="?tab=dispatched">
-                Dispatched <span class="badge text-bg-secondary">{{ counts.dispatched }}</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {% if tab == 'delivered' %}active{% endif %}"
-               href="?tab=delivered">
-                Delivered <span class="badge text-bg-secondary">{{ counts.delivered }}</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {% if tab == 'abandoned' %}active{% endif %}"
-               href="?tab=abandoned">
-                Abandoned checkouts <span class="badge text-bg-secondary">{{ counts.abandoned }}</span>
-            </a>
-        </li>
-        <li class="nav-item ms-auto">
-            <a class="nav-link {% if tab == 'all' %}active{% endif %}"
-               href="?tab=all">
-                All <span class="badge text-bg-secondary">{{ counts.all }}</span>
-            </a>
-        </li>
-    </ul>
-    <!-- Order table -->
-    <div class="table-responsive">
-        <table class="table align-middle">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Customer</th>
-                    <th>Total</th>
-                    <th>Payment</th>
-                    <th>Fulfilment</th>
-                    <th class="text-end"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for o in orders %}
-                    <tr>
-                        <td>#{{ o.id }}</td>
-                        <td>{{ o.created_at|date:"d M Y H:i" }}</td>
-                        <td>{{ o.full_name|default:o.email|default:"Guest" }}</td>
-                        <td>£{{ o.total }}</td>
-                        {# Payment status (your existing field) #}
-                        <td>
-                            {% if o.status == "PAID" %}
-                                <span class="badge text-bg-success">Paid</span>
-                            {% elif o.status == "PENDING" %}
-                                <span class="badge text-bg-warning">Pending</span>
-                            {% else %}
-                                <span class="badge text-bg-danger">Failed</span>
-                            {% endif %}
-                        </td>
-                        {# Fulfilment status (the field we’re updating) #}
-                        <td>
-                            {% if o.fulfilment_status == "NEW" %}
-                                <span class="badge text-bg-secondary">New</span>
-                            {% elif o.fulfilment_status == "DISPATCHED" %}
-                                <span class="badge text-bg-info">Dispatched</span>
-                            {% elif o.fulfilment_status == "DELIVERED" %}
-                                <span class="badge text-bg-success">Delivered</span>
-                            {% elif o.fulfilment_status == "CANCELLED" %}
-                                <span class="badge text-bg-dark">Cancelled</span>
-                            {% else %}
-                                <span class="badge text-bg-light">—</span>
-                            {% endif %}
-                        </td>
-                        <td class="text-end">
-                            <div class="d-inline-flex gap-1">
-                                {# Only show fulfilment actions if paid (optional but sensible) #}
-                                {% if o.status == "PAID" %}
-                                    {% if o.fulfilment_status == "NEW" %}
-                                        <form method="post"
-                                              action="{% url 'owner_order_set_fulfilment' o.id 'DISPATCHED' %}">
-                                            {% csrf_token %}
-                                            <button class="btn btn-sm btn-mm" type="submit">Mark dispatched</button>
-                                        </form>
-                                    {% endif %}
-                                    {% if o.fulfilment_status != "DELIVERED" and o.fulfilment_status != "CANCELLED" %}
-                                        <form method="post"
-                                              action="{% url 'owner_order_set_fulfilment' o.id 'DELIVERED' %}">
-                                            {% csrf_token %}
-                                            <button class="btn btn-sm btn-mm-outline" type="submit">Mark delivered</button>
-                                        </form>
-                                    {% endif %}
-                                {% endif %}
-                                <a class="btn btn-sm btn-outline-secondary"
-                                   href="{% url 'owner_order_detail' o.id %}">View</a>
-                            </div>
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="7" class="text-muted py-4">No orders yet.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+  <h1 class="h3 mb-3">Orders</h1>
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link {% if tab == 'new' %}active{% endif %}"
+         href="?tab=new">
+        New orders <span class="badge text-bg-secondary">{{ counts.new }}</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if tab == 'dispatched' %}active{% endif %}"
+         href="?tab=dispatched">
+        Dispatched <span class="badge text-bg-secondary">{{ counts.dispatched }}</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if tab == 'delivered' %}active{% endif %}"
+         href="?tab=delivered">
+        Delivered <span class="badge text-bg-secondary">{{ counts.delivered }}</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if tab == 'abandoned' %}active{% endif %}"
+         href="?tab=abandoned">
+        Abandoned checkouts <span class="badge text-bg-secondary">{{ counts.abandoned }}</span>
+      </a>
+    </li>
+    <li class="nav-item ms-auto">
+      <a class="nav-link {% if tab == 'all' %}active{% endif %}"
+         href="?tab=all">
+        All <span class="badge text-bg-secondary">{{ counts.all }}</span>
+      </a>
+    </li>
+  </ul>
+  <!-- Order table -->
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Total</th>
+          <th>Payment</th>
+          <th>Fulfilment</th>
+          <th class="text-end"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+          <tr>
+            <td>#{{ o.id }}</td>
+            <td>{{ o.created_at|date:"d M Y H:i" }}</td>
+            <td>{{ o.full_name|default:o.email|default:"Guest" }}</td>
+            <td>£{{ o.total }}</td>
+            {# Payment status (your existing field) #}
+            <td>
+              {% if o.status == "PAID" %}
+                <span class="badge text-bg-success">Paid</span>
+              {% elif o.status == "PENDING" %}
+                <span class="badge text-bg-warning">Pending</span>
+              {% else %}
+                <span class="badge text-bg-danger">Failed</span>
+              {% endif %}
+            </td>
+            {# Fulfilment status (the field we’re updating) #}
+            <td>
+              {% if o.fulfilment_status == "NEW" %}
+                <span class="badge text-bg-secondary">New</span>
+              {% elif o.fulfilment_status == "DISPATCHED" %}
+                <span class="badge text-bg-info">Dispatched</span>
+              {% elif o.fulfilment_status == "DELIVERED" %}
+                <span class="badge text-bg-success">Delivered</span>
+              {% elif o.fulfilment_status == "CANCELLED" %}
+                <span class="badge text-bg-dark">Cancelled</span>
+              {% else %}
+                <span class="badge text-bg-light">—</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <div class="d-inline-flex gap-1">
+                {# Only show fulfilment actions if paid (optional but sensible) #}
+                {% if o.status == "PAID" %}
+                  {% if o.fulfilment_status == "NEW" %}
+                    <form method="post"
+                          action="{% url 'owner_order_set_fulfilment' o.id 'DISPATCHED' %}">
+                      {% csrf_token %}
+                      <button class="btn btn-sm btn-mm" type="submit">Mark dispatched</button>
+                    </form>
+                  {% endif %}
+                  {% if o.fulfilment_status != "DELIVERED" and o.fulfilment_status != "CANCELLED" %}
+                    <form method="post"
+                          action="{% url 'owner_order_set_fulfilment' o.id 'DELIVERED' %}">
+                      {% csrf_token %}
+                      <button class="btn btn-sm btn-mm-outline" type="submit">Mark delivered</button>
+                    </form>
+                  {% endif %}
+                {% endif %}
+                <a class="btn btn-sm btn-outline-secondary"
+                   href="{% url 'owner_order_detail' o.id %}">View</a>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-muted py-4">No orders yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

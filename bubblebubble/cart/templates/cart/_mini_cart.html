@@ -1,73 +1,73 @@
 {% if cart.items.all %}
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <p class="mb-0 text-muted small">Items in your cart</p>
-        <a class="small" href="{% url 'cart:view' %}">View full cart</a>
-    </div>
-    <div class="vstack gap-3">
-        {% for item in cart.items.all %}
-            <div class="d-flex gap-3 align-items-start">
-                <div class="flex-grow-1">
-                    <div class="fw-semibold">{{ item.product.title }}</div>
-                    <div class="text-muted small">£{{ item.product.price|floatformat:2 }}</div>
-                    <!-- Qty controls -->
-                    <div class="d-inline-flex align-items-center gap-2 mt-2">
-                        <button type="button"
-                                class="btn btn-sm btn-outline-secondary js-qty"
-                                data-action="dec"
-                                data-update-url="{% url 'cart:update' item.id %}"
-                                data-stock="{{ item.product.stock_qty }}">
-                            <i class="fa-solid fa-minus"></i>
-                        </button>
-                        <input type="number"
-                               class="form-control form-control-sm text-center js-qty-input"
-                               value="{{ item.qty }}"
-                               min="1"
-                               max="{{ item.product.stock_qty }}"
-                               style="width: 64px"
-                               data-update-url="{% url 'cart:update' item.id %}"
-                               data-stock="{{ item.product.stock_qty }}">
-                        <button type="button"
-                                class="btn btn-sm btn-outline-secondary js-qty"
-                                data-action="inc"
-                                data-update-url="{% url 'cart:update' item.id %}"
-                                data-stock="{{ item.product.stock_qty }}">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="text-end">
-                    <div class="fw-semibold">£{{ item.subtotal|floatformat:2 }}</div>
-                    <form method="post"
-                          action="{% url 'cart:remove' item.id %}"
-                          class="mt-1 js-mini-remove">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-link text-danger p-0">Remove</button>
-                    </form>
-                </div>
-            </div>
-            {% if not forloop.last %}<hr class="my-2">{% endif %}
-        {% endfor %}
-    </div>
-    <hr class="my-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-muted">Total</span>
-        <span class="h5 mb-0">£{{ cart.total|floatformat:2 }}</span>
-    </div>
-    <div class="d-grid gap-2">
-        <form method="post" action="{% url 'checkout:start_checkout' %}">
-            {% csrf_token %}
-            <button class="btn btn-primary w-100" type="submit">Checkout</button>
-        </form>
-        <a class="btn btn-outline-secondary w-100 mt-2"
-           href="{% url 'cart:view' %}">View cart</a>
-    </div>
-{% else %}
-    <div class="text-center py-4">
-        <div class="mb-2">
-            <i class="fa-solid fa-cart-shopping fa-lg text-muted"></i>
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <p class="mb-0 text-muted small">Items in your cart</p>
+    <a class="small" href="{% url 'cart:view' %}">View full cart</a>
+  </div>
+  <div class="vstack gap-3">
+    {% for item in cart.items.all %}
+      <div class="d-flex gap-3 align-items-start">
+        <div class="flex-grow-1">
+          <div class="fw-semibold">{{ item.product.title }}</div>
+          <div class="text-muted small">£{{ item.product.price|floatformat:2 }}</div>
+          <!-- Qty controls -->
+          <div class="d-inline-flex align-items-center gap-2 mt-2">
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary js-qty"
+                    data-action="dec"
+                    data-update-url="{% url 'cart:update' item.id %}"
+                    data-stock="{{ item.product.stock_qty }}">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <input type="number"
+                   class="form-control form-control-sm text-center js-qty-input"
+                   value="{{ item.qty }}"
+                   min="1"
+                   max="{{ item.product.stock_qty }}"
+                   style="width: 64px"
+                   data-update-url="{% url 'cart:update' item.id %}"
+                   data-stock="{{ item.product.stock_qty }}">
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary js-qty"
+                    data-action="inc"
+                    data-update-url="{% url 'cart:update' item.id %}"
+                    data-stock="{{ item.product.stock_qty }}">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
         </div>
-        <p class="mb-3">Your cart is empty.</p>
-        <a class="btn btn-outline-secondary"
-           href="{% url 'catalog:product_list' %}">Continue shopping</a>
+        <div class="text-end">
+          <div class="fw-semibold">£{{ item.subtotal|floatformat:2 }}</div>
+          <form method="post"
+                action="{% url 'cart:remove' item.id %}"
+                class="mt-1 js-mini-remove">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-link text-danger p-0">Remove</button>
+          </form>
+        </div>
+      </div>
+      {% if not forloop.last %}<hr class="my-2">{% endif %}
+    {% endfor %}
+  </div>
+  <hr class="my-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <span class="text-muted">Total</span>
+    <span class="h5 mb-0">£{{ cart.total|floatformat:2 }}</span>
+  </div>
+  <div class="d-grid gap-2">
+    <form method="post" action="{% url 'checkout:start_checkout' %}">
+      {% csrf_token %}
+      <button class="btn btn-primary w-100" type="submit">Checkout</button>
+    </form>
+    <a class="btn btn-outline-secondary w-100 mt-2"
+       href="{% url 'cart:view' %}">View cart</a>
+  </div>
+{% else %}
+  <div class="text-center py-4">
+    <div class="mb-2">
+      <i class="fa-solid fa-cart-shopping fa-lg text-muted"></i>
     </div>
+    <p class="mb-3">Your cart is empty.</p>
+    <a class="btn btn-outline-secondary"
+       href="{% url 'catalog:product_list' %}">Continue shopping</a>
+  </div>
 {% endif %}

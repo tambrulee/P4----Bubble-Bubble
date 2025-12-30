@@ -1,54 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h3 mb-0">Products</h1>
-        <a class="btn btn-primary" href="{% url 'owner_product_create' %}">+ New product</a>
-    </div>
-    <div class="table-responsive">
-        <table class="table align-middle">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Type</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Images</th>
-                    <th>Active</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in products %}
-                    <tr>
-                        <td>{{ p.title }}</td>
-                        <td>£{{ p.price }}</td>
-                        <td>{{ p.stock_qty }}</td>
-                        <td>{{ p.image_count }}</td>
-                        <td>
-                            {% if p.active %}
-                                <span class="badge text-bg-success">Yes</span>
-                            {% else %}
-                                <span class="badge text-bg-secondary">No</span>
-                            {% endif %}
-                        </td>
-                        <td class="text-end">
-                            <a class="btn btn-sm btn-outline-secondary"
-                               href="{% url 'owner_product_edit' p.pk %}">Edit</a>
-                            <a class="btn btn-sm btn-outline-secondary"
-                               href="{% url 'owner_product_images' p.pk %}">Images</a>
-                            <a class="btn btn-sm btn-outline-danger"
-                               href="{% url 'owner_product_toggle' p.pk %}">
-                                {% if p.active %}
-                                    Deactivate
-                                {% else %}
-                                    Activate
-                                {% endif %}
-                            </a>
-                        </td>
-                    </tr>
-                    {% if p.stock_qty <= LOW_STOCK_THRESHOLD %}<span class="badge text-bg-warning">Low</span>{% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Products</h1>
+    <a class="btn btn-primary" href="{% url 'owner_product_create' %}">+ New product</a>
+  </div>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Type</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Images</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+          <tr>
+            <td>{{ p.title }}</td>
+            <td>£{{ p.price }}</td>
+            <td>{{ p.stock_qty }}</td>
+            <td>{{ p.image_count }}</td>
+            <td>
+              {% if p.active %}
+                <span class="badge text-bg-success">Yes</span>
+              {% else %}
+                <span class="badge text-bg-secondary">No</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <a class="btn btn-sm btn-outline-secondary"
+                 href="{% url 'owner_product_edit' p.pk %}">Edit</a>
+              <a class="btn btn-sm btn-outline-secondary"
+                 href="{% url 'owner_product_images' p.pk %}">Images</a>
+              <a class="btn btn-sm btn-outline-danger"
+                 href="{% url 'owner_product_toggle' p.pk %}">
+                {% if p.active %}
+                  Deactivate
+                {% else %}
+                  Activate
+                {% endif %}
+              </a>
+            </td>
+          </tr>
+          {% if p.stock_qty <= LOW_STOCK_THRESHOLD %}<span class="badge text-bg-warning">Low</span>{% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

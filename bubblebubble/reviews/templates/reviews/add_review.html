@@ -1,58 +1,58 @@
 {% extends "base.html" %}
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'reviews/css/reviews.css' %}">
+  <link rel="stylesheet" href="{% static 'reviews/css/reviews.css' %}">
 {% endblock %}
 {% block content %}
-    <div class="container py-4" style="max-width: 720px;">
-        <div class="mb-4">
-            <h1 class="h3 mb-1">Leave a review</h1>
-            <div class="text-muted">
-                for <strong>{{ product.title }}</strong>
-            </div>
-        </div>
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    {{ form.non_field_errors }}
-                    <div class="d-none" data-rating-field="{{ form.rating.name }}"></div>
-                    {# --- Rating (hidden real field + star UI) --- #}
-                    <div class="mb-4">
-                        <label class="form-label d-block mb-2">Rating</label>
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="star-rating" role="radiogroup" aria-label="Rating">
-                                {# clickable stars (5..1) #}
-                                {% for i in "12345" %}
-                                    <button type="button"
-                                            class="star"
-                                            data-value="{{ forloop.counter }}"
-                                            aria-label="{{ forloop.counter }} star">★</button>
-                                {% endfor %}
-                            </div>
-                            <div class="small text-muted" id="ratingText">Click to rate</div>
-                        </div>
-                        {# keep the actual Django field (will be submitted) but hide it #}
-                        <div class="d-none">{{ form.rating }}</div>
-                        {% for error in form.rating.errors %}<div class="text-danger small mt-2">{{ error }}</div>{% endfor %}
-                    </div>
-                    {# --- Comment --- #}
-                    <div class="mb-4">
-                        <label class="form-label" for="{{ form.comment.id_for_label }}">Comment</label>
-                        {{ form.comment }}
-                        <div class="form-text">Keep it short and helpful — what did you like or dislike?</div>
-                        {% for error in form.comment.errors %}<div class="text-danger small mt-2">{{ error }}</div>{% endfor %}
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary px-4">Save review</button>
-                        <a href="{% url 'catalog:product_detail' product.slug %}"
-                           class="btn btn-outline-secondary">Cancel</a>
-                    </div>
-                </form>
-            </div>
-        </div>
+  <div class="container py-4" style="max-width: 720px;">
+    <div class="mb-4">
+      <h1 class="h3 mb-1">Leave a review</h1>
+      <div class="text-muted">
+        for <strong>{{ product.title }}</strong>
+      </div>
     </div>
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          <div class="d-none" data-rating-field="{{ form.rating.name }}"></div>
+          {# --- Rating (hidden real field + star UI) --- #}
+          <div class="mb-4">
+            <label class="form-label d-block mb-2">Rating</label>
+            <div class="d-flex align-items-center gap-3">
+              <div class="star-rating" role="radiogroup" aria-label="Rating">
+                {# clickable stars (5..1) #}
+                {% for i in "12345" %}
+                  <button type="button"
+                          class="star"
+                          data-value="{{ forloop.counter }}"
+                          aria-label="{{ forloop.counter }} star">★</button>
+                {% endfor %}
+              </div>
+              <div class="small text-muted" id="ratingText">Click to rate</div>
+            </div>
+            {# keep the actual Django field (will be submitted) but hide it #}
+            <div class="d-none">{{ form.rating }}</div>
+            {% for error in form.rating.errors %}<div class="text-danger small mt-2">{{ error }}</div>{% endfor %}
+          </div>
+          {# --- Comment --- #}
+          <div class="mb-4">
+            <label class="form-label" for="{{ form.comment.id_for_label }}">Comment</label>
+            {{ form.comment }}
+            <div class="form-text">Keep it short and helpful — what did you like or dislike?</div>
+            {% for error in form.comment.errors %}<div class="text-danger small mt-2">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4">Save review</button>
+            <a href="{% url 'catalog:product_detail' product.slug %}"
+               class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 {% block extra_js %}
-    <script src="{% static 'reviews/js/star-rating.js' %}" defer></script>
+  <script src="{% static 'reviews/js/star-rating.js' %}" defer></script>
 {% endblock %}

@@ -1,100 +1,100 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="row">
-        <!-- Images -->
-        <div class="col-md-6 mb-3">
-            {% if product.images.all %}
-                <div class="border rounded p-2">
-                    <img id="main-img"
-                         src="{{ product.images.first.image.url }}"
-                         class="img-fluid"
-                         alt="{{ product.images.first.alt_text }}">
-                </div>
-                <div class="d-flex gap-2 mt-2 flex-wrap">
-                    {% for img in product.images.all %}
-                        <img src="{{ img.image.url }}"
-                             data-src="{{ img.image.url }}"
-                             class="thumb border rounded"
-                             style="height:70px;
-                                    cursor:pointer"
-                             alt="{{ img.alt_text }}">
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="border rounded p-3 text-muted">No images yet.</div>
-            {% endif %}
+  <div class="row">
+    <!-- Images -->
+    <div class="col-md-6 mb-3">
+      {% if product.images.all %}
+        <div class="border rounded p-2">
+          <img id="main-img"
+               src="{{ product.images.first.image.url }}"
+               class="img-fluid"
+               alt="{{ product.images.first.alt_text }}">
         </div>
-        <!-- Product info -->
-        <div class="col-md-6 mb-3">
-            <h1 class="h3">{{ product.title }}</h1>
-            <p class="text-muted mb-2">{{ product.scent }} • {{ product.weight_g }}g</p>
-            <p class="h4 mb-3">£{{ product.price }}</p>
-            <p>{{ product.description }}</p>
-            {% if product.stock_qty == 0 %}
-                <span class="badge text-bg-secondary">Out of stock</span>
-            {% elif product.stock_qty <= LOW_STOCK_THRESHOLD %}
-                <span class="badge text-bg-warning">Only {{ product.stock_qty }} left</span>
-            {% endif %}
-            <hr class="my-4">
-            <!-- Reviews -->
-            <div class="d-flex justify-content-between align-items-center">
-                <h2 class="h5 mb-0">Reviews</h2>
-            </div>
-            <div class="mt-3">
-                {% if product.reviews.all %}
-                    {% for r in product.reviews.all %}
-                        <div class="mb-3 pb-3 border-bottom">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <strong>{{ r.user.username }}</strong>
-                                    <span class="review-stars ms-2">
-                                        {% for i in "12345"|slice:":r.rating"|make_list %}★{% endfor %}
-                                    </span>
-                                </div>
-                                <small class="text-muted">{{ r.created_at|date:"j M Y" }}</small>
-                            </div>
-                            {% if r.comment %}<div class="mt-2">{{ r.comment|linebreaksbr }}</div>{% endif %}
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="text-muted mb-0">No reviews yet.</p>
-                {% endif %}
-            </div>
-            <!-- Review CTA (from orders, not here) -->
-            <div class="mt-3">
-                {% if user.is_authenticated %}
-                    <p class="text-muted small mb-0">
-                        Bought this? Leave a review from
-                        <a href="{% url 'accounts:my_orders' %}">My orders</a>
-                        once your order is marked as paid.
-                    </p>
-                {% else %}
-                    <p class="mt-2 mb-0">
-                        <a href="{% url 'accounts:login' %}">Log in</a> to view your orders and leave a review.
-                    </p>
-                {% endif %}
-            </div>
-            <hr class="my-4">
-            <!-- Add to cart -->
-            <form id="add-form" method="post" action="{% url 'cart:add' product.id %}">
-                {% csrf_token %}
-                <div class="input-group mb-3" style="max-width: 220px;">
-                    <span class="input-group-text">Qty</span>
-                    <input type="number"
-                           name="qty"
-                           value="1"
-                           min="1"
-                           max="{{ product.stock_qty }}"
-                           class="form-control">
-                </div>
-                <button class="btn btn-primary"
-                        {% if product.stock_qty == 0 %}disabled{% endif %}>Add to cart</button>
-            </form>
+        <div class="d-flex gap-2 mt-2 flex-wrap">
+          {% for img in product.images.all %}
+            <img src="{{ img.image.url }}"
+                 data-src="{{ img.image.url }}"
+                 class="thumb border rounded"
+                 style="height:70px;
+                        cursor:pointer"
+                 alt="{{ img.alt_text }}">
+          {% endfor %}
         </div>
+      {% else %}
+        <div class="border rounded p-3 text-muted">No images yet.</div>
+      {% endif %}
     </div>
+    <!-- Product info -->
+    <div class="col-md-6 mb-3">
+      <h1 class="h3">{{ product.title }}</h1>
+      <p class="text-muted mb-2">{{ product.scent }} • {{ product.weight_g }}g</p>
+      <p class="h4 mb-3">£{{ product.price }}</p>
+      <p>{{ product.description }}</p>
+      {% if product.stock_qty == 0 %}
+        <span class="badge text-bg-secondary">Out of stock</span>
+      {% elif product.stock_qty <= LOW_STOCK_THRESHOLD %}
+        <span class="badge text-bg-warning">Only {{ product.stock_qty }} left</span>
+      {% endif %}
+      <hr class="my-4">
+      <!-- Reviews -->
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="h5 mb-0">Reviews</h2>
+      </div>
+      <div class="mt-3">
+        {% if product.reviews.all %}
+          {% for r in product.reviews.all %}
+            <div class="mb-3 pb-3 border-bottom">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <strong>{{ r.user.username }}</strong>
+                  <span class="review-stars ms-2">
+                    {% for i in "12345"|slice:":r.rating"|make_list %}★{% endfor %}
+                  </span>
+                </div>
+                <small class="text-muted">{{ r.created_at|date:"j M Y" }}</small>
+              </div>
+              {% if r.comment %}<div class="mt-2">{{ r.comment|linebreaksbr }}</div>{% endif %}
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-muted mb-0">No reviews yet.</p>
+        {% endif %}
+      </div>
+      <!-- Review CTA (from orders, not here) -->
+      <div class="mt-3">
+        {% if user.is_authenticated %}
+          <p class="text-muted small mb-0">
+            Bought this? Leave a review from
+            <a href="{% url 'accounts:my_orders' %}">My orders</a>
+            once your order is marked as paid.
+          </p>
+        {% else %}
+          <p class="mt-2 mb-0">
+            <a href="{% url 'accounts:login' %}">Log in</a> to view your orders and leave a review.
+          </p>
+        {% endif %}
+      </div>
+      <hr class="my-4">
+      <!-- Add to cart -->
+      <form id="add-form" method="post" action="{% url 'cart:add' product.id %}">
+        {% csrf_token %}
+        <div class="input-group mb-3" style="max-width: 220px;">
+          <span class="input-group-text">Qty</span>
+          <input type="number"
+                 name="qty"
+                 value="1"
+                 min="1"
+                 max="{{ product.stock_qty }}"
+                 class="form-control">
+        </div>
+        <button class="btn btn-primary"
+                {% if product.stock_qty == 0 %}disabled{% endif %}>Add to cart</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}
 {% block scripts %}
-    <script>
+  <script>
   // Swap main image when hovering/clicking a thumbnail
   document.querySelectorAll('.thumb').forEach((thumb) => {
     thumb.addEventListener('mouseenter', () => {
@@ -104,5 +104,5 @@
       }
     });
   });
-    </script>
+  </script>
 {% endblock %}
