@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product
 from django.db.models import Count
 
+
 def home(request):
     best_sellers = (
         Product.objects
@@ -47,6 +48,7 @@ RANGES = [
     ("winter", "Winter Isles"),
     ("refillable", "Refillables"),
 ]
+
 
 def product_list(request):
     range_tag = request.GET.get("range", "").strip().lower()
@@ -108,6 +110,7 @@ def product_list(request):
         "SCENT_FAMILIES": SCENT_FAMILIES,
     })
 
+
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, active=True)
     return render(request, "catalog/product_detail.html", {
@@ -115,8 +118,10 @@ def product_detail(request, slug):
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
 
+
 def about(request):
     return render(request, "catalog/about.html")
+
 
 def winter_isles(request):
     products = Product.objects.filter(active=True, tags__icontains="winter").order_by("-created_at")
@@ -129,13 +134,17 @@ def winter_isles(request):
         "tag": "winter",
     })
 
+
 def refillables(request):
-    products = Product.objects.filter(active=True, tags__icontains="refillable").order_by("-created_at")
+    products = Product.objects.filter(
+        active=True, tags__icontains="refillable").order_by("-created_at")
     return render(request, "catalog/category_page.html", {
         "products": products,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
         "page_title": "Refillable Soaps",
-        "page_description": "Low-waste favourites designed for everyday rituals — refill options so you don’t have to keep buying new bottles.",
+        "page_description": 
+        "Low-waste favourites designed for everyday rituals — "
+        "refill options so you don’t have to keep buying new bottles.",
         "hero_image": "img/hero/slide3.png",  # change to your real hero
         "tag": "refillable",
     })

@@ -93,7 +93,8 @@ class CheckoutSuccessEmailTests(TestCase):
         self, mock_retrieve
     ):
         """
-        If the order is already marked as PAID, we shouldn't send a second email.
+        If the order is already marked as PAID,
+        we shouldn't send a second email.
         """
         self.order.status = Order.PAID
         self.order.save()

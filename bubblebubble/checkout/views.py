@@ -10,9 +10,10 @@ from .forms import CheckoutForm
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from .services import deduct_stock_for_order
-from accounts.models import ShippingAddress 
+from accounts.models import ShippingAddress
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
 
 def checkout_summary(request):
     cart = get_or_create_cart(request)
@@ -28,8 +29,10 @@ def checkout_summary(request):
 
         # prefill from default saved address (optional but feels great)
         default_addr = (
-            ShippingAddress.objects.filter(user=request.user, is_default=True).first()
-            or ShippingAddress.objects.filter(user=request.user).order_by("-created_at").first()
+            ShippingAddress.objects.filter(
+                user=request.user, is_default=True).first()
+            or ShippingAddress.objects.filter(
+                user=request.user).order_by("-created_at").first()
         )
         if default_addr:
             initial.setdefault("full_name", default_addr.full_name)
@@ -76,7 +79,8 @@ def start_checkout(request):
     postcode = data.get("postcode") or ""
 
     # if user picked a saved address, overwrite shipping fields with it
-    saved = data.get("saved_address") if request.user.is_authenticated else None
+    saved = data.get(
+        "saved_address") if request.user.is_authenticated else None
     if saved:
         full_name = saved.full_name or full_name
         address_line1 = saved.address_line1
@@ -126,7 +130,8 @@ def start_checkout(request):
     order.save(update_fields=["total"])
 
     # Save address if requested and they DIDN'T pick an existing one
-    if request.user.is_authenticated and data.get("save_address") and not saved:
+    if request.user.is_authenticated and data.get(
+            "save_address") and not saved:
         addr, created = ShippingAddress.objects.get_or_create(
             user=request.user,
             address_line1=address_line1,
@@ -136,7 +141,8 @@ def start_checkout(request):
             defaults={"label": "Home", "full_name": full_name},
         )
         # if no default exists, set this as default
-        if not ShippingAddress.objects.filter(user=request.user, is_default=True).exists():
+        if not ShippingAddress.objects.filter(
+                user=request.user, is_default=True).exists():
             addr.is_default = True
             addr.save(update_fields=["is_default"])
 
@@ -204,6 +210,7 @@ def checkout_success(request):
 def checkout_cancel(request):
     return render(request, "checkout/cancel.html")
 
+
 # --- New function added to send order confirmation email ---
 def send_order_confirmation_email(order):
     """
@@ -216,7 +223,8 @@ def send_order_confirmation_email(order):
     subject = f"Your BubbleBubble Order #{order.id}"
 
     context = {"order": order}
-    message = render_to_string("checkout/emails/order_confirmation.txt", context)
+    message = render_to_string(
+        "checkout/emails/order_confirmation.txt", context)
     try:
         html_message = render_to_string(
             "checkout/emails/order_confirmation.html", context
@@ -231,4 +239,3 @@ def send_order_confirmation_email(order):
         [order.email],
         html_message=html_message,
     )
-

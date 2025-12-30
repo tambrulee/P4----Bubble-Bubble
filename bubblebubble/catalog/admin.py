@@ -26,8 +26,8 @@ class ProductAdmin(ImportExportModelAdmin):
     list_filter = ("scent", "active")
     search_fields = ("title", "scent", "description")
     prepopulated_fields = {"slug": ("title",)}
-    inlines = [ProductImageInline]                
-    actions = [activate_products, deactivate_products] 
+    inlines = [ProductImageInline]
+    actions = [activate_products, deactivate_products]
 
 
 @admin.register(ProductImage)

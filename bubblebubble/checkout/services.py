@@ -30,7 +30,10 @@ def deduct_stock_for_order(order_id: int) -> None:
         p = products[item.product_id]
         if item.qty > p.stock_qty:
             raise ValidationError(
-                f"Not enough stock for {p.title}. Requested {item.qty}, available {p.stock_qty}"
+                f"Not enough stock for {
+                    p.title}. Requested {
+                        item.qty}, available {
+                            p.stock_qty}"
             )
 
     # Deduct using F expressions

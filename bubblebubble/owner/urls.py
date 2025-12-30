@@ -23,9 +23,10 @@ urlpatterns = [
         views.product_image_delete, name="owner_product_image_delete"),
 
     path("owner/orders/", views.orders, name="owner_orders"),
-    path("owner/orders/<int:order_id>/",
+    path(
+        "owner/orders/<int:order_id>/",
         views.order_detail, name="owner_order_detail"),
-        path(
+    path(
         "orders/<int:order_id>/fulfilment/<str:fulfilment>/",
         views.owner_order_set_fulfilment,
         name="owner_order_set_fulfilment",
