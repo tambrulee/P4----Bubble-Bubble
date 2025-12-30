@@ -38,8 +38,10 @@ def add_to_cart(request, product_id):
 
     is_ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
     if is_ajax:
-        mini_html = render_to_string("cart/_mini_cart.html", {"cart": cart}, request=request)
-        total = cart.total() if callable(getattr(cart, "total", None)) else getattr(cart, "total", 0)
+        mini_html = render_to_string(
+            "cart/_mini_cart.html", {"cart": cart}, request=request)
+        total = cart.total() if callable(
+            getattr(cart, "total", None)) else getattr(cart, "total", 0)
 
         return JsonResponse({
             "ok": True,
@@ -54,30 +56,11 @@ def add_to_cart(request, product_id):
 
 
 @require_POST
-def update_item(request, item_id):
-    cart = get_or_create_cart(request)
-    item = get_object_or_404(CartItem, pk=item_id, cart=cart)
-
-    try:
-        qty = int(request.POST.get("qty", 1))
-    except (TypeError, ValueError):
-        qty = 1
-
-    qty = max(1, qty)
-    qty = min(qty, item.product.stock_qty)
-
-    item.qty = qty
-    item.save()
-    return redirect("cart:view")
-
-
-@require_POST
 def remove_item(request, item_id):
     cart = get_or_create_cart(request)
     item = get_object_or_404(CartItem, pk=item_id, cart=cart)
     item.delete()
     return redirect("cart:view")
-
 
 
 def add(request, product_id):
@@ -108,10 +91,12 @@ def add(request, product_id):
 
 def mini_cart(request):
     cart = get_or_create_cart(request)
-    html = render_to_string("cart/_mini_cart.html", {"cart": cart}, request=request)
+    html = render_to_string(
+        "cart/_mini_cart.html", {"cart": cart}, request=request)
 
     cart_count = sum(i.qty for i in cart.items.all())
-    total = cart.total() if callable(getattr(cart, "total", None)) else getattr(cart, "total", 0)
+    total = cart.total() if callable(
+        getattr(cart, "total", None)) else getattr(cart, "total", 0)
 
     return JsonResponse({
         "ok": True,
@@ -141,7 +126,8 @@ def update_item(request, item_id):
 
     is_ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
     if is_ajax:
-        mini_html = render_to_string("cart/_mini_cart.html", {"cart": cart}, request=request)
+        mini_html = render_to_string(
+            "cart/_mini_cart.html", {"cart": cart}, request=request)
         return JsonResponse({
             "ok": True,
             "cart_count": cart_count,

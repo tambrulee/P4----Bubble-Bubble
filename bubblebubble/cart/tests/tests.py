@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 
 from catalog.models import Product
-from cart.models import Cart, CartItem
+from cart.models import Cart
 
 User = get_user_model()
 
@@ -28,7 +28,8 @@ class AddToCartTests(TestCase):
         )
 
     def test_first_add_sets_qty_to_requested_amount(self):
-        """First add_to_cart should set qty exactly to requested value (not default+requested)."""
+        """First add_to_cart should set qty exactly to
+        requested value (not default+requested)."""
         url = reverse("cart:add", args=[self.product.id])
         response = self.client.post(url, {"qty": 1}, follow=True)
 
@@ -49,4 +50,3 @@ class AddToCartTests(TestCase):
         cart = Cart.objects.first()
         item = cart.items.get(product=self.product)
         self.assertEqual(item.qty, 2)
-

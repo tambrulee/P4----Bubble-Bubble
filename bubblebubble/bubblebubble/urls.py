@@ -1,11 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from django.conf.urls.static import static
 from django.views.static import serve
 
 urlpatterns = [
-    
+
     path("shop_manager/", admin.site.urls),
 
     # Serve media locally even when DEBUG=False
@@ -20,7 +19,7 @@ urlpatterns = [
 
     # Auth (login/logout/password reset)
     path("accounts/", include("accounts.urls")),
-    
+
 ]
 
 # Serve media locally even when DEBUG=False

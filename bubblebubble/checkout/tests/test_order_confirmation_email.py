@@ -55,7 +55,6 @@ class CheckoutSuccessEmailTests(TestCase):
             unit_price=Decimal("12.50"),
         )
 
-
     @patch("checkout.views.stripe.checkout.Session.retrieve")
     def test_checkout_success_marks_order_paid_clears_cart_and_sends_email(
         self, mock_retrieve

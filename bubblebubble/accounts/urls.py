@@ -6,8 +6,14 @@ app_name = "accounts"
 
 urlpatterns = [
     path("signup/", views.signup, name="signup"),
-    path("login/", auth_views.LoginView.as_view(template_name="accounts/login.html"), name="login"),
-    path("logout/", auth_views.LogoutView.as_view(next_page="catalog:product_list"), name="logout"),
+    path(
+        "login/",
+        auth_views.LoginView.as_view(
+            template_name="accounts/login.html"), name="login"),
+    path(
+        "logout/",
+        auth_views.LogoutView.as_view(
+            next_page="catalog:product_list"), name="logout"),
     path(
         "password-reset/",
         auth_views.PasswordResetView.as_view(
@@ -29,7 +35,8 @@ urlpatterns = [
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(
             template_name="accounts/password_reset_confirm.html",
-            success_url=reverse_lazy("accounts:password_reset_complete"),  # ✅ this is the key line
+            success_url=reverse_lazy(
+                "accounts:password_reset_complete"),
         ),
         name="password_reset_confirm",
     ),
@@ -40,8 +47,11 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
-#   User order history
+    #   User order history
     path("orders/", views.my_orders, name="my_orders"),
-    path("orders/<int:order_id>/", views.my_order_detail, name="my_order_detail"),
+    path(
+        "orders/<int:order_id>/",
+        views.my_order_detail,
+        name="my_order_detail"),
 
 ]

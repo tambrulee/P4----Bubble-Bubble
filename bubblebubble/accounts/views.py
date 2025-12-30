@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from checkout.models import Order
 
+
 def signup(request):
     next_url = request.GET.get("next") or "catalog:product_list"
 

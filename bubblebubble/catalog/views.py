@@ -15,14 +15,24 @@ def home(request):
     )
 
     promos = [
-        {"title": "Winter Isles bundle", "text": "Seasonal scents — limited run.", "tag": "winter"},
-        {"title": "Refill & save", "text": "Low-waste favourites with refill options.", "tag": "refillable"},
+        {"title":
+         "Winter Isles bundle", "text": "Seasonal scents — limited run.",
+         "tag": "winter"},
+        {"title":
+         "Refill & save", "text": "Low-waste favourites with refill options.",
+         "tag": "refillable"},
     ]
 
     testimonials = [
-        {"quote": "Smells incredible and feels so gentle — my new daily ritual.", "name": "Customer"},
-        {"quote": "Fast delivery, beautiful packaging, and the scent lasts ages.", "name": "Customer"},
-        {"quote": "Finally found a vegan soap that doesn’t dry my skin out.", "name": "Customer"},
+        {"quote":
+         "Smells incredible and feels so gentle — my new daily ritual.",
+         "name": "Customer"},
+        {"quote":
+         "Fast delivery, beautiful packaging, and the scent lasts ages.",
+         "name": "Customer"},
+        {"quote":
+         "Finally found a vegan soap that doesn’t dry my skin out.",
+         "name": "Customer"},
     ]
 
     return render(request, "catalog/home.html", {
@@ -32,6 +42,7 @@ def home(request):
         "free_shipping_threshold": 35,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
+
 
 SCENT_FAMILIES = [
     ("earthy", "Earthy"),
@@ -89,7 +100,9 @@ def product_list(request):
         # Only use this if you have a related reviews name "reviews".
         # Otherwise fallback to newest.
         try:
-            qs = qs.annotate(review_count=Count("reviews")).order_by("-review_count", "-created_at")
+            qs = qs.annotate(
+                review_count=Count("reviews")).order_by(
+                    "-review_count", "-created_at")
         except Exception:
             qs = qs.order_by("-created_at")
     else:
@@ -124,12 +137,15 @@ def about(request):
 
 
 def winter_isles(request):
-    products = Product.objects.filter(active=True, tags__icontains="winter").order_by("-created_at")
+    products = Product.objects.filter(
+        active=True, tags__icontains="winter").order_by("-created_at")
     return render(request, "catalog/category_page.html", {
         "products": products,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
         "page_title": "Winter Isles",
-        "page_description": "Limited edition seasonal blends inspired by the UK landscape — sea air, hedgerow berries, juniper and frost.",
+        "page_description":
+        "Limited edition seasonal blends inspired by the "
+        "UK landscape — sea air, hedgerow berries, juniper and frost.",
         "hero_image": "img/hero/slide2.png",  # change to your real hero
         "tag": "winter",
     })
@@ -142,7 +158,7 @@ def refillables(request):
         "products": products,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
         "page_title": "Refillable Soaps",
-        "page_description": 
+        "page_description":
         "Low-waste favourites designed for everyday rituals — "
         "refill options so you don’t have to keep buying new bottles.",
         "hero_image": "img/hero/slide3.png",  # change to your real hero

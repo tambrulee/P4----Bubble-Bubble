@@ -16,9 +16,12 @@ class EmailUserCreationForm(UserCreationForm):
         email = self.cleaned_data["email"].strip().lower()
 
         # Since we store email in username too, we must ensure uniqueness
-        if User.objects.filter(username__iexact=email).exists() or User.objects.filter(email__iexact=email).exists():
+        if User.objects.filter(
+            username__iexact=email).exists() or User.objects.filter(
+                email__iexact=email).exists():
             raise forms.ValidationError(
-                "An account with this email already exists. Try logging in instead."
+                "An account with this email already exists. "
+                "Try logging in instead."
             )
         return email
 
