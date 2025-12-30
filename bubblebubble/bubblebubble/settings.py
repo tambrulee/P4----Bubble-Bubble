@@ -93,8 +93,10 @@ INSTALLED_APPS = [
     'checkout',
     'reviews',
     'owner',
-    'import_export',   # csv import export
-    'cart.apps.CartConfig'   # cart app config to register signals
+    'import_export',   
+    # csv import export
+    'cart.apps.CartConfig'   
+    # cart app config to register signals
 ]
 
 LOGIN_REDIRECT_URL = "/cart/"

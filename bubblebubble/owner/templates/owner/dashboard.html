@@ -1,43 +1,80 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1 class="h3 mb-3">Owner Dashboard</h1>
-  <div class="row g-3">
-    <div class="col-md-4">
-      <div class="card p-3">
-        <div class="fw-semibold">Products</div>
+
+<h1 class="h3 mb-4">Owner dashboard</h1>
+
+<!-- KPI CARDS -->
+<div class="row g-3">
+
+  <!-- Products -->
+  <div class="col-md-4">
+    <a href="{% url 'owner_products' %}" class="text-decoration-none text-dark">
+      <div class="card p-3 h-100 shadow-sm">
+        <div class="fw-semibold text-muted">Total products</div>
         <div class="display-6">{{ product_count }}</div>
-        <a class="btn btn-sm btn-mm-outline mt-2"
-           href="{% url 'owner_products' %}">Manage products</a>
+        <small class="text-muted">View and manage products</small>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card p-3">
-        <div class="fw-semibold">Inactive</div>
-        <div class="display-6">{{ inactive_count }}</div>
-        <a class="btn btn-sm btn-mm-outline mt-2"
-           href="{% url 'owner_products' %}">Review</a>
+    </a>
+  </div>
+
+  <!-- Inactive -->
+  <div class="col-md-4">
+    <a href="{% url 'owner_products' %}" class="text-decoration-none text-dark">
+      <div class="card p-3 h-100 shadow-sm {% if inactive_count %}border-warning{% endif %}">
+        <div class="fw-semibold text-muted">Inactive products</div>
+        <div class="display-6">
+          {{ inactive_count }}
+        </div>
+        <small class="text-muted">
+          {% if inactive_count %}
+            Needs review
+          {% else %}
+            All active ✔
+          {% endif %}
+        </small>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card p-3">
-        <div class="fw-semibold">Pending orders</div>
+    </a>
+  </div>
+
+  <!-- Orders -->
+  <div class="col-md-4">
+    <a href="{% url 'owner_orders' %}" class="text-decoration-none text-dark">
+      <div class="card p-3 h-100 shadow-sm {% if pending_orders %}border-primary{% endif %}">
+        <div class="fw-semibold text-muted">Orders pending dispatch</div>
         <div class="display-6">{{ pending_orders }}</div>
-        <a class="btn btn-sm btn-mm-outline mt-2"
-           href="{% url 'owner_orders' %}">View orders</a>
+        <small class="text-muted">View and fulfil orders</small>
       </div>
-    </div>
+    </a>
   </div>
-  <div class="card p-3 mt-3">
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="fw-semibold">Low stock</div>
-      <span class="badge text-bg-warning">{{ low_stock_count }}</span>
-    </div>
-    <ul class="mt-2 mb-0">
-      {% for p in low_stock %}
-        <li>{{ p.title }} — {{ p.stock_qty }} left</li>
-      {% empty %}
-        <li class="text-muted">All good 🎉</li>
-      {% endfor %}
-    </ul>
+
+</div>
+
+<!-- LOW STOCK -->
+<div class="card p-3 mt-4 shadow-sm">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div class="fw-semibold">Low stock alerts</div>
+
+    {% if low_stock_count %}
+      <span class="badge text-bg-warning">
+        {{ low_stock_count }} item{{ low_stock_count|pluralize }}
+      </span>
+    {% else %}
+      <span class="badge text-bg-success">All good</span>
+    {% endif %}
   </div>
+
+  <ul class="list-unstyled mb-0">
+    {% for p in low_stock %}
+      <li class="d-flex justify-content-between py-1 border-bottom">
+        <span>{{ p.title }}</span>
+        <span class="fw-semibold">{{ p.stock_qty }} left</span>
+      </li>
+    {% empty %}
+      <li class="text-muted py-2">
+        🎉 No low-stock items — everything is healthy
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
 {% endblock %}
