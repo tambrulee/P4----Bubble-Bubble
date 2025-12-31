@@ -99,14 +99,17 @@
                 <a href="{% url 'catalog:product_detail' p.slug %}"
                    class="btn btn-sm btn-outline-primary">View</a>
                 <form method="post"
-                      action="{% url 'cart:add_to_cart' product.id %}"
+                      action="{% url 'cart:add_to_cart' p.id %}"
                       class="js-add-to-cart">
                   {% csrf_token %}
                   <input type="hidden" name="qty" value="1">
                   <button type="submit"
                           class="btn btn-primary"
-                          {% if product.stock_qty == 0 %}disabled{% endif %}>Add to cart</button>
+                          {% if p.stock_qty == 0 %}disabled{% endif %}>
+                    Add to cart
+                  </button>
                 </form>
+  
               </div>
               {% if p.stock_qty == 0 %}<p class="small text-muted mt-2 mb-0">Out of stock</p>{% endif %}
             </div>
