@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>{% block title %}Owner | Moon &amp; Moss{% endblock %}</title>
+  <title>{% block title %}Shop Admin{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
@@ -14,72 +14,161 @@
   <!-- Your CSS -->
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
   {% block extra_css %}{% endblock %}
+
+  <!-- Owner-only polish -->
+  <style>
+
+    /* === Admin colour tokens === */
+  :root {
+    --bb-primary: #5f7f6b;   /* moss green */
+    --bb-secondary: #8f8a83; /* warm stone */
+    --bb-success: #6f9e7a;
+    --bb-warning: #e3b35a;
+    --bb-danger: #c46a6a;
+    --bb-info: #7aa6c9;
+
+    --bb-bg-soft: rgba(255,255,255,.85);
+    --bb-border-soft: rgba(0,0,0,.08);
+  }
+
+    /* soft admin background */
+    body.bb-admin {
+      background: radial-gradient(1200px 600px at 10% 0%, rgba(101, 71, 39, 0.18), transparent 55%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(159, 214, 255, .20), transparent 55%),
+                  #f8f9fa;
+    }
+
+    /* gradient top bar */
+    .bb-admin-nav {
+      background: linear-gradient(90deg, rgba(38, 18, 52, 0.55), rgba(214, 239, 255, .65));
+      backdrop-filter: blur(10px);
+    }
+
+    .bb-admin-brand {
+      letter-spacing: .2px;
+    }
+
+    /* pill nav links */
+    .bb-admin-nav .nav-link {
+      border-radius: 999px;
+      padding: .45rem .85rem;
+      color: rgba(0,0,0,.72);
+    }
+    .bb-admin-nav .nav-link:hover {
+      background: rgba(255,255,255,.55);
+    }
+    .bb-admin-nav .nav-link.active {
+      background: rgba(255,255,255,.85);
+      border: 1px solid rgba(0,0,0,.06);
+      color: rgba(0,0,0,.85);
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    }
+
+    /* content card feel */
+    .bb-admin-shell {
+      background: rgba(255,255,255,.70);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.06);
+    }
+
+    /* nicer alerts */
+    .bb-admin-alerts .alert {
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 6px 16px rgba(0,0,0,.05);
+    }
+  </style>
 </head>
 
-<body class="bg-light">
+<body class="bb-admin">
 
-  <!-- Owner top bar -->
-  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
-  <div class="container-fluid px-3">
-    <a class="navbar-brand fw-semibold" href="{% url 'owner:owner_dashboard' %}">
-      Owner Panel
-    </a>
+  <!-- Top bar -->
+  <nav class="navbar navbar-expand-lg bb-admin-nav border-bottom sticky-top">
+    <div class="container-fluid px-3">
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ownerNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <a class="navbar-brand fw-semibold bb-admin-brand d-flex align-items-center gap-2"
+         href="{% url 'owner:owner_dashboard' %}">
+        <span class="badge text-bg-dark">Shop Admin</span>
+      </a>
 
-    <div class="collapse navbar-collapse" id="ownerNav">
-      <ul class="navbar-nav me-auto gap-lg-1">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ownerNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name == 'owner_dashboard' %}active{% endif %}"
-             href="{% url 'owner:owner_dashboard' %}">
-            Dashboard
-          </a>
-        </li>
+      <div class="collapse navbar-collapse" id="ownerNav">
 
-        <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name in 'owner_products owner_product_create owner_product_edit owner_product_images' %}active{% endif %}"
-             href="{% url 'owner:owner_products' %}">
-            Products
-          </a>
-        </li>
+        {% if request.user.is_authenticated and request.user.is_staff %}
+          {% with current=request.resolver_match.url_name %}
 
-        <li class="nav-item">
-          <a class="nav-link {% if request.resolver_match.url_name in 'owner_orders owner_order_detail' %}active{% endif %}"
-             href="{% url 'owner:owner_orders' %}">
-            Orders
-          </a>
-        </li>
+          <ul class="navbar-nav me-auto gap-2 mt-3 mt-lg-0">
 
-      </ul>
+            <li class="nav-item">
+              <a class="nav-link {% if current == 'owner_dashboard' %}active{% endif %}"
+                 href="{% url 'owner:owner_dashboard' %}">
+                Dashboard
+              </a>
+            </li>
 
-      <div class="d-flex gap-2">
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:home' %}">
-          View shop
-        </a>
+            <li class="nav-item">
+              <a class="nav-link {% if current in 'owner_products owner_product_create owner_product_edit owner_product_images' %}active{% endif %}"
+                 href="{% url 'owner:owner_products' %}">
+                Products
+              </a>
+            </li>
 
-        <a class="btn btn-sm btn-outline-danger"
-          href="{% url 'logout' %}?next={{ request.get_full_path|urlencode }}">
-          Log out
-        </a>
+            <li class="nav-item">
+              <a class="nav-link {% if current in 'owner_orders owner_order_detail' %}active{% endif %}"
+                 href="{% url 'owner:owner_orders' %}">
+                Orders
+              </a>
+            </li>
+
+          </ul>
+
+          <div class="d-flex gap-2 mt-3 mt-lg-0">
+            <a class="btn btn-sm btn-outline-dark"
+               href="{% url 'catalog:home' %}">
+              View shop
+            </a>
+
+            <a class="btn btn-sm btn-outline-danger"
+               href="{% url 'logout' %}?next=/owner/login/">
+              Log out
+            </a>
+          </div>
+
+          {% endwith %}
+        {% else %}
+          <div class="ms-auto mt-3 mt-lg-0">
+            <a class="btn btn-sm btn-dark"
+               href="{% url 'owner:owner_login' %}">
+              Log in
+            </a>
+          </div>
+        {% endif %}
+
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
   <!-- Page container -->
   <main class="container py-4">
+
     {% if messages %}
-      <div class="mb-3">
+      <div class="bb-admin-alerts mb-3">
         {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
+          <div class="alert alert-{{ message.tags }} mb-2" role="alert">
+            {{ message }}
+          </div>
         {% endfor %}
       </div>
     {% endif %}
 
-    {% block content %}{% endblock %}
+    <div class="bb-admin-shell p-3 p-md-4">
+      {% block content %}{% endblock %}
+    </div>
+
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

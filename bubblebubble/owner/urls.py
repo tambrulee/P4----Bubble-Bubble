@@ -6,10 +6,17 @@ from django.contrib.auth.views import LoginView
 app_name = "owner"
 
 urlpatterns = [
-    path("admin/login", LoginView.as_view(
-        template_name="owner/login.html",
-        redirect_authenticated_user=True
-    ), name="owner_login"),
+    path(
+        "login/",
+        LoginView.as_view(
+            template_name="owner/login.html",
+            redirect_authenticated_user=True,
+            next_page=reverse_lazy("owner:owner_dashboard"),  # ✅ default redirect
+        ),
+        name="owner_login",
+    ),
+
+    path("login/", views.owner_login, name="owner_login"),
 
     path("", views.dashboard, name="owner_dashboard"),
 

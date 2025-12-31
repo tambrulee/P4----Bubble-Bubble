@@ -15,7 +15,7 @@ urlpatterns = [
     path("cart/", include("cart.urls")),
     path("checkout/", include("checkout.urls")),
     path("reviews/", include("reviews.urls")),
-    path("", include("owner.urls")),
+    path("owner/", include("owner.urls")),
   
 
     # Auth (login/logout/password reset)

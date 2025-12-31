@@ -122,7 +122,7 @@ def product_images(request, pk):
         img = form.save(commit=False)
         img.product = product
         img.save()
-        return redirect("owner_product_images", pk=product.pk)
+        return redirect("owner:owner_product_images", pk=product.pk)
 
     return render(request, "owner/product_images.html", {
         "product": product,
@@ -136,7 +136,7 @@ def product_image_delete(request, image_id):
     img = get_object_or_404(ProductImage, pk=image_id)
     product_id = img.product_id
     img.delete()
-    return redirect("owner_product_images", pk=product_id)
+    return redirect("owner:owner_product_images", pk=product_id)
 
 
 # ---------- Orders ----------
