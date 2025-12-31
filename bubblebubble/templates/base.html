@@ -35,12 +35,24 @@
       </button>
     </div>
 
-    <!-- CENTER: logo -->
+    <!-- LOGO -->
     <div class="bb-nav-center">
-      <a class="navbar-brand d-flex flex-column align-items-center"
-         href="{% url 'catalog:home' %}">
+      <a class="navbar-brand bb-brand" href="{% url 'catalog:home' %}">
         <img src="{% static 'img/logo.png' %}" alt="Moon & Moss" class="bb-logo">
       </a>
+    </div>
+
+    <!-- DESKTOP LINKS (inline, desktop only) -->
+    <div class="bb-nav-links-wrap d-none d-lg-flex">
+      <ul class="navbar-nav bb-nav-links bb-nav-links-desktop">
+        <li class="nav-item"><a class="nav-link" href="{% url 'catalog:product_list' %}">Shop All</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'catalog:winter_isles' %}">Winter Isles</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'catalog:refillables' %}">Refillables</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'catalog:about' %}">Our Story</a></li>
+        {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:my_orders' %}">My Orders</a></li>
+        {% endif %}
+      </ul>
     </div>
 
     <!-- RIGHT: icons -->
@@ -62,7 +74,6 @@
         </a>
       {% endif %}
 
-      <!-- CART ICON + BADGE -->
       <a href="{% url 'cart:view' %}"
          class="bb-icon-link position-relative"
          title="Cart"
@@ -76,42 +87,27 @@
         </span>
       </a>
     </div>
+
   </div>
 
-  <!-- MAIN LINKS
-       - mobile: collapses under header (burger opens it)
-       - desktop: always visible (CSS forces it open + horizontal)
-  -->
-  <div class="bb-main-links navbar-collapse collapse" id="mainNav">
+  <!-- MOBILE LINKS (collapse) -->
+  <div class="bb-main-links navbar-collapse collapse d-lg-none" id="mainNav">
     <div class="container">
       <ul class="navbar-nav mx-auto bb-nav-links text-center">
-
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'catalog:product_list' %}">Shop All</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'catalog:winter_isles' %}">Winter Isles</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'catalog:refillables' %}">Refillables</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'catalog:about' %}">Our Story</a>
-        </li>
-
+        <li class="nav-item"><a class="nav-link" href="{% url 'catalog:product_list' %}">Shop All</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'catalog:winter_isles' %}">Winter Isles</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'catalog:refillables' %}">Refillables</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'catalog:about' %}">Our Story</a></li>
         {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:my_orders' %}">My Orders</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:my_orders' %}">My Orders</a></li>
         {% endif %}
-
       </ul>
     </div>
   </div>
 </nav>
+
+
+
 
     <!-- Scrolling bar -->
     <div class="bb-promo-bar">

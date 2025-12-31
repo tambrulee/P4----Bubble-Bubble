@@ -22,198 +22,6 @@ a:hover {
 }
 
 /* ====================================
-   NAVBAR + HEADER (CLEAN)
-   ==================================== */
-
-.bb-navbar {
-  background-color: #6D8675;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #7A8F7A;
-}
-
-/* Slightly tighter container padding just for navbar */
-.bb-navbar .container {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-
-/* Logo */
-.bb-logo {
-  height: 100px;
-  width: auto;
-  display: block;
-}
-
-/* Top row layout: burger | logo | icons */
-.bb-nav-grid {
-  display: grid;
-  grid-template-columns: 44px auto 1fr;
-  align-items: center;
-}
-
-.bb-nav-left   { justify-self: start; }
-.bb-nav-center { justify-self: center; }
-.bb-nav-right  {
-  justify-self: end;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-/* Burger button */
-.bb-icon-button {
-  background: transparent;
-  border: 0;
-  padding: 0;
-  box-shadow: none;
-}
-
-/* Generic icon style */
-.bb-icon {
-  font-size: 1.4rem;
-  line-height: 1;
-  color: #f6f4f0;
-}
-
-/* Right-hand icon links */
-.bb-nav-icons .bb-icon-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-
-/* Font Awesome icons inside nav */
-.bb-nav-icons .bb-icon-link .fa-solid,
-.bb-nav-icons .bb-icon-link .fa-regular {
-  font-size: 0.95rem;
-}
-
-/* Menu bar under header */
-.bb-main-links {
-  background-color: #6D8675;
-}
-
-/* Nav list default (mobile = stacked) */
-.bb-main-links .navbar-nav {
-  padding: 0.75rem 0;
-}
-
-/* Link pills */
-.bb-main-links .nav-link {
-  padding: 0.6rem 1rem;
-  margin: 0.15rem 0;       /* vertical rhythm on mobile */
-  border-radius: 999px;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #f6f4f0;
-}
-
-.bb-main-links .nav-link:hover,
-.bb-main-links .nav-link:focus {
-  background-color: #f6f4f0;
-  color: #29403e;
-}
-
-/* Small screens tweaks */
-@media (max-width: 575.98px) {
-  .bb-navbar .container {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-  }
-
-  .bb-logo {
-    height: 48px;
-  }
-
-  .bb-nav-right {
-    gap: 0.25rem;
-  }
-}
-
-/* Desktop behaviour */
-@media (min-width: 992px) {
-  /* Hide burger, rebalance grid */
-  .bb-nav-left {
-    display: none;
-  }
-
-  /* Top row becomes: logo left | icons right */
-  .bb-nav-grid {
-    grid-template-columns: auto 1fr;
-  }
-
-  .bb-nav-center {
-    justify-self: start;
-  }
-
-  .bb-nav-right {
-    justify-self: end;
-  }
-
-  /* Force menu visible on desktop (override Bootstrap collapse) */
-  #mainNav {
-    display: block !important;
-    height: auto !important;
-    visibility: visible !important;
-  }
-
-  /* Desktop links go horizontal + centered */
-  .bb-main-links .navbar-nav {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0.5rem 0 0.75rem;
-  }
-
-  /* Remove vertical margins once horizontal */
-  .bb-main-links .nav-link {
-    margin: 0;
-  }
-}
-
-
-
-/* ====================================
-   PROMO BAR
-   ==================================== */
-
-.bb-promo-bar {
-  background-color: #29403e;
-  color: #f6f4f0;
-  font-size: 0.9rem;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.bb-promo-track {
-  display: inline-block;
-  padding: 0.45rem 0;
-  padding-left: 100%;
-  animation: bb-promo-scroll 22s linear infinite;
-}
-
-.bb-promo-track span {
-  margin: 0 3rem;
-}
-
-@keyframes bb-promo-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@media (max-width: 576px) {
-  .bb-promo-track {
-    animation-duration: 28s;
-  }
-}
-
-/* ====================================
    BUTTONS
    ==================================== */
 
@@ -279,6 +87,330 @@ a:hover {
   background-color: #618280;
   border-color: #618280;
   color: #f6f4f0;
+}
+
+.btn-bb-primary {
+  background: #203a1a;
+  border: none;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 999px;
+}
+.btn-bb-primary:hover { opacity: 0.92; color: #fff; }
+
+.btn-bb-secondary {
+  background: rgba(255,255,255,0.9);
+  border: none;
+  color: #203a1a;
+  padding: 10px 18px;
+  border-radius: 999px;
+}
+.btn-bb-secondary:hover { opacity: 0.92; color: #203a1a; }
+
+/* Discount badge */
+.bb-badge {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  background: rgba(32, 58, 26, 0.95); /* mossy green */
+  color: #fff;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.05;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+}
+
+/* ====================================
+   NAVBAR + HEADER
+   ==================================== */
+
+.bb-navbar {
+  background-color: #6D8675;
+  border-bottom: 1px solid rgba(246, 244, 240, 0.18);
+  padding: 0; 
+}
+
+/* Tighter container just for navbar */
+.bb-navbar .container {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+/* Top row layout (desktop inline): burger | logo | links | icons */
+.bb-nav-grid {
+  display: grid;
+  grid-template-columns: 44px auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 64px; /* controls navbar thickness */
+}
+
+.bb-nav-left   { justify-self: start; display: flex; align-items: center; }
+.bb-nav-center { justify-self: start; }
+.bb-nav-right  {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Brand reset (Bootstrap navbar-brand adds vertical bulk) */
+.bb-brand {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Logo should NOT control navbar height */
+.bb-logo {
+  max-height: 120px; /* key: keeps the navbar slender */
+  width: auto;
+  display: block;
+}
+
+/* Burger button */
+.bb-icon-button {
+  background: transparent;
+  border: 0;
+  padding: 0.25rem;
+  line-height: 1;
+  box-shadow: none;
+  border-radius: 10px;
+}
+
+.bb-icon-button:focus-visible {
+  outline: 2px solid rgba(246, 244, 240, 0.75);
+  outline-offset: 2px;
+}
+
+/* Icons */
+.bb-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  color: #f6f4f0;
+}
+
+/* Icon links */
+.bb-nav-icons .bb-icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0.25rem;
+  border-radius: 12px;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.bb-nav-icons .bb-icon-link:hover,
+.bb-nav-icons .bb-icon-link:focus-visible {
+  background-color: rgba(246, 244, 240, 0.14);
+  transform: translateY(-1px);
+}
+
+/* Font Awesome sizing */
+.bb-nav-icons .bb-icon-link .fa-solid,
+.bb-nav-icons .bb-icon-link .fa-regular {
+  font-size: 0.95rem;
+}
+
+/* ====================================
+   LINKS 
+   ==================================== */
+
+/* Wrapper for desktop inline links (hidden on mobile in your HTML) */
+.bb-nav-links-wrap {
+  justify-self: center;
+  min-width: 0;
+}
+
+.bb-nav-links-desktop {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base link style */
+.bb-nav-links .nav-link {
+  color: rgba(246, 244, 240, 0.92);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  line-height: 1.1;
+  padding: 0.35rem 0.25rem; /* keeps things slim */
+  text-decoration: none;
+  position: relative;
+  border-radius: 10px;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+/* Soft hover surface */
+.bb-nav-links .nav-link:hover,
+.bb-nav-links .nav-link:focus-visible {
+  color: #ffffff;
+  background-color: rgba(246, 244, 240, 0.10);
+}
+
+/* Underline indicator */
+.bb-nav-links .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  right: 0.25rem;
+  bottom: -6px;
+  height: 2px;
+  background: rgba(246, 244, 240, 0.9);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 170ms ease;
+  border-radius: 999px;
+}
+
+.bb-nav-links .nav-link:hover::after,
+.bb-nav-links .nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ====================================
+   MOBILE COLLAPSE LINKS (stacked)
+   ==================================== */
+
+.bb-main-links {
+  background-color: #6D8675;
+}
+
+.bb-main-links .navbar-nav {
+  padding: 0.75rem 0;
+}
+
+.bb-main-links .nav-link {
+  padding: 0.75rem 0.5rem;
+  margin: 0;
+}
+
+/* ====================================
+   RESPONSIVE TWEAKS
+   ==================================== */
+
+@media (max-width: 575.98px) {
+  .bb-navbar .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .bb-nav-grid {
+    min-height: 56px;
+  }
+
+  .bb-logo {
+    max-height: 40px;
+  }
+
+  .bb-nav-right {
+    gap: 0.2rem;
+  }
+
+  .bb-icon {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 991.98px) {
+  /* Mobile layout: burger | logo | icons */
+  .bb-nav-grid {
+    grid-template-columns: 44px 1fr auto;
+  }
+
+  .bb-nav-center {
+    justify-self: center;
+  }
+}
+
+@media (min-width: 992px) {
+  /* No burger on desktop */
+  .bb-nav-left {
+    display: none;
+  }
+}
+
+/* ✅ Force desktop menu to be inline/horizontal */
+@media (min-width: 992px) {
+  .bb-nav-links-wrap {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Override Bootstrap .navbar-nav (column) */
+  .bb-nav-links-desktop {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    /* kill default UL spacing */
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none;
+  }
+
+  /* Make sure list items don't behave like full-width blocks */
+  .bb-nav-links-desktop .nav-item {
+    display: inline-flex;
+    margin: 0 !important;
+  }
+
+  .bb-nav-links-desktop .nav-link {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap; /* prevents ugly wrapping per word */
+  }
+}
+
+
+
+/* ====================================
+   PROMO BAR
+   ==================================== */
+
+.bb-promo-bar {
+  background-color: #29403e;
+  color: #f6f4f0;
+  font-size: 0.9rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.bb-promo-track {
+  display: inline-block;
+  padding: 0.45rem 0;
+  padding-left: 100%;
+  animation: bb-promo-scroll 22s linear infinite;
+}
+
+.bb-promo-track span {
+  margin: 0 3rem;
+}
+
+@keyframes bb-promo-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 576px) {
+  .bb-promo-track {
+    animation-duration: 28s;
+  }
 }
 
 /* ====================================
@@ -457,42 +589,7 @@ footer .text-muted {
   text-shadow: 0 6px 18px rgba(0,0,0,0.35);
 }
 
-/* Discount badge */
-.bb-badge {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  width: 92px;
-  height: 92px;
-  border-radius: 999px;
-  background: rgba(32, 58, 26, 0.95); /* mossy green */
-  color: #fff;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  font-size: 0.95rem;
-  line-height: 1.05;
-  box-shadow: 0 12px 24px rgba(0,0,0,0.25);
-}
 
-/* Buttons */
-.btn-bb-primary {
-  background: #203a1a;
-  border: none;
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: 999px;
-}
-.btn-bb-primary:hover { opacity: 0.92; color: #fff; }
-
-.btn-bb-secondary {
-  background: rgba(255,255,255,0.9);
-  border: none;
-  color: #203a1a;
-  padding: 10px 18px;
-  border-radius: 999px;
-}
-.btn-bb-secondary:hover { opacity: 0.92; color: #203a1a; }
 
 /* Mobile tweaks */
 @media (max-width: 991.98px) {
