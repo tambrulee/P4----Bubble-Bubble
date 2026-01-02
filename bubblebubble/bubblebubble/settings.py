@@ -100,9 +100,9 @@ INSTALLED_APPS = [
     # cart app config to register signals
 ]
 
-LOGIN_REDIRECT_URL = "/cart/"
-
-LOGIN_URL = "/admin/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = "/accounts/login/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

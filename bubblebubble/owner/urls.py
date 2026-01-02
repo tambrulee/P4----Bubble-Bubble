@@ -1,7 +1,7 @@
 from django.urls import path, reverse_lazy
 from . import views
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 
 app_name = "owner"
 
@@ -11,7 +11,7 @@ urlpatterns = [
         LoginView.as_view(
             template_name="owner/login.html",
             redirect_authenticated_user=True,
-            next_page=reverse_lazy("owner:owner_dashboard"),  # ✅ default redirect
+            next_page=reverse_lazy("owner:owner_dashboard"),
         ),
         name="owner_login",
     ),
@@ -82,4 +82,8 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
+
+    path("logout/", LogoutView.as_view(
+        next_page="/owner/login/"
+    ), name="logout"),
 ]
