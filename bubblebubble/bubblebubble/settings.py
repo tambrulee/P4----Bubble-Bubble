@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     'checkout',
     'reviews',
     'owner',
+    "pages",
     'import_export',   
     # csv import export
     'cart.apps.CartConfig',  
@@ -173,7 +174,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Email (Gmail SMTP)
 
 EMAIL_BACKEND = config(
-    "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
+    "EMAIL_BACKEND", default="")
 EMAIL_HOST = config(
     "EMAIL_HOST", default="")
 EMAIL_PORT = config(
@@ -186,6 +187,10 @@ EMAIL_HOST_PASSWORD = config(
     "EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = config(
     "DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
+EMAIL_BACKEND = config(
+    "EMAIL_BACKEND", default="")
+CONTACT_TO_EMAIL = config(
+    "CONTACT_TO_EMAIL", default="")
 
 
 # Custom settings

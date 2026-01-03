@@ -4,6 +4,7 @@ from .models import Product
 from django.db.models import Count
 
 
+
 def home(request):
     best_sellers = (
         Product.objects
@@ -164,31 +165,3 @@ def refillables(request):
         "hero_image": "img/hero/slide3.png",  # change to your real hero
         "tag": "refillable",
     })
-
-
-def delivery(request):
-    return render(request, "catalog/delivery.html")
-
-
-def returns(request):
-    return render(request, "catalog/returns.html")
-
-
-def faq(request):
-    return render(request, "catalog/faq.html")
-
-
-def terms(request):
-    return render(request, "catalog/terms.html")
-
-
-def privacy(request):
-    return render(request, "catalog/privacy.html")
-
-
-def cookies(request):
-    return render(request, "catalog/cookies.html")
-
-
-def contact(request):
-    return render(request, "catalog/contact.html")

@@ -11,6 +11,9 @@ urlpatterns = [
     path("media/<path:path>", serve, {"document_root": settings.MEDIA_ROOT}),
 
     # App URLs
+    # Static/info pages
+    path("pages/", include("pages.urls")),
+    # App URLs
     path("", include("catalog.urls")),
     path("cart/", include("cart.urls")),
     path("checkout/", include("checkout.urls")),
