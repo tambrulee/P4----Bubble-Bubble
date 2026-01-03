@@ -54,4 +54,14 @@ urlpatterns = [
         views.my_order_detail,
         name="my_order_detail"),
 
+    #  Shipping address management
+   #  Shipping address management
+    path("addresses/", views.address_list, name="address_list"),
+    path("addresses/add/", views.address_create, name="address_add"),
+    path("addresses/<int:pk>/edit/", views.address_update, name="address_edit"),
+    path("addresses/<int:pk>/delete/", views.address_delete, name="address_delete"),
+    path("addresses/<int:pk>/default/", views.address_set_default, name="address_default"),
+
 ]
+
+

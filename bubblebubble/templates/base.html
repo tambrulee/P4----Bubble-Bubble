@@ -49,30 +49,50 @@
         <li class="nav-item"><a class="nav-link" href="{% url 'catalog:winter_isles' %}">Winter Isles</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'catalog:refillables' %}">Refillables</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'catalog:about' %}">Our Story</a></li>
-        {% if user.is_authenticated %}
-          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:my_orders' %}">My Orders</a></li>
-        {% endif %}
       </ul>
     </div>
 
     <!-- RIGHT: icons -->
     <div class="bb-nav-right bb-nav-icons">
-      {% if user.is_authenticated %}
-        <a href="#" class="bb-icon-link" title="My account">
+      
+    {% if user.is_authenticated %}
+      <div class="dropdown bb-account-dropdown">
+        <button class="btn bb-icon-link dropdown-toggle"
+                type="button"
+                id="accountMenu"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                aria-label="Account menu">
           <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
-        </a>
-        <a href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}"
-           class="bb-icon-link"
-           title="Logout">
-          <span class="bb-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
-        </a>
-      {% else %}
-        <a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}"
-           class="bb-icon-link"
-           title="Login">
-          <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
-        </a>
-      {% endif %}
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end bb-dropdown" aria-labelledby="accountMenu">
+          <li><a class="dropdown-item" href="{% url 'accounts:my_orders' %}">
+            <i class="fa-regular fa-clipboard me-2"></i> My orders
+          </a></li>
+
+          <li><a class="dropdown-item" href="{% url 'cart:view' %}">
+            <i class="fa-solid fa-cart-shopping me-2"></i> Cart
+          </a></li>
+
+          <li><a class="dropdown-item" href="{% url 'accounts:address_list' %}">
+            <i class="fa-regular fa-address-book me-2"></i> Address book
+          </a></li>
+
+          <li><hr class="dropdown-divider"></li>
+
+          <li><a class="dropdown-item" href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+          </a></li>
+        </ul>
+      </div>
+    {% else %}
+  <a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}"
+     class="bb-icon-link"
+     title="Login">
+    <span class="bb-icon"><i class="fa-regular fa-user"></i></span>
+  </a>
+{% endif %}
 
       <a href="{% url 'cart:view' %}"
          class="bb-icon-link position-relative"

@@ -296,6 +296,30 @@ a:hover {
   margin: 0;
 }
 
+/* Account dropdown: keep icon-only look */
+.bb-account-dropdown .dropdown-toggle::after { display: none; }
+
+.bb-dropdown {
+  background: rgba(246, 244, 240, 0.98);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 0.4rem;
+  min-width: 220px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+}
+
+.bb-dropdown .dropdown-item {
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  color: #29403e;
+}
+
+.bb-dropdown .dropdown-item:hover,
+.bb-dropdown .dropdown-item:focus {
+  background: rgba(109, 134, 117, 0.15);
+}
+
+
 /* ====================================
    RESPONSIVE TWEAKS
    ==================================== */
