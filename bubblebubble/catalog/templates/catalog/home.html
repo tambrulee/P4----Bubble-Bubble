@@ -132,77 +132,84 @@
         <button class="carousel-control-next" type="button" data-bs-target="#bbHeroCarousel" data-bs-slide="next" aria-label="Next slide">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
         </button>
-
       </div>
     </div>
   </section>
 
   <!-- Short customer quotes / reviews -->
   {% if testimonials %}
-    <section class="py-5">
-      <div class="container">
-        <h2 class="h4 mb-3">What customers say</h2>
-
-        <div class="row g-3">
-          {% for t in testimonials %}
-            <div class="col-12 col-md-6 col-lg-4">
-              <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                  <p class="mb-2">“{{ t.quote }}”</p>
-                  <p class="text-muted small mb-0">— {{ t.name }}</p>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
+  <section class="py-5 bb-testimonials">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+          <h2 class="h4 mb-1">What customers say</h2>
+          <p class="text-muted mb-0">Real reviews from real people.</p>
         </div>
-
       </div>
-    </section>
+
+      <div class="bb-testimonials-row">
+        {% for t in testimonials %}
+        <article class="bb-quote-card">
+          <div class="bb-quote-top">
+            <span class="bb-quote-mark" aria-hidden="true">“</span>
+            <div class="bb-stars" aria-label="5 star rating">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+          </div>
+
+          <p class="mb-2">“{{ t.quote }}”</p>
+          <p class="text-muted small mb-0">— {{ t.name }}</p>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
   {% endif %}
+
 
   <!-- Best sellers / favourites -->
   <section class="py-5">
     <div class="container">
-
-      <div class="d-flex justify-content-between align-items-end mb-3">
-        <div>
+        <div class="d-flex justify-content-between align-items-end mb-3 bb-bestsellers-head">
           <h2 class="h4 mb-1">Best sellers</h2>
           <p class="text-muted mb-0">Start with proven favourites people come back for.</p>
         </div>
+        <div class="d-flex justify-content-between align-items-end mb-3">
+          <a href="{% url 'catalog:product_list' %}"
+            class="btn btn-outline-secondary bb-viewall-btn">
+            View all
+          </a>   
+        </div>
+    </div>
 
-        <a href="{% url 'catalog:product_list' %}"
-           class="btn btn-sm btn-outline-secondary">
-          View all
-        </a>
-      </div>
+      
 
       <div class="row g-3">
         {% for p in best_sellers %}
           <div class="col-12 col-sm-6 col-lg-3">
             <div class="card h-100 shadow-sm">
               {% if p.images.first %}
-                <img src="{{ p.images.first.image.url }}"
-                     class="card-img-top"
-                     alt="{{ p.images.first.alt_text }}">
+                <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
+                  <img src="{{ p.images.first.image.url }}"
+                      class="card-img-top"
+                      alt="{{ p.images.first.alt_text }}">
+                </a>
               {% endif %}
-
               <div class="card-body d-flex flex-column">
                 <h5 class="card-title mb-1">{{ p.title }}</h5>
                 <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
                 <p class="mb-2 product-price">£{{ p.price }}</p>
-
-                <div class="mt-auto product-card-actions">
+                <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
                   <a href="{% url 'catalog:product_detail' p.slug %}"
-                     class="btn btn-sm btn-outline-primary">
-                    View
-                  </a>
-
-                  <form method="post" action="{% url 'cart:add' p.id %}" class="m-0">
+                     class="btn btn-sm btn-outline-primary">View</a>
+                  <form method="post"
+                        action="{% url 'cart:add_to_cart' p.id %}"
+                        class="js-add-to-cart">
                     {% csrf_token %}
                     <input type="hidden" name="qty" value="1">
-                    <button class="btn btn-primary btn-sm" {% if p.stock_qty == 0 %}disabled{% endif %}>
-                      Add
-                    </button>
+                    <button type="submit"
+                            class="btn btn-primary"
+                            {% if p.stock_qty == 0 %}disabled{% endif %}>Add to cart</button>
                   </form>
                 </div>
 
@@ -220,30 +227,32 @@
     </div>
   </section>
 
-  <!-- Our Story teaser -->
-  <section class="py-5 bg-light">
-    <div class="container">
-      <div class="row align-items-center g-4">
+  <!-- Our Story -->
+  <section class="py-5 bb-story-feature">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6 order-2 order-lg-1">
+        <span class="bb-section-kicker">Moon &amp; Moss</span>
+        <h2 class="h4 mb-2">Our story</h2>
+        <p class="text-muted mb-3">
+          Moon &amp; Moss started with a love of simple rituals — the kind that slow you down and bring you back to yourself.
+          We make small-batch soaps inspired by nature, comfort, and quiet moments.
+        </p>
+        <a href="{% url 'catalog:about' %}" class="btn btn-primary">Read Our Story</a>
+      </div>
 
-        <div class="col-lg-6">
-          <h2 class="h4 mb-2">Our story</h2>
-          <p class="text-muted mb-3">
-            Moon &amp; Moss started with a love of simple rituals — the kind that slow you down and bring you back to yourself.
-            We make small-batch soaps inspired by nature, comfort, and quiet moments.
-          </p>
-          <a href="{% url 'catalog:about' %}" class="btn btn-outline-primary">Read Our Story</a>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card shadow-sm border-0 overflow-hidden">
-            <img src="{% static 'img/hero/our_story.png' %}"
-                 class="w-100"
-                 alt="Our story">
+      <div class="col-lg-6 order-1 order-lg-2">
+        <a href="{% url 'catalog:about' %}" class="bb-story-card">
+          <img src="{% static 'img/hero/our_story.png' %}" class="w-100" alt="Our story">
+          <div class="bb-story-chip">
+            <i class="fa-solid fa-seedling"></i>
+            <span>Small-batch • UK made</span>
           </div>
-        </div>
-
+        </a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
 {% endblock %}

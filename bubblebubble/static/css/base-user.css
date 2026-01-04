@@ -3,6 +3,7 @@
    ==================================== */
 
 :root {
+  --bb-btn-radius: 20px;
   /* Brand */
   --bb-primary: #618280;         /* main button colour (your request) */
   --bb-primary-dark: #29403e;    /* darker version */
@@ -50,6 +51,7 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+
 /* Accent headings */
 h1, .h1, h2, .h2, h3, .h3 {
   color: var(--bb-primary-dark);
@@ -62,6 +64,10 @@ a:hover { color: var(--bb-primary); }
 /* ====================================
    BUTTONS (consistent + Bootstrap overrides)
    ==================================== */
+
+.btn{
+  border-radius: var(--bb-btn-radius);
+}
 
 /* Accessible focus */
 .btn:focus-visible {
@@ -460,6 +466,153 @@ a:hover { color: var(--bb-primary); }
 }
 
 
+/* Testimonials */
+
+.bb-testimonials{
+  background:
+    radial-gradient(800px 300px at 10% 10%, rgba(97,130,128,.18), transparent 60%),
+    radial-gradient(700px 260px at 90% 30%, rgba(41,64,62,.14), transparent 55%),
+    transparent;
+}
+
+.bb-testimonials-row{
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 1fr);
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bb-quote-card{
+  scroll-snap-align: start;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.9);
+  border: 1px solid rgba(41,64,62,.10);
+  box-shadow: 0 14px 28px rgba(0,0,0,.08);
+  position: relative;
+}
+
+.bb-quote-top{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.bb-quote-mark{
+  font-size: 2rem;
+  line-height: 1;
+  color: rgba(97,130,128,.55);
+  font-weight: 700;
+}
+
+.bb-stars i{
+  color: var(--bb-primary);
+  font-size: .9rem;
+}
+
+@media (min-width: 768px){
+  .bb-testimonials-row{
+    grid-auto-flow: initial;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: visible;
+  }
+}
+
+
+/* Best sellers */
+
+.bb-viewall-btn{
+  white-space: nowrap;
+}
+
+@media (max-width: 575.98px){
+  .bb-viewall-btn{
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* make header stack nicely */
+  .bb-bestsellers-head{
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: .75rem;
+  }
+}
+
+.bb-card-img-link{
+  display:block;
+}
+
+.bb-card-img-link img{
+  transition: transform 180ms ease;
+}
+
+.bb-card-img-link:hover img{
+  transform: scale(1.02);
+}
+
+/* keeps buttons tidy */
+.bb-card-actions .btn{
+  border-radius: 12px;
+}
+
+/* Our Story feature */
+
+.bb-story-feature{
+  background:
+    radial-gradient(900px 360px at 15% 15%, rgba(97,130,128,.18), transparent 60%),
+    radial-gradient(800px 320px at 85% 25%, rgba(41,64,62,.12), transparent 55%),
+    rgba(255,255,255,.35);
+}
+
+.bb-section-kicker{
+  display:inline-block;
+  font-size:.8rem;
+  letter-spacing:.12em;
+  text-transform: uppercase;
+  color: rgba(41,64,62,.75);
+  margin-bottom:.35rem;
+}
+
+.bb-story-card{
+  display:block;
+  position: relative;
+  border-radius: 18px;
+  overflow:hidden;
+  box-shadow: 0 18px 36px rgba(0,0,0,.12);
+}
+
+.bb-story-card img{
+  display:block;
+  transition: transform 200ms ease;
+}
+
+.bb-story-card:hover img{
+  transform: scale(1.03);
+}
+
+.bb-story-chip{
+  position:absolute;
+  left: 14px;
+  bottom: 14px;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.55rem .75rem;
+  border-radius: 14px;
+  background: rgba(255,255,255,.88);
+  border: 1px solid rgba(41,64,62,.10);
+  color: var(--bb-primary-dark);
+  font-size:.9rem;
+}
+.bb-story-chip i{ color: var(--bb-primary); }
+
+
 /* ====================================
    CAROUSEL & PROMO CARD
    ==================================== */
@@ -581,9 +734,138 @@ a:hover { color: var(--bb-primary); }
 /* ====================================
    FOOTER
    ==================================== */
-footer { background-color: #b2c4c2; }
+/* =========================
+   FOOTER (Moon & Moss)
+   ========================= */
 
-footer .text-muted { color: var(--bb-primary-dark) !important; }
+.bb-footer{
+  background:
+    radial-gradient(900px 380px at 10% 0%, rgba(97,130,128,.35), transparent 60%),
+    radial-gradient(800px 320px at 90% 30%, rgba(41,64,62,.22), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.25));
+  border-top: 1px solid rgba(41,64,62,.12);
+}
+
+.bb-footer h6{
+  color: var(--bb-primary-dark);
+  letter-spacing: .12em;
+  font-size: .85rem;
+}
+
+.bb-footer-muted{
+  color: rgba(41,64,62,.75);
+}
+
+.bb-footer-card{
+  border-radius: 18px;
+  background: rgba(255,255,255,.75);
+  border: 1px solid rgba(41,64,62,.10);
+  box-shadow: 0 18px 36px rgba(0,0,0,.08);
+  padding: 18px;
+}
+
+.bb-footer-form .form-control{
+  border-radius: 12px 0 0 12px;
+  border: 1px solid rgba(41,64,62,.18);
+}
+.bb-footer-form .btn{
+  border-radius: 0 12px 12px 0;
+}
+
+/* Chips */
+.bb-footer-chips{
+  display:flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.bb-footer-chip{
+  display:inline-flex;
+  align-items:center;
+  gap: .45rem;
+  padding: .45rem .65rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.75);
+  border: 1px solid rgba(41,64,62,.10);
+  color: var(--bb-primary-dark);
+  font-size: .82rem;
+}
+
+.bb-footer-chip i{
+  color: var(--bb-primary);
+}
+
+/* Links */
+.bb-footer-links a{
+  display:inline-block;
+  padding: .25rem 0;
+  color: rgba(41,64,62,.85);
+  text-decoration: none;
+}
+.bb-footer-links a:hover{
+  color: var(--bb-primary);
+  text-decoration: underline;
+}
+
+/* Social */
+.bb-footer-social{
+  display:flex;
+  gap: .5rem;
+}
+.bb-social-link{
+  width: 42px;
+  height: 42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: 14px;
+  background: rgba(255,255,255,.65);
+  border: 1px solid rgba(41,64,62,.12);
+  color: var(--bb-primary-dark);
+  text-decoration: none;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+.bb-social-link:hover{
+  background: rgba(255,255,255,.9);
+  transform: translateY(-1px);
+  color: var(--bb-primary-dark);
+}
+
+/* Payment chips (optional flourish) */
+.bb-footer-payments{
+  display:flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.bb-pay-chip{
+  display:inline-block;
+  padding: .4rem .6rem;
+  border-radius: 12px;
+  background: rgba(41,64,62,.08);
+  border: 1px solid rgba(41,64,62,.10);
+  color: rgba(41,64,62,.85);
+  font-size: .8rem;
+}
+
+/* Bottom bar */
+.bb-footer-bottom{
+  display:flex;
+  flex-direction: column;
+  gap: .35rem;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(41,64,62,.12);
+  color: rgba(41,64,62,.85);
+  font-size: .9rem;
+}
+
+@media (min-width: 768px){
+  .bb-footer-bottom{
+    flex-direction: row;
+  }
+}
+
+
 
 /* ====================================
    FORMS
