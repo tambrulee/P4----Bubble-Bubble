@@ -80,9 +80,11 @@
         <div class="col-12 col-sm-6 col-lg-3">
           <div class="card h-100 shadow-sm">
             {% if p.images.first %}
-              <img src="{{ p.images.first.image.url }}"
-                   class="card-img-top"
-                   alt="{{ p.images.first.alt_text }}">
+              <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
+                  <img src="{{ p.images.first.image.url }}"
+                      class="card-img-top"
+                      alt="{{ p.images.first.alt_text }}">
+                </a>
             {% endif %}
             <div class="card-body d-flex flex-column">
               <h5 class="card-title mb-1">{{ p.title }}</h5>
@@ -92,7 +94,6 @@
                 {% if p.tags|has_tag:"limited" %}<span class="badge bg-warning text-dark">Limited Edition</span>{% endif %}
                 {% if p.tags|has_tag:"refillable" %}<span class="badge bg-success">Refillable</span>{% endif %}
               </div>
-              <h5 class="card-title mb-1">{{ p.title }}</h5>
               <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
               <p class="mb-2 product-price">£{{ p.price }}</p>
               <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
