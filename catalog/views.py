@@ -3,6 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product
 from django.db.models import Count
 
+
+
 def home(request):
     best_sellers = (
         Product.objects
@@ -14,14 +16,24 @@ def home(request):
     )
 
     promos = [
-        {"title": "Winter Isles bundle", "text": "Seasonal scents — limited run.", "tag": "winter"},
-        {"title": "Refill & save", "text": "Low-waste favourites with refill options.", "tag": "refillable"},
+        {"title":
+         "Winter Isles bundle", "text": "Seasonal scents — limited run.",
+         "tag": "winter"},
+        {"title":
+         "Refill & save", "text": "Low-waste favourites with refill options.",
+         "tag": "refillable"},
     ]
 
     testimonials = [
-        {"quote": "Smells incredible and feels so gentle — my new daily ritual.", "name": "Customer"},
-        {"quote": "Fast delivery, beautiful packaging, and the scent lasts ages.", "name": "Customer"},
-        {"quote": "Finally found a vegan soap that doesn’t dry my skin out.", "name": "Customer"},
+        {"quote":
+         "Smells incredible and feels so gentle — my new daily ritual.",
+         "name": "Laura M."},
+        {"quote":
+         "Fast delivery, beautiful packaging, and the scent lasts ages.",
+         "name": "Hannah S."},
+        {"quote":
+         "Finally found a vegan soap that doesn’t dry my skin out.",
+         "name": "Simon K."},
     ]
 
     return render(request, "catalog/home.html", {
@@ -31,6 +43,7 @@ def home(request):
         "free_shipping_threshold": 35,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
+
 
 SCENT_FAMILIES = [
     ("earthy", "Earthy"),
@@ -47,6 +60,7 @@ RANGES = [
     ("winter", "Winter Isles"),
     ("refillable", "Refillables"),
 ]
+
 
 def product_list(request):
     range_tag = request.GET.get("range", "").strip().lower()
@@ -87,7 +101,9 @@ def product_list(request):
         # Only use this if you have a related reviews name "reviews".
         # Otherwise fallback to newest.
         try:
-            qs = qs.annotate(review_count=Count("reviews")).order_by("-review_count", "-created_at")
+            qs = qs.annotate(
+                review_count=Count("reviews")).order_by(
+                    "-review_count", "-created_at")
         except Exception:
             qs = qs.order_by("-created_at")
     else:
@@ -108,6 +124,7 @@ def product_list(request):
         "SCENT_FAMILIES": SCENT_FAMILIES,
     })
 
+
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, active=True)
     return render(request, "catalog/product_detail.html", {
@@ -115,27 +132,36 @@ def product_detail(request, slug):
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
 
+
 def about(request):
     return render(request, "catalog/about.html")
 
+
 def winter_isles(request):
-    products = Product.objects.filter(active=True, tags__icontains="winter").order_by("-created_at")
+    products = Product.objects.filter(
+        active=True, tags__icontains="winter").order_by("-created_at")
     return render(request, "catalog/category_page.html", {
         "products": products,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
         "page_title": "Winter Isles",
-        "page_description": "Limited edition seasonal blends inspired by the UK landscape — sea air, hedgerow berries, juniper and frost.",
+        "page_description":
+        "Limited edition seasonal blends inspired by the "
+        "UK landscape — sea air, hedgerow berries, juniper and frost.",
         "hero_image": "img/hero/slide2.png",  # change to your real hero
         "tag": "winter",
     })
 
+
 def refillables(request):
-    products = Product.objects.filter(active=True, tags__icontains="refillable").order_by("-created_at")
+    products = Product.objects.filter(
+        active=True, tags__icontains="refillable").order_by("-created_at")
     return render(request, "catalog/category_page.html", {
         "products": products,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
         "page_title": "Refillable Soaps",
-        "page_description": "Low-waste favourites designed for everyday rituals — refill options so you don’t have to keep buying new bottles.",
+        "page_description":
+        "Low-waste favourites designed for everyday rituals — "
+        "refill options so you don’t have to keep buying new bottles.",
         "hero_image": "img/hero/slide3.png",  # change to your real hero
         "tag": "refillable",
     })

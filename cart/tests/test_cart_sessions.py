@@ -1,4 +1,3 @@
-# cart/tests/test_cart_sessions.py
 from django.test import TestCase, RequestFactory
 from django.contrib.auth import get_user_model
 from django.contrib.auth.signals import user_logged_in
@@ -82,7 +81,7 @@ class CartSessionTests(TestCase):
         login_request = guest_request
         login_request.user = self.user
 
-        # send the signal manually in tests (Django would do this in real login)
+        # send the signal manually in tests
         user_logged_in.send(
             sender=self.user.__class__,
             request=login_request,
@@ -98,5 +97,6 @@ class CartSessionTests(TestCase):
 
         # Guest cart should be gone
         self.assertFalse(
-            Cart.objects.filter(session_key=session_key, user__isnull=True).exists()
+            Cart.objects.filter(
+                session_key=session_key, user__isnull=True).exists()
         )

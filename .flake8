@@ -1,0 +1,17 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    env,
+    node_modules,
+    static,
+    media,
+    staticfiles,
+    .pytest_cache,
+    migrations,
+    *.pyc
+
+extend-ignore = E203, W503
+max-line-length = 100

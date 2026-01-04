@@ -81,7 +81,8 @@ class CheckoutForm(forms.ModelForm):
         if user and user.is_authenticated:
             from accounts.models import ShippingAddress
             self.fields["saved_address"].queryset = (
-                ShippingAddress.objects.filter(user=user).order_by("-is_default", "-created_at")
+                ShippingAddress.objects.filter(
+                    user=user).order_by("-is_default", "-created_at")
             )
         else:
             # ✅ Guests: hide them

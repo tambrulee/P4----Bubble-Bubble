@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Address book</h1>
+  <a class="btn btn-sm btn-outline-dark" href="{% url 'accounts:address_add' %}">Add address</a>
+</div>
+
+{% if addresses %}
+  <div class="row g-3">
+    {% for a in addresses %}
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <strong>{{ a.full_name }}</strong><br>
+                <span class="text-muted small">{{ a.email }}</span><br><br>
+                {{ a.address_line1 }}<br>
+                {% if a.address_line2 %}{{ a.address_line2 }}<br>{% endif %}
+                {{ a.city }}<br>
+                <span class="text-uppercase">{{ a.postcode }}</span>
+              </div>
+
+              {% if a.is_default %}
+                <span class="badge text-bg-success">Default</span>
+              {% endif %}
+            </div>
+
+            <div class="d-flex gap-2 mt-3">
+              {% if not a.is_default %}
+                <a class="btn btn-sm btn-outline-success" href="{% url 'accounts:address_default' a.pk %}">Make default</a>
+              {% endif %}
+              <a class="btn btn-sm btn-outline-secondary" href="{% url 'accounts:address_edit' a.pk %}">Edit</a>
+              <a class="btn btn-sm btn-outline-danger" href="{% url 'accounts:address_delete' a.pk %}">Delete</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-muted">No saved addresses yet.</p>
+{% endif %}
+
+{% endblock %}

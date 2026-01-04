@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 
+
 class ShippingAddress(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -20,7 +21,8 @@ class ShippingAddress(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.is_default:
-            ShippingAddress.objects.filter(user=self.user).exclude(pk=self.pk).update(is_default=False)
+            ShippingAddress.objects.filter(
+                user=self.user).exclude(pk=self.pk).update(is_default=False)
 
     def __str__(self):
         return f"{self.label} – {self.postcode}"

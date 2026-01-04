@@ -55,7 +55,6 @@ class CheckoutSuccessEmailTests(TestCase):
             unit_price=Decimal("12.50"),
         )
 
-
     @patch("checkout.views.stripe.checkout.Session.retrieve")
     def test_checkout_success_marks_order_paid_clears_cart_and_sends_email(
         self, mock_retrieve
@@ -93,7 +92,8 @@ class CheckoutSuccessEmailTests(TestCase):
         self, mock_retrieve
     ):
         """
-        If the order is already marked as PAID, we shouldn't send a second email.
+        If the order is already marked as PAID,
+        we shouldn't send a second email.
         """
         self.order.status = Order.PAID
         self.order.save()
