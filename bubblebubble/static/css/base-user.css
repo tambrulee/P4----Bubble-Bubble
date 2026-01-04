@@ -1,0 +1,667 @@
+/* ====================================
+   GLOBAL
+   ==================================== */
+
+body {
+  background-color: #f6f4f0;
+  color: #333333;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Accent headings */
+h1, .h1, h2, .h2, h3, .h3 {
+  color: #29403e;
+}
+
+/* Links */
+a {
+  color: #29403e;
+}
+a:hover {
+  color: #618280;
+}
+
+/* =========================================================
+   Moon & Moss — Admin UI
+   ========================================================= */
+
+/* === Customer UX colour tokens === */
+:root {
+  --aa-primary: #5f7f6b;
+  --aa-secondary: #334038;
+}
+
+
+/* ====================================
+   BUTTONS
+   ==================================== */
+
+.btn-primary {
+  background-color: #29403e;
+  border-color: #29403e;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #618280;
+  border-color: #618280;
+}
+
+.btn-outline-primary {
+  color: #ffffff;
+  background-color: var(--aa-secondary);
+  border-color: #29403e;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  color: var(--aa-secondary);
+  background-color: #ffffff;
+  border-color: #29403e;
+}
+
+.btn-bb-primary {
+  background: #203a1a;
+  border: none;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 999px;
+}
+.btn-bb-primary:hover { opacity: 0.92; color: #fff; }
+
+.btn-bb-secondary {
+  background: rgba(255,255,255,0.9);
+  border: none;
+  color: #203a1a;
+  padding: 10px 18px;
+  border-radius: 999px;
+}
+.btn-bb-secondary:hover { opacity: 0.92; color: #203a1a; }
+
+/* Discount badge */
+.bb-badge {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  background: rgba(32, 58, 26, 0.95); /* mossy green */
+  color: #fff;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.05;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+}
+
+/* ====================================
+   NAVBAR + HEADER
+   ==================================== */
+
+:root {
+  --bb-nav-bg: #6D8675;
+  --bb-nav-text: #f6f4f0;
+  --bb-nav-border: rgba(246, 244, 240, 0.18);
+
+  --bb-nav-gap: 0.75rem;
+  --bb-nav-height: 64px;
+  --bb-nav-height-sm: 56px;
+
+  --bb-logo-max: 90px;      /* keep slender */
+  --bb-logo-max-sm: 90px;
+
+  --bb-hit: 44px;           /* accessible tap target */
+  --bb-radius: 12px;
+}
+
+/* NAV wrapper */
+.bb-navbar {
+  background: var(--bb-nav-bg);
+  border-bottom: 1px solid var(--bb-nav-border);
+  padding: 0;
+}
+
+.bb-navbar .container {
+  padding-inline: 0.75rem;
+}
+
+/* GRID */
+.bb-nav-grid {
+  display: grid;
+  grid-template-columns: var(--bb-hit) auto 1fr auto;
+  align-items: center;
+  gap: var(--bb-nav-gap);
+  min-height: var(--bb-nav-height);
+}
+
+/* Regions */
+.bb-nav-left,
+.bb-nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.bb-nav-left  { justify-self: start; }
+.bb-nav-center { justify-self: start; min-width: 0; }
+.bb-nav-right { justify-self: end; gap: 0.25rem; min-width: 0; }
+
+/* Brand reset */
+.bb-brand {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Logo — do NOT let it control bar height */
+.bb-logo {
+  max-height: var(--bb-logo-max);
+  width: auto;
+  display: block;
+}
+
+/* ====================================
+   ICON BUTTONS (consistent)
+   ==================================== */
+
+/* Make burger + icon links identical size/padding */
+.bb-icon-button,
+.bb-nav-icons .bb-icon-link,
+.bb-account-dropdown .btn.bb-icon-link {
+  width: var(--bb-hit);
+  height: var(--bb-hit);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--bb-radius);
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.bb-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--bb-nav-text);
+}
+
+.bb-icon-button:focus-visible,
+.bb-nav-icons .bb-icon-link:focus-visible,
+.bb-account-dropdown .btn.bb-icon-link:focus-visible {
+  outline: 2px solid rgba(246, 244, 240, 0.75);
+  outline-offset: 2px;
+}
+
+.bb-icon-button:hover,
+.bb-nav-icons .bb-icon-link:hover,
+.bb-account-dropdown .btn.bb-icon-link:hover {
+  background-color: rgba(246, 244, 240, 0.14);
+  transform: translateY(-1px);
+}
+
+/* Keep dropdown trigger icon-only */
+.bb-account-dropdown .dropdown-toggle::after { display: none; }
+
+/* Font Awesome size inside icons */
+.bb-nav-icons .fa-solid,
+.bb-nav-icons .fa-regular {
+  font-size: 0.95rem;
+}
+
+/* ====================================
+   DESKTOP LINKS (inline)
+   ==================================== */
+
+.bb-nav-links-wrap { justify-self: center; min-width: 0; }
+
+/* Boost specificity once to override Bootstrap's .navbar-nav column */
+.bb-navbar .bb-nav-links-desktop.navbar-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bb-navbar .bb-nav-links-desktop .nav-item { display: inline-flex; margin: 0; }
+
+.bb-nav-links .nav-link {
+  color: rgba(246, 244, 240, 0.92);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  line-height: 1.1;
+  padding: 0.35rem 0.25rem;
+  text-decoration: none;
+  position: relative;
+  border-radius: 10px;
+  transition: color 160ms ease, background-color 160ms ease;
+  white-space: nowrap;
+}
+
+.bb-nav-links .nav-link:hover,
+.bb-nav-links .nav-link:focus-visible {
+  color: #fff;
+  background-color: rgba(246, 244, 240, 0.10);
+}
+
+/* Underline indicator */
+.bb-nav-links .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  right: 0.25rem;
+  bottom: -6px;
+  height: 2px;
+  background: rgba(246, 244, 240, 0.9);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 170ms ease;
+  border-radius: 999px;
+}
+
+.bb-nav-links .nav-link:hover::after,
+.bb-nav-links .nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ====================================
+   MOBILE COLLAPSE
+   ==================================== */
+
+.bb-main-links { background: var(--bb-nav-bg); }
+.bb-main-links .navbar-nav { padding: 0.75rem 0; }
+.bb-main-links .nav-link { padding: 0.75rem 0.5rem; margin: 0; }
+
+/* ====================================
+   DROPDOWN MENU
+   ==================================== */
+
+.bb-dropdown {
+  background: rgba(246, 244, 240, 0.98);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 0.4rem;
+  min-width: 220px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+}
+
+.bb-dropdown .dropdown-item {
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  color: #29403e;
+}
+
+.bb-dropdown .dropdown-item:hover,
+.bb-dropdown .dropdown-item:focus {
+  background: rgba(109, 134, 117, 0.15);
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
+@media (max-width: 991.98px) {
+  /* Mobile grid: burger | logo | icons */
+  .bb-nav-grid {
+    grid-template-columns: var(--bb-hit) minmax(0, 1fr) auto;
+    min-height: var(--bb-nav-height-sm);
+  }
+
+  .bb-nav-center { justify-self: center; }
+  .bb-logo { max-height: var(--bb-logo-max-sm); }
+
+  /* Hide desktop links already handled by your d-none d-lg-flex */
+}
+
+@media (max-width: 575.98px) {
+  .bb-navbar .container { padding-inline: 0.5rem; }
+  .bb-icon { font-size: 1.1rem; }
+}
+
+@media (min-width: 992px) {
+  .bb-nav-left { display: none; }
+}
+
+
+
+/* ====================================
+   PROMO BAR
+   ==================================== */
+
+.bb-promo-bar {
+  background-color: #29403e;
+  color: #f6f4f0;
+  font-size: 0.9rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.bb-promo-track {
+  display: inline-block;
+  padding: 0.45rem 0;
+  padding-left: 100%;
+  animation: bb-promo-scroll 22s linear infinite;
+}
+
+.bb-promo-track span {
+  margin: 0 3rem;
+}
+
+@keyframes bb-promo-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 576px) {
+  .bb-promo-track {
+    animation-duration: 28s;
+  }
+}
+
+/* ====================================
+   CARDS & PRODUCT LIST
+   ==================================== */
+
+.card {
+  border-radius: 0.85rem;
+  border-color: #f6f4f0;
+}
+
+.card-img-top {
+  height: 240px;        /* consistent tile height */
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-top-left-radius: 0.85rem;
+  border-top-right-radius: 0.85rem;
+}
+
+.card-title {
+  color: #29403e;
+}
+
+.product-meta {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.product-price {
+  font-weight: 600;
+  color: #29403e;
+}
+
+/* ====================================
+   CART
+   ==================================== */
+
+.cart-qty-input {
+  width: 70px;
+  text-align: center;
+  padding-right: 0;
+}
+
+.cart-qty-input::-webkit-outer-spin-button,
+.cart-qty-input::-webkit-inner-spin-button {
+  margin: 0;
+}
+
+/* Cart-specific buttons */
+
+.btn-update {
+  border-color: #29403e;
+  color: #29403e;
+}
+.btn-update:hover {
+  background-color: #29403e;
+  color: #f6f4f0;
+  border-color: #29403e;
+}
+
+.btn-remove {
+  border-color: #29403e;
+  color: #29403e;
+}
+.btn-remove:hover {
+  background-color: #29403e;
+  color: #f6f4f0;
+}
+
+.btn-continue {
+  background-color: #618280;
+  color: #f6f4f0;
+  border: none;
+  font-weight: 500;
+}
+.btn-continue:hover {
+  background-color: #29403e;
+  color: #f6f4f0;
+}
+
+.btn-checkout {
+  background-color: #29403e;
+  border-color: #29403e;
+  color: #f6f4f0;
+}
+.btn-checkout:hover {
+  background-color: #618280;
+  border-color: #618280;
+  color: #f6f4f0;
+}
+
+/* ====================================
+   REVIEWS
+   ==================================== */
+
+.review-stars {
+  color: #29403e;
+}
+
+/* ====================================
+   FOOTER
+   ==================================== */
+
+footer {
+  background-color: #b2c4c2;
+}
+
+footer .text-muted {
+  color: #29403e !important;
+}
+
+/* Email reset */
+.card input[type="text"],
+.card input[type="email"],
+.card input[type="password"]{
+  width: 100%;
+  padding: .5rem .75rem;
+  border: 1px solid #dee2e6;
+  border-radius: .5rem;
+}
+
+.form-text {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+/* Carousel */
+
+/* HERO WRAP */
+.bb-hero-carousel,
+.bb-promo-card {
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Make slide images consistent */
+.bb-hero-img {
+  height: 440px;
+  object-fit: cover;
+}
+
+/* Overlay panel on slides */
+.bb-hero-overlay {
+  position: absolute;
+  left: 28px;
+  top: 28px;
+  bottom: 28px;
+  width: min(520px, 78%);
+  padding: 28px;
+  border-radius: 24px;
+
+  /* frosted glass */
+  background: rgba(151, 146, 146, 0.616);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Text styles */
+.bb-hero-title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  font-size: clamp(2.2rem, 3vw, 3.6rem);
+  margin-bottom: 14px;
+  text-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.bb-hero-text {
+  max-width: 46ch;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin-bottom: 18px;
+  text-shadow: 0 6px 18px rgb(0, 0, 0);
+}
+
+/* Promo card */
+.bb-promo-card {
+  background: #111;
+}
+
+.bb-promo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Promo overlay at bottom */
+.bb-promo-overlay {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  padding: 18px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: #fff;
+}
+
+.bb-promo-title {
+  font-size: 1.9rem;
+  margin: 0 0 6px;
+  text-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.bb-promo-text {
+  margin: 0 0 12px;
+  text-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+
+
+/* Mobile tweaks */
+@media (max-width: 991.98px) {
+  .bb-hero-img { height: 360px; }
+  .bb-hero-overlay {
+    left: 16px; right: 16px;
+    width: auto;
+    top: auto;
+    bottom: 16px;
+    padding: 18px;
+  }
+}
+
+
+/* HERO */
+.bb-hero-bg{
+  min-height: 70vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.bb-hero-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,0.22);
+}
+
+.bb-hero .container{
+  position: relative;
+  z-index: 2;
+}
+
+
+.bb-hero-our-story {
+  background-image: url("../img/hero/our_story.png");
+}
+
+
+.bb-hero-card{
+  max-width: 520px;
+  padding: 2.5rem;
+  border-radius: 1rem;
+
+  /* translucent overlay */
+  background: rgba(255, 255, 255, 0.28);
+
+  /* optional: frosted-glass effect (supported in modern browsers) */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+
+/* BODY OVERLAP */
+.bb-story-body {
+  margin-top: -6rem; /* pulls card into hero */
+  position: relative;
+  z-index: 3;
+}
+
+/* STORY CARD */
+.bb-card {
+  border-radius: 1.25rem;
+}
+
+/* PILLS */
+.bb-pill {
+  background: #f7f6f4;
+  text-align: center;
+}
+
+.bb-pill h5 {
+  font-weight: 600;
+}
