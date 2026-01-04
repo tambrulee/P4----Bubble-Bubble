@@ -27,13 +27,13 @@ def home(request):
     testimonials = [
         {"quote":
          "Smells incredible and feels so gentle — my new daily ritual.",
-         "name": "Customer"},
+         "name": "Laura M."},
         {"quote":
          "Fast delivery, beautiful packaging, and the scent lasts ages.",
-         "name": "Customer"},
+         "name": "Hannah S."},
         {"quote":
          "Finally found a vegan soap that doesn’t dry my skin out.",
-         "name": "Customer"},
+         "name": "Simon K."},
     ]
 
     return render(request, "catalog/home.html", {
