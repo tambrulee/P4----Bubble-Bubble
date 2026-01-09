@@ -1,57 +1,115 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+
+<div class="container py-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
       <h1 class="h3 mb-0">Order #{{ order.id }}</h1>
-      <a class="btn btn-outline-secondary"
-         href="{% url 'accounts:my_orders' %}">Back</a>
+      <div class="text-muted small">Placed: {{ order.created_at|date:"d M Y H:i" }}</div>
     </div>
-    <div class="card p-3 mb-3">
-      <div class="row g-2">
-        <div class="col-md-6">
-          <div class="fw-semibold">Delivery address</div>
-          <div>{{ order.full_name }}</div>
-          <div>{{ order.address_line1 }}</div>
-          {% if order.address_line2 %}<div>{{ order.address_line2 }}</div>{% endif %}
-          <div>{{ order.city }}, {{ order.postcode }}</div>
-        </div>
-        <div class="col-md-6">
-          <div class="fw-semibold">Order status</div>
-          <div>{{ order.get_status_display }}</div>
-          <div class="text-muted small">Placed: {{ order.created_at|date:"d M Y H:i" }}</div>
-        </div>
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'accounts:my_orders' %}">Back</a>
+  </div>
+
+  <!-- Summary cards -->
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-lg-7">
+      <div class="bb-order-card">
+        <h2 class="h6 text-uppercase mb-2">Delivery address</h2>
+        <div class="bb-order-muted">{{ order.full_name }}</div>
+        <div class="bb-order-muted">{{ order.address_line1 }}</div>
+        {% if order.address_line2 %}<div class="bb-order-muted">{{ order.address_line2 }}</div>{% endif %}
+        <div class="bb-order-muted">{{ order.city }}, {{ order.postcode }}</div>
       </div>
     </div>
-    <div class="card p-3">
-      <div class="d-flex justify-content-between align-items-start gap-3">
-        <div>
-          <h2 class="h5 mb-1">Items</h2>
+
+    <div class="col-12 col-lg-5">
+      <div class="bb-order-card bb-order-card-accent">
+        <h2 class="h6 text-uppercase mb-2">Order status</h2>
+        <div class="fw-semibold">{{ order.get_status_display }}</div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <span class="text-muted">Total</span>
+          <span class="h5 mb-0">£{{ order.total|floatformat:2 }}</span>
         </div>
-        <div class="text-end fw-semibold">Total: £{{ order.total|floatformat:2 }}</div>
       </div>
-      <hr class="my-3">
-      <ul class="list-group list-group-flush">
-        {% for item in order.items.all %}
-          <li class="list-group-item">
-            <div class="d-flex justify-content-between align-items-start gap-3">
-              <div>
-                <div class="fw-semibold">{{ item.product.title }}</div>
-                <div class="text-muted small">Qty: {{ item.qty }} • £{{ item.subtotal|floatformat:2 }}</div>
-              </div>
-              <div class="text-end d-flex flex-column align-items-end gap-2">
-                <a class="btn btn-sm btn-outline-secondary"
-                   href="{% url 'catalog:product_detail' item.product.slug %}">View product</a>
-                {% if order.fulfilment_status == "DELIVERED" %}
-                  <a class="btn btn-sm btn-outline-primary"
-                     href="{% url 'reviews:from_order' order.id item.product.id %}">Write / edit review</a>
-                {% else %}
-                  <span class="text-muted small">Review available after delivery</span>
-                {% endif %}
-              </div>
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
     </div>
   </div>
+
+  <!-- Items -->
+  <div class="bb-order-card">
+    <div class="d-flex justify-content-between align-items-start gap-3">
+      <div>
+        <h2 class="h5 mb-0">Items</h2>
+        <p class="text-muted small mb-0">Quick links to view products and leave a review.</p>
+      </div>
+      <div class="text-end fw-semibold d-none d-md-block">
+        Total: £{{ order.total|floatformat:2 }}
+      </div>
+    </div>
+
+    <hr class="bb-order-divider my-3">
+
+    <ul class="list-unstyled mb-0 bb-order-items">
+      {% for item in order.items.all %}
+        <li class="bb-order-item">
+
+          <!-- Thumb -->
+          <a class="bb-order-thumb"
+             href="{% url 'catalog:product_detail' item.product.slug %}"
+             aria-label="View {{ item.product.title }}">
+            {% if item.product.images.first %}
+              <img src="{{ item.product.images.first.image.url }}"
+                   alt="{{ item.product.images.first.alt_text|default:item.product.title }}">
+            {% else %}
+              <span class="bb-order-thumb-fallback" aria-hidden="true">
+                <i class="fa-solid fa-leaf"></i>
+              </span>
+            {% endif %}
+          </a>
+
+          <!-- Info -->
+          <div class="bb-order-main">
+            <a class="bb-order-title"
+               href="{% url 'catalog:product_detail' item.product.slug %}">
+              {{ item.product.title }}
+            </a>
+
+            <div class="bb-order-meta">
+              <span class="text-muted small">Qty: {{ item.qty }}</span>
+              <span class="bb-dot" aria-hidden="true">•</span>
+              <span class="text-muted small">£{{ item.subtotal|floatformat:2 }}</span>
+            </div>
+
+            <!-- Mobile: actions under title -->
+            <div class="bb-order-actions">
+              <a class="btn btn-sm btn-outline-secondary bb-order-btn"
+                 href="{% url 'catalog:product_detail' item.product.slug %}">
+                View
+              </a>
+
+              {% if order.fulfilment_status == "DELIVERED" %}
+                <a class="btn btn-sm btn-outline-primary bb-order-btn"
+                   href="{% url 'reviews:from_order' order.id item.product.id %}">
+                  Review
+                </a>
+              {% else %}
+                <span class="text-muted small bb-order-review-lock">
+                  Review available after delivery
+                </span>
+              {% endif %}
+            </div>
+          </div>
+
+        </li>
+
+        {% if not forloop.last %}
+          <hr class="bb-order-divider">
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+
+</div>
+
 {% endblock %}
