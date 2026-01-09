@@ -79,6 +79,18 @@
                 <i class="fa-regular fa-address-book me-2"></i> Address book
               </a></li>
 
+              {% if user.is_staff %}
+                <li><hr class="dropdown-divider"></li>
+
+                <li>
+                  <a class="dropdown-item"
+                    href="http://127.0.0.1:8000/owner/owner/">
+                    <i class="fa-solid fa-screwdriver-wrench me-2"></i>
+                    Admin panel
+                  </a>
+                </li>
+              {% endif %}
+
               <li><hr class="dropdown-divider"></li>
 
               <li><a class="dropdown-item" href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}">

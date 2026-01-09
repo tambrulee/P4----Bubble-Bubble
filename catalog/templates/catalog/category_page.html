@@ -1,118 +1,161 @@
 {% extends "base.html" %}
 {% load static %}
+{% load tag_extras %}
 {% block content %}
-  {% load tag_extras %}
-  <section class="bb-hero-wrap my-4">
-    <div class="container">
-      <div class="card border-0 shadow-sm overflow-hidden">
-        <div class="position-relative">
-          <img src="{% static hero_image %}"
-               class="d-block w-100 bb-hero-img"
-               alt="{{ page_title }}">
-          <div class="bb-hero-overlay">
+
+<!-- HERO -->
+<section class="bb-hero-wrap my-4">
+  <div class="container">
+    <div class="card border-0 shadow-sm overflow-hidden bb-hero-card">
+      <div class="position-relative bb-hero-media">
+
+        <img src="{% static hero_image %}"
+             class="d-block w-100 bb-hero-img"
+             alt="{{ page_title }}">
+
+        {# Accessibility overlay: gradient + subtle blur panel so text always passes contrast #}
+        <div class="bb-hero-scrim" aria-hidden="true"></div>
+
+        <div class="bb-hero-overlay" role="region" aria-label="{{ page_title }}">
+          <div class="bb-hero-overlay-inner">
             <h1 class="bb-hero-title">{{ page_title }}</h1>
-            <p class="bb-hero-text mb-0">{{ page_description }}</p>
+            {% if page_description %}
+              <p class="bb-hero-text mb-0">{{ page_description }}</p>
+            {% endif %}
+
+            {# optional: quick anchors (remove if you don’t want) #}
+            <div class="bb-hero-actions mt-3">
+              <a href="#products" class="btn btn-primary btn-sm">Browse</a>
+              <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-primary btn-sm">All products</a>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 </section>
+
 {% if tag == "refillable" %}
-  <section class="py-4 bg-light">
+  <!-- REFILLABLE INFO -->
+  <section class="py-4 bb-refillable-feature">
     <div class="container">
       <div class="row g-4">
-        {# HOW REFILLABLES WORK #}
+        <!-- HOW REFILLABLES WORK -->
         <div class="col-lg-6">
-          <h2 class="h4 mb-2">How refillables work</h2>
-          <p class="text-muted">
-            Our refillable soaps are designed to be reused again and again.
-            Buy the main bottle once, then top up with refills whenever you run low.
-          </p>
-          <ul class="list-unstyled mt-3">
-            <li class="d-flex gap-2 mb-2">
-              <span aria-hidden="true">🧴</span>
-              <span>Buy the reusable bottle once</span>
-            </li>
-            <li class="d-flex gap-2 mb-2">
-              <span aria-hidden="true">♻️</span>
-              <span>Refill using lightweight refill packs</span>
-            </li>
-            <li class="d-flex gap-2">
-              <span aria-hidden="true">🌍</span>
-              <span>Reduce plastic waste over time</span>
-            </li>
-          </ul>
+          <div class="bb-feature-card h-100">
+            <h2 class="h4 mb-2">How refillables work</h2>
+            <p class="bb-muted">
+              Our refillable soaps are designed to be reused again and again.
+              Buy the main bottle once, then top up with refills whenever you run low.
+            </p>
+
+            <ul class="list-unstyled mt-3 mb-0 bb-steps">
+              <li class="bb-step">
+                <span class="bb-step-icon" aria-hidden="true">🧴</span>
+                <span>Buy the reusable bottle once</span>
+              </li>
+              <li class="bb-step">
+                <span class="bb-step-icon" aria-hidden="true">♻️</span>
+                <span>Refill using lightweight refill packs</span>
+              </li>
+              <li class="bb-step">
+                <span class="bb-step-icon" aria-hidden="true">🌍</span>
+                <span>Reduce plastic waste over time</span>
+              </li>
+            </ul>
+          </div>
         </div>
-        {# WASTE SAVING BENEFIT #}
+
+        <!-- WASTE SAVING BENEFIT -->
         <div class="col-lg-6">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="card-body">
-              <h3 class="h5 mb-2">Why refilling matters</h3>
-              <p class="text-muted mb-3">Refilling creates significantly less waste than replacing bottles.</p>
-              <div class="d-flex flex-column gap-2">
-                <div class="d-flex justify-content-between">
-                  <span>Bottles bought</span>
-                  <strong>5</strong>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <span>Reusable bottle kept</span>
-                  <strong>1</strong>
-                </div>
-                <hr class="my-2">
-                <div class="d-flex justify-content-between">
-                  <span>Plastic bottles avoided</span>
-                  <strong>4</strong>
-                </div>
+          <div class="bb-feature-card h-100 bb-feature-card-accent">
+            <h3 class="h5 mb-2">Why refilling matters</h3>
+            <p class="bb-muted mb-3">Refilling creates significantly less waste than replacing bottles.</p>
+
+            <div class="bb-metric">
+              <div class="d-flex justify-content-between">
+                <span>Bottles bought</span>
+                <strong>5</strong>
               </div>
-              <p class="small text-muted mt-3 mb-0">Exact savings vary, but refilling always reduces single-use plastic.</p>
+              <div class="d-flex justify-content-between">
+                <span>Reusable bottle kept</span>
+                <strong>1</strong>
+              </div>
+              <hr class="my-2">
+              <div class="d-flex justify-content-between">
+                <span>Plastic bottles avoided</span>
+                <strong>4</strong>
+              </div>
             </div>
+
+            <p class="small bb-muted mt-3 mb-0">
+              Exact savings vary, but refilling always reduces single-use plastic.
+            </p>
           </div>
         </div>
       </div>
     </div>
   </section>
 {% endif %}
-<section class="py-3">
+
+<!-- PRODUCTS -->
+<section class="py-3" id="products">
   <div class="container">
     <div class="row g-3">
       {% for p in products %}
         <div class="col-12 col-sm-6 col-lg-3">
-          <div class="card h-100 shadow-sm">
+          <div class="card h-100 shadow-sm bb-product-card">
+
             {% if p.images.first %}
               <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
-                  <img src="{{ p.images.first.image.url }}"
-                      class="card-img-top"
-                      alt="{{ p.images.first.alt_text }}">
-                </a>
+                <img src="{{ p.images.first.image.url }}"
+                     class="card-img-top"
+                     alt="{{ p.images.first.alt_text }}">
+              </a>
             {% endif %}
+
             <div class="card-body d-flex flex-column">
               <h5 class="card-title mb-1">{{ p.title }}</h5>
+
               <!-- Badges -->
               <div class="d-flex flex-wrap gap-1 mb-2">
-                {% if p.tags|has_tag:"bestseller" %}<span class="badge bg-dark">Best Selling</span>{% endif %}
-                {% if p.tags|has_tag:"limited" %}<span class="badge bg-warning text-dark">Limited Edition</span>{% endif %}
-                {% if p.tags|has_tag:"refillable" %}<span class="badge bg-success">Refillable</span>{% endif %}
+                {% if p.tags|has_tag:"bestseller" %}
+                  <span class="badge bb-badge-soft">Best Seller</span>
+                {% endif %}
+                {% if p.tags|has_tag:"limited" %}
+                  <span class="badge bb-badge-warm">Limited Edition</span>
+                {% endif %}
+                {% if p.tags|has_tag:"refillable" %}
+                  <span class="badge bb-badge-green">Refillable</span>
+                {% endif %}
               </div>
+
               <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
               <p class="mb-2 product-price">£{{ p.price }}</p>
-              <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
+
+              <div class="mt-auto d-flex gap-2 bb-card-actions">
                 <a href="{% url 'catalog:product_detail' p.slug %}"
-                   class="btn btn-sm btn-outline-primary">View</a>
+                   class="btn btn-sm btn-outline-primary flex-grow-1">
+                  View
+                </a>
+
                 <form method="post"
                       action="{% url 'cart:add_to_cart' p.id %}"
-                      class="js-add-to-cart">
+                      class="js-add-to-cart flex-grow-1 m-0">
                   {% csrf_token %}
                   <input type="hidden" name="qty" value="1">
                   <button type="submit"
-                          class="btn btn-primary"
+                          class="btn btn-primary btn-sm w-100"
                           {% if p.stock_qty == 0 %}disabled{% endif %}>
-                    Add to cart
+                    Add
                   </button>
                 </form>
-  
               </div>
-              {% if p.stock_qty == 0 %}<p class="small text-muted mt-2 mb-0">Out of stock</p>{% endif %}
+
+              {% if p.stock_qty == 0 %}
+                <p class="small text-muted mt-2 mb-0">Out of stock</p>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -122,4 +165,5 @@
     </div>
   </div>
 </section>
+
 {% endblock %}
