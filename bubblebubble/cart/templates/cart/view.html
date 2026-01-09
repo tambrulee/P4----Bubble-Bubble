@@ -1,56 +1,142 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Your Cart</h1>
-  {% if cart.items.all %}
-    <div class="table-responsive">
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th style="width:120px;">Qty</th>
-            <th>Price</th>
-            <th>Subtotal</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in cart.items.all %}
-            <tr>
-              <td>{{ item.product.title }}</td>
-              <td>
-                <form method="post" action="{% url 'cart:update' item.id %}" class="d-flex">
-                  {% csrf_token %}
-                  <input type="number"
-                         name="qty"
-                         value="{{ item.qty }}"
-                         min="1"
-                         max="{{ item.product.stock_qty }}"
-                         class="form-control form-control-sm me-2 cart-qty-input">
-                  <button class="btn btn-sm btn-update" type="submit">Update</button>
-                </form>
-              </td>
-              <td>£{{ item.product.price }}</td>
-              <td>£{{ item.subtotal }}</td>
-              <td>
-                <form method="post" action="{% url 'cart:remove' item.id %}">
-                  {% csrf_token %}
-                  <button class="btn btn-sm btn-remove" type="submit">Remove</button>
-                </form>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    <div class="d-flex justify-content-between align-items-center">
-      <a href="{% url 'catalog:product_list' %}" class="btn btn-continue">Continue shopping</a>
-      <div class="text-end">
-        <h4>Total: £{{ cart.total }}</h4>
-        <a href="{% url 'checkout:summary' %}" class="btn btn-checkout">Checkout</a>
+
+<section class="py-4">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end gap-2 mb-3">
+      <div>
+        <h1 class="mb-1">Your Cart</h1>
+        <p class="text-muted mb-0">Review your items, update quantities, then checkout.</p>
       </div>
+      <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-secondary bb-cart-continue">
+        Continue shopping
+      </a>
     </div>
-  {% else %}
-    <p>Your cart is empty.</p>
-    <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Back to shop</a>
-  {% endif %}
+
+    {% if cart.items.all %}
+      <div class="row g-4">
+
+        <!-- Items -->
+        <div class="col-12 col-lg-8">
+          <div class="bb-cart-card">
+            <div class="vstack gap-0">
+
+              {% for item in cart.items.all %}
+                <div class="bb-cart-row">
+
+                  <!-- Thumb -->
+                  <a class="bb-cart-thumb"
+                     href="{% url 'catalog:product_detail' item.product.slug %}"
+                     aria-label="View {{ item.product.title }}">
+                    {% if item.product.images.first %}
+                      <img src="{{ item.product.images.first.image.url }}"
+                           alt="{{ item.product.images.first.alt_text|default:item.product.title }}">
+                    {% else %}
+                      <span class="bb-cart-thumb-fallback" aria-hidden="true">
+                        <i class="fa-solid fa-leaf"></i>
+                      </span>
+                    {% endif %}
+                  </a>
+
+                  <!-- Details -->
+                  <div class="bb-cart-main">
+                    <a class="bb-cart-title"
+                       href="{% url 'catalog:product_detail' item.product.slug %}">
+                      {{ item.product.title }}
+                    </a>
+
+                    <div class="bb-cart-meta">
+                      <span class="text-muted small">£{{ item.product.price|floatformat:2 }} each</span>
+                      {% if item.product.stock_qty == 0 %}
+                        <span class="badge text-bg-secondary">Out of stock</span>
+                      {% endif %}
+                    </div>
+
+                    <!-- Qty + Remove -->
+                    <div class="bb-cart-controls">
+                      <form method="post"
+                            action="{% url 'cart:update' item.id %}"
+                            class="d-flex align-items-center gap-2 bb-cart-qty-form">
+                        {% csrf_token %}
+                        <input type="number"
+                               name="qty"
+                               value="{{ item.qty }}"
+                               min="1"
+                               max="{{ item.product.stock_qty }}"
+                               inputmode="numeric"
+                               class="form-control form-control-sm text-center bb-cart-qty-input"
+                               aria-label="Quantity for {{ item.product.title }}">
+                        <button class="btn btn-sm btn-primary bb-cart-update" type="submit">
+                          Update
+                        </button>
+                      </form>
+
+                      <form method="post" action="{% url 'cart:remove' item.id %}" class="m-0">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-link text-danger p-0 bb-cart-remove" type="submit">
+                          Remove
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+
+                  <!-- Subtotal -->
+                  <div class="bb-cart-right text-end">
+                    <div class="bb-cart-subtotal">£{{ item.subtotal|floatformat:2 }}</div>
+                    <div class="text-muted small">Subtotal</div>
+                  </div>
+
+                </div>
+
+                {% if not forloop.last %}
+                  <hr class="bb-cart-divider">
+                {% endif %}
+              {% endfor %}
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="col-12 col-lg-4">
+          <aside class="bb-cart-summary">
+            <h2 class="h5 mb-3">Order summary</h2>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-muted">Items</span>
+              <span class="fw-semibold">{{ cart.items.count }}</span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-muted">Total</span>
+              <span class="h4 mb-0">£{{ cart.total|floatformat:2 }}</span>
+            </div>
+
+            <a href="{% url 'checkout:summary' %}" class="btn btn-primary w-100">
+              Checkout
+            </a>
+
+            <p class="small text-muted mt-3 mb-0">
+              Shipping and taxes calculated at checkout.
+            </p>
+          </aside>
+        </div>
+
+      </div>
+    {% else %}
+      <div class="bb-cart-empty text-center py-5">
+        <div class="bb-cart-empty-icon mb-3" aria-hidden="true">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+        <h2 class="h4 mb-2">Your cart is empty</h2>
+        <p class="text-muted mb-3">Browse the shop to find something you love.</p>
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Back to shop</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
 {% endblock %}

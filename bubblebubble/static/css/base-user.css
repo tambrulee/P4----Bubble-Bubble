@@ -926,3 +926,221 @@ a:hover { color: var(--bb-primary); }
   font-size: 0.875rem;
   color: #6c757d;
 }
+
+
+/* =========================
+   ABOUT PAGE
+   ========================= */
+
+/* Hero wrapper */
+.bb-about-hero .bb-hero-bg{
+  position: relative;
+}
+
+/* Soft overlay for readability */
+.bb-about-scrim{
+  position: absolute;
+  inset: 0;
+
+  background:
+    /* gentle brand glow (very subtle) */
+    radial-gradient(
+      800px 300px at 15% 20%,
+      rgba(97,130,128,0.18),
+      transparent 65%
+    ),
+
+    /* bottom fade only – NOT full overlay */
+    linear-gradient(
+      to top,
+      rgba(0,0,0,0.22),
+      rgba(0,0,0,0.08) 35%,
+      rgba(0,0,0,0) 65%
+    );
+
+  pointer-events: none;
+}
+
+
+/* Hero card (frosted glass, dark text) */
+.bb-about-hero-card{
+  border-radius: 18px;
+  padding: clamp(1.1rem, 3vw, 1.75rem);
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(41,64,62,.18);
+  box-shadow: 0 18px 36px rgba(0,0,0,.14);
+  position: relative;
+  z-index: 2;
+}
+
+.bb-kicker{
+  display:inline-block;
+  font-size:.8rem;
+  letter-spacing:.14em;
+  text-transform: uppercase;
+  color: rgba(41,64,62,.75);
+  margin-bottom:.35rem;
+}
+
+.bb-about-title{
+  color: var(--bb-primary-dark);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+}
+
+.bb-about-sub{
+  color: rgba(41,64,62,.82);
+  font-size: 1.05rem;
+}
+
+/* Micro chips */
+.bb-about-micro{
+  display:flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.bb-micro-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  padding:.4rem .6rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.75);
+  border: 1px solid rgba(41,64,62,.12);
+  color: rgba(41,64,62,.88);
+  font-size: .85rem;
+}
+.bb-micro-chip i{ color: var(--bb-primary); }
+
+/* Image card */
+.bb-about-image-card{
+  display:block;
+  position: relative;
+  border-radius: 18px;
+  overflow:hidden;
+  box-shadow: 0 18px 36px rgba(0,0,0,.14);
+  border: 1px solid rgba(255,255,255,.22);
+  z-index: 2;
+}
+
+.bb-about-image-card img{
+  display:block;
+  transition: transform 220ms ease;
+}
+.bb-about-image-card:hover img{
+  transform: scale(1.03);
+}
+
+.bb-about-image-chip{
+  position:absolute;
+  left: 14px;
+  bottom: 14px;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.55rem .75rem;
+  border-radius: 14px;
+  background: rgba(255,255,255,.78);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(41,64,62,.14);
+  color: rgba(41,64,62,.92);
+  font-size:.9rem;
+}
+.bb-about-image-chip i{ color: var(--bb-primary); }
+
+/* Story card */
+.bb-story-card-wrap{
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Keep spacing + readability */
+.bb-story-card-inner{
+  padding: clamp(1.1rem, 2.8vw, 2rem);
+}
+
+/* Gentle divider instead of a box */
+.bb-story-card-inner > hr{
+  border: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(41,64,62,.18),
+    transparent
+  );
+}
+
+
+.bb-story-aside{
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,.85);
+  border: 1px solid rgba(41,64,62,.10);
+}
+
+.bb-values{
+  display:grid;
+  gap: 12px;
+}
+
+.bb-value{
+  display:flex;
+  gap: 10px;
+  align-items:flex-start;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(97,130,128,.08);
+  border: 1px solid rgba(97,130,128,.12);
+}
+
+.bb-value i{
+  margin-top: 2px;
+  color: var(--bb-primary);
+  width: 1.2rem;
+  text-align:center;
+}
+
+.bb-value strong{
+  display:block;
+  color: var(--bb-primary-dark);
+  line-height: 1.1;
+}
+.bb-value span{
+  display:block;
+  color: rgba(41,64,62,.75);
+  font-size: .9rem;
+  margin-top: 2px;
+}
+
+/* CTA strip */
+.bb-about-cta-inner{
+  border-radius: 18px;
+  padding: 18px;
+  background:
+    radial-gradient(900px 320px at 10% 10%, rgba(97,130,128,.18), transparent 60%),
+    rgba(255,255,255,.78);
+  border: 1px solid rgba(41,64,62,.10);
+  box-shadow: 0 18px 36px rgba(0,0,0,.08);
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.bb-muted{ color: rgba(41,64,62,.75); }
+
+@media (max-width: 575.98px){
+  .bb-about-cta-inner{
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+  }
+}
