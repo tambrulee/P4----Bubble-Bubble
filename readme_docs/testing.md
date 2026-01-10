@@ -1,5 +1,5 @@
 ## Test Driven Development
-- [DJLint - Django/HTML Template Linting](/readme_docs/djlint.md)
+- [DJLint - Django/HTML Template Linting](/readme_docs//tdd.md)
 
 ## Django
 - [DJLint - Django/HTML Template Linting](/readme_docs/djlint.md)

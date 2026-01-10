@@ -98,7 +98,7 @@ def product_edit(request, pk):
     form = ProductForm(request.POST or None, instance=product)
     if request.method == "POST" and form.is_valid():
         form.save()
-        return redirect("owner_products")
+        return redirect("owner:owner_products")
     return render(
         request, "owner/product_form.html", {
             "form": form, "mode": "Edit", "product": product})
@@ -324,3 +324,26 @@ def products(request):
         # debug helper
         "debug_qs": request.GET.urlencode(),
     })
+
+
+# --------- Duplicate product ----------
+@login_required
+def product_duplicate(request, pk):
+    original = get_object_or_404(Product, pk=pk)
+
+    # Create a new product (slug handled automatically in save())
+    duplicate = Product.objects.create(
+        title=f"{original.title} (Copy)",
+        description=original.description,
+        scent=original.scent,
+        weight_g=original.weight_g,
+        price=original.price,
+        stock_qty=0,          # reset stock
+        active=False,         # safer default
+        tags=original.tags,
+    )
+
+    return redirect("owner:owner_product_edit", pk=duplicate.pk)
+
+
+

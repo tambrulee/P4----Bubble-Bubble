@@ -31,6 +31,10 @@ urlpatterns = [
         "owner/products/<int:pk>/edit/",
         views.product_edit, name="owner_product_edit"),
     path(
+        "owner/products/<int:pk>/duplicate/",
+        views.product_duplicate,
+        name="owner_product_duplicate"),
+    path(
         "owner/products/<int:pk>/toggle/",
         views.product_toggle_active, name="owner_product_toggle"),
     path(
@@ -86,4 +90,5 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(
         next_page="/owner/login/"
     ), name="logout"),
+
 ]
