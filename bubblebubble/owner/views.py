@@ -11,8 +11,6 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_http_methods
-from django.db.models import Count
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 
@@ -355,3 +353,37 @@ def product_duplicate(request, pk):
     )
 
     return redirect("owner:owner_product_edit", pk=duplicate.pk)
+
+
+
+@staff_member_required
+@require_POST
+def products_bulk_action(request):
+    action = request.POST.get("action")
+    ids = request.POST.getlist("product_ids")
+
+    if not ids:
+        messages.error(request, "Select at least one product first.")
+        return redirect("owner:owner_products")
+
+    qs = Product.objects.filter(pk__in=ids)
+
+    if action == "activate":
+        updated = qs.update(active=True)
+        messages.success(request, f"Activated {updated} product(s).")
+        return redirect("owner:owner_products")
+
+    if action == "hide":
+        updated = qs.update(active=False)
+        messages.success(request, f"Hidden {updated} product(s).")
+        return redirect("owner:owner_products")
+
+    if action == "delete":
+        count = qs.count()
+        qs.delete()
+        messages.success(request, f"Deleted {count} product(s).")
+        return redirect("owner:owner_products")
+
+    messages.error(request, "Unknown action.")
+    return redirect("owner:owner_products")
+

@@ -21,6 +21,7 @@ urlpatterns = [
     path("dashboard/", views.dashboard, name="owner_dashboard"),
 
     # /owner/products/...
+    path("products/bulk/", views.products_bulk_action, name="owner_products_bulk"),
     path("products/", views.products, name="owner_products"),
     path("products/new/", views.product_create, name="owner_product_create"),
     path("products/<int:pk>/edit/", views.product_edit, name="owner_product_edit"),
