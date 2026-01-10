@@ -15,7 +15,68 @@
     ← Back to dashboard
   </a>
 </div>
+<!-- Filter form -->
 
+<form method="get" class="card shadow-sm border-0 p-3 mb-3">
+  <div class="row g-2 align-items-end">
+
+    <div class="col-12 col-md-3">
+      <label class="form-label small text-muted mb-1">Status</label>
+      <select name="status" class="form-select form-select-sm">
+        <option value="" {% if not active_status %}selected{% endif %}>All</option>
+        <option value="active" {% if active_status == "active" %}selected{% endif %}>Active</option>
+        <option value="hidden" {% if active_status == "hidden" %}selected{% endif %}>Hidden</option>
+      </select>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <label class="form-label small text-muted mb-1">Tag</label>
+      <select name="tag" class="form-select form-select-sm">
+        <option value="" {% if not active_tag %}selected{% endif %}>All tags</option>
+        {% for t in tag_options %}
+          <option value="{{ t }}" {% if active_tag == t %}selected{% endif %}>{{ t|capfirst }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <label class="form-label small text-muted mb-1">Stock</label>
+      <select name="stock" class="form-select form-select-sm">
+        <option value="" {% if not active_stock %}selected{% endif %}>All</option>
+        <option value="in" {% if active_stock == "in" %}selected{% endif %}>In stock</option>
+        <option value="low" {% if active_stock == "low" %}selected{% endif %}>Low stock</option>
+        <option value="out" {% if active_stock == "out" %}selected{% endif %}>Out of stock</option>
+      </select>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <label class="form-label small text-muted mb-1">Sort</label>
+      <select name="sort" class="form-select form-select-sm">
+        <option value="title" {% if active_sort == "title" %}selected{% endif %}>Title (A–Z)</option>
+        <option value="newest" {% if active_sort == "newest" %}selected{% endif %}>Newest</option>
+        <option value="price_asc" {% if active_sort == "price_asc" %}selected{% endif %}>Price: low → high</option>
+        <option value="price_desc" {% if active_sort == "price_desc" %}selected{% endif %}>Price: high → low</option>
+        <option value="stock_asc" {% if active_sort == "stock_asc" %}selected{% endif %}>Stock: low → high</option>
+        <option value="stock_desc" {% if active_sort == "stock_desc" %}selected{% endif %}>Stock: high → low</option>
+      </select>
+    </div>
+
+    <div class="col-12 d-flex gap-2 mt-2">
+      <button class="btn btn-primary btn-sm" type="submit">Apply</button>
+      <a class="btn btn-outline-secondary btn-sm" href="{% url 'owner:owner_products' %}">Clear</a>
+    </div>
+
+    <div class="col-12">
+      <div class="small text-muted">Querystring: {{ debug_qs }}</div>
+    </div>
+
+  </div>
+</form>
+
+
+
+
+<!-- Product list -->
 <div class="card shadow-sm">
   <div class="table-responsive">
     <table class="table align-middle mb-0">

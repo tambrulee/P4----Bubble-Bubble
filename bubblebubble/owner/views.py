@@ -11,8 +11,10 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from django.db.models import Count
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 
 @staff_member_required
@@ -107,7 +109,7 @@ def product_toggle_active(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product.active = not product.active
     product.save(update_fields=["active"])
-    return redirect("owner_products")
+    return redirect("owner:owner_products")
 
 
 # ---------- Product images ----------
@@ -215,6 +217,7 @@ def owner_analytics(request):
     return render(request, "owner/analytics.html", ctx)
 
 
+# ---------- Owner product list with filters ----------
 @staff_member_required
 @require_POST
 def owner_order_set_fulfilment(request, order_id, fulfilment):
@@ -242,3 +245,82 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
         "cancelled_at",
     ])
     return redirect("owner_orders")
+
+#  -------- Product list with filters for owner ----------
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.shortcuts import render
+
+from catalog.models import Product
+
+
+@login_required
+def products(request):
+    # --- GET params (must match template name="...") ---
+    active_status = request.GET.get("status", "").strip().lower()  # "" | "active" | "hidden"
+    active_tag = request.GET.get("tag", "").strip().lower()        # e.g. "winter"
+    active_stock = request.GET.get("stock", "").strip().lower()    # "" | "in" | "low" | "out"
+    active_sort = request.GET.get("sort", "title").strip().lower() # "title" default
+
+    low_threshold = getattr(settings, "LOW_STOCK_THRESHOLD", 5)
+
+    qs = Product.objects.all()
+
+    # --- Filters ---
+    if active_status == "active":
+        qs = qs.filter(active=True)
+    elif active_status == "hidden":
+        qs = qs.filter(active=False)
+
+    if active_tag:
+        qs = qs.filter(tags__icontains=active_tag)
+
+    if active_stock == "out":
+        qs = qs.filter(stock_qty=0)
+    elif active_stock == "low":
+        qs = qs.filter(stock_qty__gt=0, stock_qty__lte=low_threshold)
+    elif active_stock == "in":
+        qs = qs.filter(stock_qty__gt=low_threshold)
+
+    # --- Sorting ---
+    sort_map = {
+        "title": ["title"],
+        "newest": ["-created_at", "title"],
+        "price_asc": ["price", "title"],
+        "price_desc": ["-price", "title"],
+        "stock_asc": ["stock_qty", "title"],
+        "stock_desc": ["-stock_qty", "title"],
+    }
+    if active_sort not in sort_map:
+        active_sort = "title"
+    qs = qs.order_by(*sort_map[active_sort])
+
+    # --- Counts for template ---
+    qs = qs.annotate(image_count=Count("images", distinct=True))
+
+    # --- Build tag dropdown from DB ---
+    raw_tags = Product.objects.exclude(tags="").values_list("tags", flat=True)
+    tag_options = sorted({
+        t.strip().lower()
+        for row in raw_tags
+        for t in row.split(",")
+        if t.strip()
+    })
+
+    return render(request, "owner/products.html", {
+        "products": qs,
+        "LOW_STOCK_THRESHOLD": low_threshold,
+
+        # mirror user-side "active_*"
+        "active_status": active_status,
+        "active_tag": active_tag,
+        "active_stock": active_stock,
+        "active_sort": active_sort,
+
+        # options for dropdown
+        "tag_options": tag_options,
+
+        # debug helper
+        "debug_qs": request.GET.urlencode(),
+    })
