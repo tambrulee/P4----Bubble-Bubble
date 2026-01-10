@@ -9,45 +9,58 @@ from django.utils import timezone
 from datetime import timedelta
 from django.views.decorators.http import require_POST
 from django.contrib import messages
-from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from django.db.models import Count
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login as auth_login
 
 
-@staff_member_required
+# ---------- Owner login ----------
+
 @require_http_methods(["GET", "POST"])
 def owner_login(request):
     # Already logged in
     if request.user.is_authenticated:
         if request.user.is_staff:
-            return redirect("owner_dashboard")
-        # Logged in but not staff -> boot them out
-        logout(request)
+            return redirect("owner:owner_dashboard")
+
+        # Logged in but not staff → hard reset
+        request.session.flush()
         messages.error(request, "Staff access only.")
-        return redirect("owner_login")
+        return redirect("owner:owner_login")
 
     form = AuthenticationForm(request, data=request.POST or None)
 
     if request.method == "POST" and form.is_valid():
         user = form.get_user()
-        login(request, user)
 
+        # BLOCK NON-STAFF — DO NOT LOG THEM IN
         if not user.is_staff:
-            logout(request)
-            messages.error(request, "Staff access only.")
-            return redirect("owner_login")
+            messages.error(request, "This account does not have admin access.")
+            return redirect("owner:owner_login")
 
-        # Respect ?next=... if present, but keep it inside /owner/
-        next_url = request.GET.get("next")
+        # ✅ Staff only reaches this point
+        auth_login(request, user)
+
+        next_url = request.POST.get("next") or request.GET.get("next")
         if next_url and next_url.startswith("/owner/"):
             return redirect(next_url)
 
         messages.success(request, "Welcome back.")
-        return redirect("owner_dashboard")
+        return redirect("owner:owner_dashboard")
 
-    return render(request, "owner/login.html", {"form": form})
+    return render(
+        request,
+        "owner/login.html",
+        {
+            "form": form,
+            "next": request.GET.get("next", ""),
+        },
+    )
 
+# ---------- Dashboard ----------
 
 @staff_member_required
 def dashboard(request):
@@ -96,7 +109,7 @@ def product_edit(request, pk):
     form = ProductForm(request.POST or None, instance=product)
     if request.method == "POST" and form.is_valid():
         form.save()
-        return redirect("owner_products")
+        return redirect("owner:owner_products")
     return render(
         request, "owner/product_form.html", {
             "form": form, "mode": "Edit", "product": product})
@@ -107,7 +120,7 @@ def product_toggle_active(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product.active = not product.active
     product.save(update_fields=["active"])
-    return redirect("owner_products")
+    return redirect("owner:owner_products")
 
 
 # ---------- Product images ----------
@@ -215,6 +228,7 @@ def owner_analytics(request):
     return render(request, "owner/analytics.html", ctx)
 
 
+# ---------- Owner product list with filters ----------
 @staff_member_required
 @require_POST
 def owner_order_set_fulfilment(request, order_id, fulfilment):
@@ -242,3 +256,102 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
         "cancelled_at",
     ])
     return redirect("owner_orders")
+
+#  -------- Product list with filters for owner ----------
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.shortcuts import render
+
+from catalog.models import Product
+
+
+@login_required
+def products(request):
+    # --- GET params (must match template name="...") ---
+    active_status = request.GET.get("status", "").strip().lower()  # "" | "active" | "hidden"
+    active_tag = request.GET.get("tag", "").strip().lower()        # e.g. "winter"
+    active_stock = request.GET.get("stock", "").strip().lower()    # "" | "in" | "low" | "out"
+    active_sort = request.GET.get("sort", "title").strip().lower() # "title" default
+
+    low_threshold = getattr(settings, "LOW_STOCK_THRESHOLD", 5)
+
+    qs = Product.objects.all()
+
+    # --- Filters ---
+    if active_status == "active":
+        qs = qs.filter(active=True)
+    elif active_status == "hidden":
+        qs = qs.filter(active=False)
+
+    if active_tag:
+        qs = qs.filter(tags__icontains=active_tag)
+
+    if active_stock == "out":
+        qs = qs.filter(stock_qty=0)
+    elif active_stock == "low":
+        qs = qs.filter(stock_qty__gt=0, stock_qty__lte=low_threshold)
+    elif active_stock == "in":
+        qs = qs.filter(stock_qty__gt=low_threshold)
+
+    # --- Sorting ---
+    sort_map = {
+        "title": ["title"],
+        "newest": ["-created_at", "title"],
+        "price_asc": ["price", "title"],
+        "price_desc": ["-price", "title"],
+        "stock_asc": ["stock_qty", "title"],
+        "stock_desc": ["-stock_qty", "title"],
+    }
+    if active_sort not in sort_map:
+        active_sort = "title"
+    qs = qs.order_by(*sort_map[active_sort])
+
+    # --- Counts for template ---
+    qs = qs.annotate(image_count=Count("images", distinct=True))
+
+    # --- Build tag dropdown from DB ---
+    raw_tags = Product.objects.exclude(tags="").values_list("tags", flat=True)
+    tag_options = sorted({
+        t.strip().lower()
+        for row in raw_tags
+        for t in row.split(",")
+        if t.strip()
+    })
+
+    return render(request, "owner/products.html", {
+        "products": qs,
+        "LOW_STOCK_THRESHOLD": low_threshold,
+
+        # mirror user-side "active_*"
+        "active_status": active_status,
+        "active_tag": active_tag,
+        "active_stock": active_stock,
+        "active_sort": active_sort,
+
+        # options for dropdown
+        "tag_options": tag_options,
+
+        # debug helper
+        "debug_qs": request.GET.urlencode(),
+    })
+
+
+# --------- Duplicate product ----------
+@login_required
+def product_duplicate(request, pk):
+    original = get_object_or_404(Product, pk=pk)
+
+    # Create a new product (slug handled automatically in save())
+    duplicate = Product.objects.create(
+        title=f"{original.title} (Copy)",
+        description=original.description,
+        scent=original.scent,
+        weight_g=original.weight_g,
+        price=original.price,
+        stock_qty=0,          # reset stock
+        active=False,         # safer default
+        tags=original.tags,
+    )
+
+    return redirect("owner:owner_product_edit", pk=duplicate.pk)
