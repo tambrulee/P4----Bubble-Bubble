@@ -46,7 +46,14 @@
             <div class="mb-3 pb-3 border-bottom">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
-                  <strong>{{ r.user.username }}</strong>
+                  <strong>
+                    {% if r.user.first_name %}
+                      {{ r.user.first_name }}{% if r.user.last_name %} {{ r.user.last_name|slice:":1" }}.{% endif %}
+                    {% else %}
+                      Verified customer
+                    {% endif %}
+                  </strong>
+                  
                   <span class="review-stars ms-2">
                     {% for i in "12345"|slice:":r.rating"|make_list %}★{% endfor %}
                   </span>
