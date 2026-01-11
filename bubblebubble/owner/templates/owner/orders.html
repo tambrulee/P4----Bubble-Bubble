@@ -117,9 +117,9 @@
 
             <!-- Actions -->
             <td class="text-end">
-              <div class="btn-group" role="group" aria-label="Order actions">
+              <div class="d-inline-flex align-items-center gap-1">
                 <a class="btn btn-sm btn-outline-secondary"
-                   href="{% url 'owner:owner_order_detail' o.id %}">
+                  href="{% url 'owner:owner_order_detail' o.id %}">
                   View
                 </a>
 
@@ -128,7 +128,9 @@
                     <form method="post"
                           action="{% url 'owner:owner_order_set_fulfilment' o.id 'DISPATCHED' %}">
                       {% csrf_token %}
-                      <button class="btn btn-sm btn-mm" type="submit">Mark dispatched</button>
+                      <button class="btn btn-sm btn-mm" type="submit">
+                        Mark dispatched
+                      </button>
                     </form>
                   {% endif %}
 
@@ -136,25 +138,18 @@
                     <form method="post"
                           action="{% url 'owner:owner_order_set_fulfilment' o.id 'DELIVERED' %}">
                       {% csrf_token %}
-                      <button class="btn btn-sm btn-mm-outline" type="submit">Mark delivered</button>
+                      <button class="btn btn-sm btn-mm-outline" type="submit">
+                        Mark delivered
+                      </button>
                     </form>
                   {% endif %}
                 {% endif %}
               </div>
 
               {% if o.status != "PAID" %}
-                <div class="text-muted small mt-1">Fulfilment locked (not paid)</div>
-              {% endif %}
-            </td>
-          </tr>
-
-        {% empty %}
-          <tr>
-            <td colspan="7" class="text-center text-muted py-5">
-              {% if tab == 'new' %}
-                🎉 No new orders — all caught up.
-              {% else %}
-                No orders found in this view.
+                <div class="text-muted small mt-1">
+                  Fulfilment locked (not paid)
+                </div>
               {% endif %}
             </td>
           </tr>
