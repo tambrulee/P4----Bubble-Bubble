@@ -70,7 +70,7 @@ While server-side validation is treated as the final authority, the sign-up temp
 ```django
 {% block extra_js %}
   <script src="{% static 'accounts/js/password.js' %}"></script>
-{% endblock %}
+{% endblock content%}
 ```
 
 These enhancements reduce user friction while maintaining full reliance on Django’s secure backend validation.
