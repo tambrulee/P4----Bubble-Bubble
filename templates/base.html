@@ -18,6 +18,32 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
+    <!-- Toasts (global, top-right) -->
+  {% if messages %}
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1080;">
+    {% for message in messages %}
+      <div class="toast
+                  {% if 'success' in message.tags %} text-bg-success
+                  {% elif 'error' in message.tags or 'danger' in message.tags %} text-bg-danger
+                  {% elif 'warning' in message.tags %} text-bg-warning
+                  {% else %} text-bg-secondary
+                  {% endif %}
+                  border-0 mb-2"
+           role="alert"
+           aria-live="assertive"
+           aria-atomic="true"
+           data-bs-delay="3500">
+        <div class="d-flex">
+          <div class="toast-body">{{ message }}</div>
+          <button type="button"
+                  class="btn-close btn-close-white me-2 m-auto"
+                  data-bs-dismiss="toast"
+                  aria-label="Close"></button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
     <!-- Navigation -->
     <nav class="navbar navbar-light navbar-pink bb-navbar sticky-top">
       <div class="container bb-nav-grid">
@@ -273,6 +299,14 @@
   <script src="https://js.stripe.com/v3/"></script>
   <!-- External cart AJAX JS -->
   <script src="{% static 'js/cart.js' %}"></script>
+  <!-- Toasts -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".toast").forEach((el) => {
+        new bootstrap.Toast(el).show();
+      });
+    });
+  </script>
   {% block extra_js %}{% endblock %}
   {% block scripts %}
   {% endblock %}
