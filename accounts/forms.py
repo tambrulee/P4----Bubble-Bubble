@@ -85,4 +85,3 @@ class ShippingAddressForm(forms.ModelForm):
             "postcode": forms.TextInput(attrs={"class": "form-control text-uppercase"}),
             "is_default": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
-
