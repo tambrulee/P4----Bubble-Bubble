@@ -158,7 +158,12 @@ def orders(request):
     base = Order.objects.all().order_by("-created_at")
 
     if tab == "all":
-        qs = base
+        qs = base.filter(
+            status=Order.PAID, fulfilment_status__in=[
+        Order.DELIVERED,
+        Order.DISPATCHED,
+        Order.NEW,
+    ],)
     elif tab == "new":
         # Paid orders that still need dispatching
         qs = base.filter(
@@ -169,23 +174,21 @@ def orders(request):
     elif tab == "delivered":
         qs = base.filter(
             status=Order.PAID, fulfilment_status=Order.DELIVERED)
-    elif tab == "abandoned":
-        # “Started checkout” orders that never became paid
-        qs = base.filter(
-            status=Order.PENDING)
     else:
         qs = base
 
     counts = {
-        "all": base.count(),
+        "all": base.filter(
+            status=Order.PAID, fulfilment_status__in=[
+        Order.DELIVERED,
+        Order.DISPATCHED,
+        Order.NEW,]).count(),
         "new": base.filter(
             status=Order.PAID, fulfilment_status=Order.NEW).count(),
         "dispatched": base.filter(
             status=Order.PAID, fulfilment_status=Order.DISPATCHED).count(),
         "delivered": base.filter(
             status=Order.PAID, fulfilment_status=Order.DELIVERED).count(),
-        "abandoned": base.filter(
-            status=Order.PENDING).count(),
     }
 
     return render(request, "owner/orders.html", {
@@ -254,14 +257,6 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
         "cancelled_at",
     ])
     return redirect("owner_orders")
-
-#  -------- Product list with filters for owner ----------
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.db.models import Count
-from django.shortcuts import render
-
-from catalog.models import Product
 
 
 @login_required
