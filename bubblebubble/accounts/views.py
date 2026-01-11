@@ -7,6 +7,8 @@ from checkout.models import Order
 from django.db import transaction
 from .forms import ShippingAddressForm
 from .models import ShippingAddress
+from django.contrib import messages
+
 
 def signup(request):
     next_url = request.GET.get("next") or "catalog:product_list"
@@ -67,7 +69,10 @@ def address_create(request):
                 ShippingAddress.objects.filter(user=request.user, is_default=True).update(is_default=False)
 
             addr.save()
+            messages.success(request, "Address saved.")
             return redirect("accounts:address_list")
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
         form = ShippingAddressForm()
 
@@ -76,6 +81,26 @@ def address_create(request):
 
 @login_required
 def address_update(request, pk):
+    addr = get_object_or_404(ShippingAddress, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        form = ShippingAddressForm(request.POST, instance=addr)
+        if form.is_valid():
+            addr = form.save(commit=False)
+
+            if addr.is_default:
+                ShippingAddress.objects.filter(user=request.user, is_default=True).exclude(pk=addr.pk).update(is_default=False)
+
+            addr.save()
+            messages.success(request, "Address updated.")
+            return redirect("accounts:address_list")
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ShippingAddressForm(instance=addr)
+
+    return render(request, "accounts/address_form.html", {"form": form, "title": "Edit address"})
+
     addr = get_object_or_404(ShippingAddress, pk=pk, user=request.user)
 
     if request.method == "POST":

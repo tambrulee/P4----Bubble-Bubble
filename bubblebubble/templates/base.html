@@ -18,6 +18,32 @@
             crossorigin="anonymous"></script>
   </head>
   <body>
+    <!-- Toasts (global, top-right) -->
+  {% if messages %}
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1080;">
+    {% for message in messages %}
+      <div class="toast
+                  {% if 'success' in message.tags %} text-bg-success
+                  {% elif 'error' in message.tags or 'danger' in message.tags %} text-bg-danger
+                  {% elif 'warning' in message.tags %} text-bg-warning
+                  {% else %} text-bg-secondary
+                  {% endif %}
+                  border-0 mb-2"
+           role="alert"
+           aria-live="assertive"
+           aria-atomic="true"
+           data-bs-delay="3500">
+        <div class="d-flex">
+          <div class="toast-body">{{ message }}</div>
+          <button type="button"
+                  class="btn-close btn-close-white me-2 m-auto"
+                  data-bs-dismiss="toast"
+                  aria-label="Close"></button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
     <!-- Navigation -->
     <nav class="navbar navbar-light navbar-pink bb-navbar sticky-top">
       <div class="container bb-nav-grid">
@@ -163,10 +189,12 @@
         </div>
       </div>
     </div>
+
     <!-- Main -->
     <main class="container py-4">
       {% block content %}{% endblock %}
     </main>
+
     <!-- MINI CART OFFCANVAS -->
     <div class="offcanvas offcanvas-end"
          tabindex="-1"
@@ -187,14 +215,16 @@
       </div>
     </div>
   </body>
+
+  <!-- Footer -->
   <footer class="bb-footer mt-5 pt-5 pb-4">
     <div class="container">
 
-      <!-- Top: brand + newsletter -->
+      <!-- Top: brand -->
       <div class="row g-4 align-items-start mb-4">
 
         <!-- Brand / About -->
-        <div class="col-12 col-lg-5">
+        <div class="col-12">
           <div class="bb-footer-brand">
             <h6 class="text-uppercase mb-2">Moon &amp; Moss</h6>
             <p class="small mb-3 bb-footer-muted">
@@ -213,34 +243,6 @@
               <a href="#" class="bb-social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
               <a href="#" class="bb-social-link" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
               <a href="#" class="bb-social-link" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Newsletter (non-functional placeholder: wire up later if you want) -->
-        <div class="col-12 col-lg-7">
-          <div class="bb-footer-card">
-            <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
-              <div>
-                <h6 class="text-uppercase mb-1">Join the newsletter</h6>
-                <p class="small mb-0 bb-footer-muted">
-                  Seasonal drops, quiet rituals, and occasional discounts (no spam).
-                </p>
-              </div>
-
-              <form class="bb-footer-form" method="post" action="#">
-                {# If you hook this up later, add csrf + real action #}
-                <div class="input-group">
-                  <input type="email"
-                        class="form-control"
-                        placeholder="Email address"
-                        aria-label="Email address">
-                  <button class="btn btn-primary" type="submit">Sign up</button>
-                </div>
-                <div class="form-text bb-footer-muted mt-2">
-                  By signing up you agree to our Privacy Policy.
-                </div>
-              </form>
             </div>
           </div>
         </div>
@@ -279,6 +281,8 @@
             <li><a href="{% url 'catalog:product_list' %}?tag=best-sellers">Best sellers</a></li>
             <li><a href="{% url 'catalog:product_list' %}?tag=limited">Limited edition</a></li>
           </ul>
+        </div>
+
       </div>
 
       <!-- Bottom line -->
@@ -290,11 +294,19 @@
     </div>
   </footer>
 
-
+   <!-- Bootstrap and Stripe -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
   <!-- External cart AJAX JS -->
   <script src="{% static 'js/cart.js' %}"></script>
+  <!-- Toasts -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".toast").forEach((el) => {
+        new bootstrap.Toast(el).show();
+      });
+    });
+  </script>
   {% block extra_js %}{% endblock %}
   {% block scripts %}
   {% endblock %}
