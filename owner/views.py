@@ -13,9 +13,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
+from django.db.models import Prefetch
 
 
 # ---------- Owner login ----------
+
 
 @require_http_methods(["GET", "POST"])
 def owner_login(request):
@@ -39,7 +41,6 @@ def owner_login(request):
             messages.error(request, "This account does not have admin access.")
             return redirect("owner:owner_login")
 
-        # ✅ Staff only reaches this point
         auth_login(request, user)
 
         next_url = request.POST.get("next") or request.GET.get("next")
@@ -58,7 +59,9 @@ def owner_login(request):
         },
     )
 
+
 # ---------- Dashboard ----------
+
 
 @staff_member_required
 def dashboard(request):
@@ -79,78 +82,9 @@ def dashboard(request):
     })
 
 
-# ---------- Products ----------
-@staff_member_required
-def products(request):
-    qs = Product.objects.annotate(
-        image_count=Count("images")).order_by("title")
-    return render(request, "owner/products.html", {
-        "products": qs,
-        "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
-    })
-
-
-@staff_member_required
-def product_create(request):
-    form = ProductForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return redirect("owner_products")
-    return render(
-        request, "owner/product_form.html", {
-            "form": form, "mode": "Create"})
-
-
-@staff_member_required
-def product_edit(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    form = ProductForm(request.POST or None, instance=product)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return redirect("owner:owner_products")
-    return render(
-        request, "owner/product_form.html", {
-            "form": form, "mode": "Edit", "product": product})
-
-
-@staff_member_required
-def product_toggle_active(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    product.active = not product.active
-    product.save(update_fields=["active"])
-    return redirect("owner:owner_products")
-
-
-# ---------- Product images ----------
-@staff_member_required
-def product_images(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    images = product.images.all().order_by("-id")
-
-    form = ProductImageForm(
-        request.POST or None, request.FILES or None)
-    if request.method == "POST" and form.is_valid():
-        img = form.save(commit=False)
-        img.product = product
-        img.save()
-        return redirect("owner:owner_product_images", pk=product.pk)
-
-    return render(request, "owner/product_images.html", {
-        "product": product,
-        "images": images,
-        "form": form,
-    })
-
-
-@staff_member_required
-def product_image_delete(request, image_id):
-    img = get_object_or_404(ProductImage, pk=image_id)
-    product_id = img.product_id
-    img.delete()
-    return redirect("owner:owner_product_images", pk=product_id)
-
-
 # ---------- Orders ----------
+
+
 @staff_member_required
 def orders(request):
     tab = request.GET.get("tab", "new")
@@ -158,7 +92,11 @@ def orders(request):
     base = Order.objects.all().order_by("-created_at")
 
     if tab == "all":
-        qs = base
+        qs = base.filter(
+            status=Order.PAID,
+            fulfilment_status__in=[
+                    Order.DELIVERED, Order.DISPATCHED, Order.NEW,
+    ],)
     elif tab == "new":
         # Paid orders that still need dispatching
         qs = base.filter(
@@ -169,23 +107,20 @@ def orders(request):
     elif tab == "delivered":
         qs = base.filter(
             status=Order.PAID, fulfilment_status=Order.DELIVERED)
-    elif tab == "abandoned":
-        # “Started checkout” orders that never became paid
-        qs = base.filter(
-            status=Order.PENDING)
     else:
         qs = base
 
     counts = {
-        "all": base.count(),
+        "all": base.filter(
+            status=Order.PAID,
+            fulfilment_status__in=[
+                Order.DELIVERED, Order.DISPATCHED, Order.NEW,]).count(),
         "new": base.filter(
             status=Order.PAID, fulfilment_status=Order.NEW).count(),
         "dispatched": base.filter(
             status=Order.PAID, fulfilment_status=Order.DISPATCHED).count(),
         "delivered": base.filter(
             status=Order.PAID, fulfilment_status=Order.DELIVERED).count(),
-        "abandoned": base.filter(
-            status=Order.PENDING).count(),
     }
 
     return render(request, "owner/orders.html", {
@@ -255,22 +190,15 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
     ])
     return redirect("owner_orders")
 
-#  -------- Product list with filters for owner ----------
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.db.models import Count
-from django.shortcuts import render
-
-from catalog.models import Product
-
 
 @login_required
+@staff_member_required
 def products(request):
     # --- GET params (must match template name="...") ---
-    active_status = request.GET.get("status", "").strip().lower()  # "" | "active" | "hidden"
-    active_tag = request.GET.get("tag", "").strip().lower()        # e.g. "winter"
-    active_stock = request.GET.get("stock", "").strip().lower()    # "" | "in" | "low" | "out"
-    active_sort = request.GET.get("sort", "title").strip().lower() # "title" default
+    active_status = request.GET.get("status", "").strip().lower()
+    active_tag = request.GET.get("tag", "").strip().lower()
+    active_stock = request.GET.get("stock", "").strip().lower()
+    active_sort = request.GET.get("sort", "title").strip().lower()
 
     low_threshold = getattr(settings, "LOW_STOCK_THRESHOLD", 5)
 
@@ -308,6 +236,11 @@ def products(request):
     # --- Counts for template ---
     qs = qs.annotate(image_count=Count("images", distinct=True))
 
+    # Prefetch images for each product
+    qs = qs.prefetch_related(
+        Prefetch("images", queryset=ProductImage.objects.order_by("-id"))
+    )
+
     # --- Build tag dropdown from DB ---
     raw_tags = Product.objects.exclude(tags="").values_list("tags", flat=True)
     tag_options = sorted({
@@ -335,7 +268,72 @@ def products(request):
     })
 
 
+# ---------- Product create / edit / toggle active ----------
+
+
+@staff_member_required
+def product_create(request):
+    form = ProductForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("owner_products")
+    return render(
+        request, "owner/product_form.html", {
+            "form": form, "mode": "Create"})
+
+
+@staff_member_required
+def product_edit(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    form = ProductForm(request.POST or None, instance=product)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("owner:owner_products")
+    return render(
+        request, "owner/product_form.html", {
+            "form": form, "mode": "Edit", "product": product})
+
+
+@staff_member_required
+def product_toggle_active(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    product.active = not product.active
+    product.save(update_fields=["active"])
+    return redirect("owner:owner_products")
+
+
+# ---------- Product images ----------
+@staff_member_required
+def product_images(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    images = product.images.all().order_by("-id")
+
+    form = ProductImageForm(
+        request.POST or None, request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        img = form.save(commit=False)
+        img.product = product
+        img.save()
+        return redirect("owner:owner_product_images", pk=product.pk)
+
+    return render(request, "owner/product_images.html", {
+        "product": product,
+        "images": images,
+        "form": form,
+    })
+
+
+@staff_member_required
+def product_image_delete(request, image_id):
+    img = get_object_or_404(ProductImage, pk=image_id)
+    product_id = img.product_id
+    img.delete()
+    return redirect("owner:owner_product_images", pk=product_id)
+
+
 # --------- Duplicate product ----------
+
+
 @login_required
 def product_duplicate(request, pk):
     original = get_object_or_404(Product, pk=pk)
@@ -354,6 +352,8 @@ def product_duplicate(request, pk):
 
     return redirect("owner:owner_product_edit", pk=duplicate.pk)
 
+
+# --------- Bulk actions ----------
 
 
 @staff_member_required
@@ -386,4 +386,3 @@ def products_bulk_action(request):
 
     messages.error(request, "Unknown action.")
     return redirect("owner:owner_products")
-

@@ -43,15 +43,18 @@ def my_order_detail(request, order_id):
 
 @login_required
 def address_list(request):
-    addresses = ShippingAddress.objects.filter(user=request.user).order_by("-is_default", "-created_at")
-    return render(request, "accounts/address_list.html", {"addresses": addresses})
+    addresses = ShippingAddress.objects.filter(
+        user=request.user).order_by("-is_default", "-created_at")
+    return render(request,
+                  "accounts/address_list.html", {"addresses": addresses})
 
 
 @login_required
 @transaction.atomic
 def address_set_default(request, pk):
     addr = get_object_or_404(ShippingAddress, pk=pk, user=request.user)
-    ShippingAddress.objects.filter(user=request.user, is_default=True).update(is_default=False)
+    ShippingAddress.objects.filter(
+        user=request.user, is_default=True).update(is_default=False)
     addr.is_default = True
     addr.save(update_fields=["is_default"])
     return redirect("accounts:address_list")
@@ -66,7 +69,9 @@ def address_create(request):
             addr.user = request.user
 
             if addr.is_default:
-                ShippingAddress.objects.filter(user=request.user, is_default=True).update(is_default=False)
+                ShippingAddress.objects.filter(
+                    user=request.user, is_default=True).update(
+                        is_default=False)
 
             addr.save()
             messages.success(request, "Address saved.")
@@ -76,7 +81,9 @@ def address_create(request):
     else:
         form = ShippingAddressForm()
 
-    return render(request, "accounts/address_form.html", {"form": form, "title": "Add address"})
+    return render(request,
+                  "accounts/address_form.html", {
+                      "form": form, "title": "Add address"})
 
 
 @login_required
@@ -89,7 +96,9 @@ def address_update(request, pk):
             addr = form.save(commit=False)
 
             if addr.is_default:
-                ShippingAddress.objects.filter(user=request.user, is_default=True).exclude(pk=addr.pk).update(is_default=False)
+                ShippingAddress.objects.filter(
+                    user=request.user, is_default=True).exclude(
+                        pk=addr.pk).update(is_default=False)
 
             addr.save()
             messages.success(request, "Address updated.")
@@ -99,24 +108,9 @@ def address_update(request, pk):
     else:
         form = ShippingAddressForm(instance=addr)
 
-    return render(request, "accounts/address_form.html", {"form": form, "title": "Edit address"})
-
-    addr = get_object_or_404(ShippingAddress, pk=pk, user=request.user)
-
-    if request.method == "POST":
-        form = ShippingAddressForm(request.POST, instance=addr)
-        if form.is_valid():
-            addr = form.save(commit=False)
-
-            if addr.is_default:
-                ShippingAddress.objects.filter(user=request.user, is_default=True).exclude(pk=addr.pk).update(is_default=False)
-
-            addr.save()
-            return redirect("accounts:address_list")
-    else:
-        form = ShippingAddressForm(instance=addr)
-
-    return render(request, "accounts/address_form.html", {"form": form, "title": "Edit address"})
+    return render(
+        request, "accounts/address_form.html", {
+            "form": form, "title": "Edit address"})
 
 
 @login_required
@@ -127,4 +121,5 @@ def address_delete(request, pk):
         addr.delete()
         return redirect("accounts:address_list")
 
-    return render(request, "accounts/address_confirm_delete.html", {"address": addr})
+    return render(request,
+                  "accounts/address_confirm_delete.html", {"address": addr})

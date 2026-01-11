@@ -4,7 +4,7 @@
 <div class="d-flex justify-content-between align-items-start mb-3">
   <div>
     <h1 class="h3 mb-0">Orders</h1>
-    <div class="text-muted small">Track paid orders, fulfilment and abandoned checkouts</div>
+    <div class="text-muted small">Track paid orders and fulfilment statuses</div>
   </div>
       <a href="{% url 'owner:owner_dashboard' %}" class="btn btn-sm btn-outline-secondary mb-2">
       ← Back to dashboard
@@ -40,17 +40,6 @@
       Delivered
       {% if counts.delivered %}
         <span class="badge text-bg-success ms-1">{{ counts.delivered }}</span>
-      {% else %}
-        <span class="badge text-bg-light border ms-1">0</span>
-      {% endif %}
-    </a>
-  </li>
-
-  <li class="nav-item">
-    <a class="nav-link {% if tab == 'abandoned' %}active{% endif %}" href="?tab=abandoned">
-      Abandoned
-      {% if counts.abandoned %}
-        <span class="badge text-bg-warning ms-1">{{ counts.abandoned }}</span>
       {% else %}
         <span class="badge text-bg-light border ms-1">0</span>
       {% endif %}
@@ -128,9 +117,9 @@
 
             <!-- Actions -->
             <td class="text-end">
-              <div class="btn-group" role="group" aria-label="Order actions">
+              <div class="d-inline-flex align-items-center gap-1">
                 <a class="btn btn-sm btn-outline-secondary"
-                   href="{% url 'owner:owner_order_detail' o.id %}">
+                  href="{% url 'owner:owner_order_detail' o.id %}">
                   View
                 </a>
 
@@ -139,7 +128,9 @@
                     <form method="post"
                           action="{% url 'owner:owner_order_set_fulfilment' o.id 'DISPATCHED' %}">
                       {% csrf_token %}
-                      <button class="btn btn-sm btn-mm" type="submit">Mark dispatched</button>
+                      <button class="btn btn-sm btn-mm" type="submit">
+                        Mark dispatched
+                      </button>
                     </form>
                   {% endif %}
 
@@ -147,27 +138,18 @@
                     <form method="post"
                           action="{% url 'owner:owner_order_set_fulfilment' o.id 'DELIVERED' %}">
                       {% csrf_token %}
-                      <button class="btn btn-sm btn-mm-outline" type="submit">Mark delivered</button>
+                      <button class="btn btn-sm btn-mm-outline" type="submit">
+                        Mark delivered
+                      </button>
                     </form>
                   {% endif %}
                 {% endif %}
               </div>
 
               {% if o.status != "PAID" %}
-                <div class="text-muted small mt-1">Fulfilment locked (not paid)</div>
-              {% endif %}
-            </td>
-          </tr>
-
-        {% empty %}
-          <tr>
-            <td colspan="7" class="text-center text-muted py-5">
-              {% if tab == 'new' %}
-                🎉 No new orders — all caught up.
-              {% elif tab == 'abandoned' %}
-                No abandoned checkouts right now.
-              {% else %}
-                No orders found in this view.
+                <div class="text-muted small mt-1">
+                  Fulfilment locked (not paid)
+                </div>
               {% endif %}
             </td>
           </tr>
@@ -178,4 +160,4 @@
   </div>
 </div>
 
-{% endblock %}
+{% endblock content %}

@@ -199,3 +199,20 @@ body.bb-admin {
 .text-bg-light.border {
   border-color: rgba(0, 0, 0, .10) !important;
 }
+
+/* === Thumbnails === */
+
+.bb-thumb{
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,.08);
+  background: rgba(255,255,255,.7);
+  flex: 0 0 auto;
+}
+
+.bb-thumb--placeholder{
+  display: inline-block;
+  background: rgba(0,0,0,.05);
+}

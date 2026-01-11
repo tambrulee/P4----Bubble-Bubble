@@ -19,7 +19,7 @@ urlpatterns = [
     path("checkout/", include("checkout.urls")),
     path("reviews/", include("reviews.urls")),
     path("owner/", include("owner.urls")),
-  
+
 
     # Auth (login/logout/password reset)
     path("accounts/", include("accounts.urls")),

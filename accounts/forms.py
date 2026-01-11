@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from .models import ShippingAddress
 
 
@@ -42,7 +41,9 @@ class EmailUserCreationForm(UserCreationForm):
         email = self.cleaned_data["email"].strip().lower()
 
         # Since we store email in username too, we must ensure uniqueness
-        if User.objects.filter(username__iexact=email).exists() or User.objects.filter(email__iexact=email).exists():
+        if User.objects.filter(
+            username__iexact=email).exists() or User.objects.filter(
+                email__iexact=email).exists():
             raise forms.ValidationError(
                 "An account with this email already exists. "
                 "Try logging in instead."
@@ -63,7 +64,6 @@ class EmailUserCreationForm(UserCreationForm):
         return user
 
 
-
 class ShippingAddressForm(forms.ModelForm):
     class Meta:
         model = ShippingAddress
@@ -82,6 +82,8 @@ class ShippingAddressForm(forms.ModelForm):
             "address_line1": forms.TextInput(attrs={"class": "form-control"}),
             "address_line2": forms.TextInput(attrs={"class": "form-control"}),
             "city": forms.TextInput(attrs={"class": "form-control"}),
-            "postcode": forms.TextInput(attrs={"class": "form-control text-uppercase"}),
-            "is_default": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+            "postcode": forms.TextInput(
+                attrs={"class": "form-control text-uppercase"}),
+            "is_default": forms.CheckboxInput(
+                attrs={"class": "form-check-input"}),
         }

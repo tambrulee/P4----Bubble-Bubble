@@ -4,7 +4,6 @@ from .models import Product
 from django.db.models import Count
 
 
-
 def home(request):
     best_sellers = (
         Product.objects

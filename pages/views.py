@@ -39,7 +39,10 @@ def contact(request):
             subject = form.cleaned_data["subject"]
             message = form.cleaned_data["message"]
 
-            to_email = getattr(settings, "CONTACT_TO_EMAIL", None) or settings.DEFAULT_FROM_EMAIL
+            to_email = getattr(
+                settings,
+                "CONTACT_TO_EMAIL",
+                None) or settings.DEFAULT_FROM_EMAIL
 
             body = (
                 f"New contact form submission from Moon & Moss\n\n"
