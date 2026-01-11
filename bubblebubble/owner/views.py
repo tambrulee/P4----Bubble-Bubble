@@ -15,7 +15,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.db.models import Prefetch
 
+
 # ---------- Owner login ----------
+
 
 @require_http_methods(["GET", "POST"])
 def owner_login(request):
@@ -39,7 +41,6 @@ def owner_login(request):
             messages.error(request, "This account does not have admin access.")
             return redirect("owner:owner_login")
 
-        # ✅ Staff only reaches this point
         auth_login(request, user)
 
         next_url = request.POST.get("next") or request.GET.get("next")
@@ -58,7 +59,9 @@ def owner_login(request):
         },
     )
 
+
 # ---------- Dashboard ----------
+
 
 @staff_member_required
 def dashboard(request):
@@ -80,6 +83,8 @@ def dashboard(request):
 
 
 # ---------- Orders ----------
+
+
 @staff_member_required
 def orders(request):
     tab = request.GET.get("tab", "new")
@@ -88,10 +93,9 @@ def orders(request):
 
     if tab == "all":
         qs = base.filter(
-            status=Order.PAID, fulfilment_status__in=[
-        Order.DELIVERED,
-        Order.DISPATCHED,
-        Order.NEW,
+            status=Order.PAID,
+            fulfilment_status__in=[
+                    Order.DELIVERED, Order.DISPATCHED, Order.NEW,
     ],)
     elif tab == "new":
         # Paid orders that still need dispatching
@@ -108,10 +112,9 @@ def orders(request):
 
     counts = {
         "all": base.filter(
-            status=Order.PAID, fulfilment_status__in=[
-        Order.DELIVERED,
-        Order.DISPATCHED,
-        Order.NEW,]).count(),
+            status=Order.PAID,
+            fulfilment_status__in=[
+                Order.DELIVERED, Order.DISPATCHED, Order.NEW,]).count(),
         "new": base.filter(
             status=Order.PAID, fulfilment_status=Order.NEW).count(),
         "dispatched": base.filter(
@@ -192,10 +195,10 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
 @staff_member_required
 def products(request):
     # --- GET params (must match template name="...") ---
-    active_status = request.GET.get("status", "").strip().lower()  # "" | "active" | "hidden"
-    active_tag = request.GET.get("tag", "").strip().lower()        # e.g. "winter"
-    active_stock = request.GET.get("stock", "").strip().lower()    # "" | "in" | "low" | "out"
-    active_sort = request.GET.get("sort", "title").strip().lower() # "title" default
+    active_status = request.GET.get("status", "").strip().lower()
+    active_tag = request.GET.get("tag", "").strip().lower()
+    active_stock = request.GET.get("stock", "").strip().lower()
+    active_sort = request.GET.get("sort", "title").strip().lower()
 
     low_threshold = getattr(settings, "LOW_STOCK_THRESHOLD", 5)
 
@@ -264,7 +267,10 @@ def products(request):
         "debug_qs": request.GET.urlencode(),
     })
 
+
 # ---------- Product create / edit / toggle active ----------
+
+
 @staff_member_required
 def product_create(request):
     form = ProductForm(request.POST or None)
@@ -324,7 +330,10 @@ def product_image_delete(request, image_id):
     img.delete()
     return redirect("owner:owner_product_images", pk=product_id)
 
+
 # --------- Duplicate product ----------
+
+
 @login_required
 def product_duplicate(request, pk):
     original = get_object_or_404(Product, pk=pk)
@@ -343,7 +352,9 @@ def product_duplicate(request, pk):
 
     return redirect("owner:owner_product_edit", pk=duplicate.pk)
 
+
 # --------- Bulk actions ----------
+
 
 @staff_member_required
 @require_POST
@@ -375,4 +386,3 @@ def products_bulk_action(request):
 
     messages.error(request, "Unknown action.")
     return redirect("owner:owner_products")
-

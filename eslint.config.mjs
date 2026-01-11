@@ -7,6 +7,8 @@ export default defineConfig([
       "staticfiles/**",
       "dist/**",
       "build/**",
+      "**/*.min.js",
+      "**/vendor/**",
     ],
   },
   {

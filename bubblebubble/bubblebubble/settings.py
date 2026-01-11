@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from decouple import config, Csv
 import dj_database_url
-from django.urls import reverse_lazy
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -95,9 +94,9 @@ INSTALLED_APPS = [
     'reviews',
     'owner',
     "pages",
-    'import_export',   
+    'import_export',
     # csv import export
-    'cart.apps.CartConfig',  
+    'cart.apps.CartConfig',
     # cart app config to register signals
 ]
 
