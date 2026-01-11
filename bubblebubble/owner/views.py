@@ -13,7 +13,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
-
+from django.db.models import Prefetch
 
 # ---------- Owner login ----------
 
@@ -77,77 +77,6 @@ def dashboard(request):
         "low_stock": low_qs[:10],
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
-
-
-# ---------- Products ----------
-@staff_member_required
-def products(request):
-    qs = Product.objects.annotate(
-        image_count=Count("images")).order_by("title")
-    return render(request, "owner/products.html", {
-        "products": qs,
-        "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
-    })
-
-
-@staff_member_required
-def product_create(request):
-    form = ProductForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return redirect("owner_products")
-    return render(
-        request, "owner/product_form.html", {
-            "form": form, "mode": "Create"})
-
-
-@staff_member_required
-def product_edit(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    form = ProductForm(request.POST or None, instance=product)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return redirect("owner:owner_products")
-    return render(
-        request, "owner/product_form.html", {
-            "form": form, "mode": "Edit", "product": product})
-
-
-@staff_member_required
-def product_toggle_active(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    product.active = not product.active
-    product.save(update_fields=["active"])
-    return redirect("owner:owner_products")
-
-
-# ---------- Product images ----------
-@staff_member_required
-def product_images(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    images = product.images.all().order_by("-id")
-
-    form = ProductImageForm(
-        request.POST or None, request.FILES or None)
-    if request.method == "POST" and form.is_valid():
-        img = form.save(commit=False)
-        img.product = product
-        img.save()
-        return redirect("owner:owner_product_images", pk=product.pk)
-
-    return render(request, "owner/product_images.html", {
-        "product": product,
-        "images": images,
-        "form": form,
-    })
-
-
-@staff_member_required
-def product_image_delete(request, image_id):
-    img = get_object_or_404(ProductImage, pk=image_id)
-    product_id = img.product_id
-    img.delete()
-    return redirect("owner:owner_product_images", pk=product_id)
 
 
 # ---------- Orders ----------
@@ -260,6 +189,7 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
 
 
 @login_required
+@staff_member_required
 def products(request):
     # --- GET params (must match template name="...") ---
     active_status = request.GET.get("status", "").strip().lower()  # "" | "active" | "hidden"
@@ -303,6 +233,11 @@ def products(request):
     # --- Counts for template ---
     qs = qs.annotate(image_count=Count("images", distinct=True))
 
+    # Prefetch images for each product
+    qs = qs.prefetch_related(
+        Prefetch("images", queryset=ProductImage.objects.order_by("-id"))
+    )
+
     # --- Build tag dropdown from DB ---
     raw_tags = Product.objects.exclude(tags="").values_list("tags", flat=True)
     tag_options = sorted({
@@ -329,6 +264,65 @@ def products(request):
         "debug_qs": request.GET.urlencode(),
     })
 
+# ---------- Product create / edit / toggle active ----------
+@staff_member_required
+def product_create(request):
+    form = ProductForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("owner_products")
+    return render(
+        request, "owner/product_form.html", {
+            "form": form, "mode": "Create"})
+
+
+@staff_member_required
+def product_edit(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    form = ProductForm(request.POST or None, instance=product)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("owner:owner_products")
+    return render(
+        request, "owner/product_form.html", {
+            "form": form, "mode": "Edit", "product": product})
+
+
+@staff_member_required
+def product_toggle_active(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    product.active = not product.active
+    product.save(update_fields=["active"])
+    return redirect("owner:owner_products")
+
+
+# ---------- Product images ----------
+@staff_member_required
+def product_images(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    images = product.images.all().order_by("-id")
+
+    form = ProductImageForm(
+        request.POST or None, request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        img = form.save(commit=False)
+        img.product = product
+        img.save()
+        return redirect("owner:owner_product_images", pk=product.pk)
+
+    return render(request, "owner/product_images.html", {
+        "product": product,
+        "images": images,
+        "form": form,
+    })
+
+
+@staff_member_required
+def product_image_delete(request, image_id):
+    img = get_object_or_404(ProductImage, pk=image_id)
+    product_id = img.product_id
+    img.delete()
+    return redirect("owner:owner_product_images", pk=product_id)
 
 # --------- Duplicate product ----------
 @login_required
@@ -349,7 +343,7 @@ def product_duplicate(request, pk):
 
     return redirect("owner:owner_product_edit", pk=duplicate.pk)
 
-
+# --------- Bulk actions ----------
 
 @staff_member_required
 @require_POST

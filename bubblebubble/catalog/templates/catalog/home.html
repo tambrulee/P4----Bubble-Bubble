@@ -50,91 +50,91 @@
   </section>
 
 
-  <!-- Hero Carousel -->
-  <section class="bb-hero-wrap my-4">
-    <div class="container">
-      <div id="bbHeroCarousel"
-           class="carousel slide bb-hero-carousel"
-           data-bs-ride="carousel"
-           data-bs-interval="7000">
+<!-- Hero Carousel -->
+<section class="bb-hero-wrap my-4">
+  <div class="container">
+    <div id="bbHeroCarousel"
+         class="carousel slide bb-hero-carousel"
+         data-bs-ride="carousel"
+         data-bs-interval="7000"
+         data-bs-touch="true">
 
-        <div class="carousel-indicators">
-          <button type="button" data-bs-target="#bbHeroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-          <button type="button" data-bs-target="#bbHeroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-          <button type="button" data-bs-target="#bbHeroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <!-- Dots -->
+      <div class="carousel-indicators">
+        <button type="button"
+                data-bs-target="#bbHeroCarousel"
+                data-bs-slide-to="0"
+                class="active"
+                aria-current="true"
+                aria-label="Slide 1"></button>
+        <button type="button"
+                data-bs-target="#bbHeroCarousel"
+                data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+        <button type="button"
+                data-bs-target="#bbHeroCarousel"
+                data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
+      </div>
+
+      <div class="carousel-inner">
+
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+          <img src="{% static 'img/hero/slide1.jpg' %}"
+               class="d-block w-100 bb-hero-img"
+               alt="Moon & Moss soaps">
+
+          <div class="bb-hero-overlay p-3 p-md-4">
+            <div class="bb-hero-overlay-inner d-flex flex-column gap-3">
+              <h1 class="bb-hero-title">Little Soap.<br>Big Impact.</h1>
+              <p class="bb-hero-text">
+                Vegan, cruelty-free and hand-crafted in the UK, using thoughtfully sourced natural ingredients.
+              </p>
+              <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">Shop All</a>
+            </div>
+          </div>
         </div>
 
-        <div class="carousel-inner">
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+          <img src="{% static 'img/hero/slide2.png' %}"
+               class="d-block w-100 bb-hero-img"
+               alt="Winter Isles limited edition collection">
 
-          <!-- Slide 1 -->
-          <div class="carousel-item active">
-            <img src="{% static 'img/hero/slide1.jpg' %}"
-                 class="d-block w-100 bb-hero-img"
-                 alt="Moon & Moss soaps">
-
-            <div class="bb-hero-overlay p-3 p-md-4">
-              <div class="bb-hero-overlay-inner">
-                <h1 class="bb-hero-title">
-                  Little Soap.<br>
-                  Big Impact.
-                </h1>
-                <p class="bb-hero-text">
-                  Vegan, cruelty-free and hand-crafted in the UK, using thoughtfully sourced natural ingredients.
-                </p>
-                <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">Shop All</a>
-              </div>
+          <div class="bb-hero-overlay p-3 p-md-4">
+            <div class="bb-hero-overlay-inner d-flex flex-column gap-3">
+              <h2 class="bb-hero-title">Winter Isles<br>Limited Edition</h2>
+              <p class="bb-hero-text">
+                Seasonal blends inspired by the UK landscape — juniper, hedgerow, sea air and frost.
+              </p>
+              <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">Shop Winter Range</a>
             </div>
           </div>
-
-          <!-- Slide 2 -->
-          <div class="carousel-item">
-            <img src="{% static 'img/hero/slide2.png' %}"
-                 class="d-block w-100 bb-hero-img"
-                 alt="Winter Isles collection">
-
-            <div class="bb-hero-overlay p-3 p-md-4">
-              <div class="bb-hero-overlay-inner">
-                <h2 class="bb-hero-title">
-                  Winter Isles<br>
-                  Limited Edition
-                </h2>
-                <p class="bb-hero-text">
-                  Seasonal blends inspired by the UK landscape — juniper, hedgerow, sea air and frost.
-                </p>
-                <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">Shop Winter Range</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 3 -->
-          <div class="carousel-item">
-            <img src="{% static 'img/hero/slide3.png' %}"
-                 class="d-block w-100 bb-hero-img"
-                 alt="Ritual refillables">
-
-            <div class="bb-hero-overlay p-3 p-md-4">
-              <div class="bb-hero-overlay-inner">
-                <h2 class="bb-hero-title">Everyday Rituals</h2>
-                <p class="bb-hero-text">
-                  Refillable hand &amp; body washes designed for slower, more intentional moments.
-                </p>
-                <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">Explore Refillables</a>
-              </div>
-            </div>
-          </div>
-
         </div>
 
-        <!-- Optional: touch-friendly controls (nice on mobile) -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#bbHeroCarousel" data-bs-slide="prev" aria-label="Previous slide">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#bbHeroCarousel" data-bs-slide="next" aria-label="Next slide">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        </button>
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+          <img src="{% static 'img/hero/slide3.png' %}"
+               class="d-block w-100 bb-hero-img"
+               alt="Refillable hand and body washes">
+
+          <div class="bb-hero-overlay p-3 p-md-4">
+            <div class="bb-hero-overlay-inner d-flex flex-column gap-3">
+              <h2 class="bb-hero-title">Everyday Rituals</h2>
+              <p class="bb-hero-text">
+                Refillable hand &amp; body washes designed for slower, more intentional moments.
+              </p>
+              <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">Explore Refillables</a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <!-- Short customer quotes / reviews -->
   {% if testimonials %}
@@ -181,9 +181,7 @@
           </a>   
         </div>
     </div>
-
       
-
       <div class="row g-3">
         {% for p in best_sellers %}
           <div class="col-12 col-sm-6 col-lg-3">

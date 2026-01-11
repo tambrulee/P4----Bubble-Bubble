@@ -634,6 +634,15 @@ a:hover { color: var(--bb-primary); }
   box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.08);
 }
 
+/* Hero CTA buttons – slimmer, calmer */
+.bb-hero-carousel .btn-bb-primary {
+  padding: 0.45rem 0.9rem;   /* was ~0.75rem 1.25rem */
+  font-size: 0.875rem;       /* slightly smaller text */
+  line-height: 1.2;
+  border-radius: 0.4rem;     /* softer, less pill-like */
+}
+
+
 /* Optional reusable glass */
 .bb-glass{
   background: var(--bb-glass-bg);
