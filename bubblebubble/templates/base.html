@@ -5,6 +5,10 @@
     <meta charset="utf-8">
     <title>Moon & Moss | Handmade & Organic Soaps</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="Moon &amp; Moss is a UK-based artisan soap and candle brand inspired by nature, quiet rituals, and sustainable living.">
+    <meta name="keywords" content="Moon and Moss, artisan soap, handmade candles, natural skincare, eco friendly gifts, sustainable living, UK handmade">
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
     <!-- Bootstrap CSS -->
@@ -12,7 +16,7 @@
           rel="stylesheet">
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    {% block extra_css %}{% endblock content %}
+    {% block extra_css %}{% endblock %}
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/40f053d397.js"
             crossorigin="anonymous"></script>
@@ -214,9 +218,7 @@
         </div>
       </div>
     </div>
-  </body>
-
-  <!-- Footer -->
+      <!-- Footer -->
   <footer class="bb-footer mt-5 pt-5 pb-4">
     <div class="container">
 
@@ -307,8 +309,9 @@
       });
     });
   </script>
-  {% block extra_js %}{% endblock content %}
+  {% block extra_js %}{% endblock %}
   {% block scripts %}
-  {% endblock content %}
-</body>
+  {% endblock %}
+  </body>
+
 </html>
