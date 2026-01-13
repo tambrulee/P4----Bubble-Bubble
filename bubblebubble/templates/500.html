@@ -1,19 +1,38 @@
-{% extends "base.html" %}
+{% extends base|default:"owner/base_owner.html" %}
 {% load static %}
+
 {% block content %}
-  <section class="py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 text-center">
-          <h1 class="display-5 mb-3">Something went a bit… bubbly</h1>
-          <p class="lead mb-4">We hit a snag on our side. Please try again in a moment.</p>
-          <p class="text-muted mb-4">If it keeps happening, feel free to contact us — we’ll get it sorted.</p>
-          <div class="d-flex justify-content-center gap-3">
-            <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Back to Shop</a>
-            <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">Return Home</a>
-          </div>
-        </div>
-      </div>
+  <h1 class="display-5 mb-3">Something went a bit… bubbly</h1>
+
+  {% if request.user.is_authenticated and request.user.is_staff %}
+    <p class="lead mb-4">
+      A server error occurred while you were working in the admin area.
+    </p>
+    <p class="text-muted mb-4">
+      You may want to retry or return to the dashboard.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'owner:owner_dashboard' %}" class="btn btn-dark">
+        Back to dashboard
+      </a>
+      <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">
+        View shop
+      </a>
     </div>
-  </section>
+
+  {% else %}
+    <p class="lead mb-4">
+      We hit a snag on our side. Please try again in a moment.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">
+        Back to shop
+      </a>
+      <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">
+        Return home
+      </a>
+    </div>
+  {% endif %}
 {% endblock content %}

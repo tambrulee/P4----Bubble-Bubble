@@ -1,19 +1,42 @@
-{% extends "base.html" %}
+{% extends base|default:"owner/base_owner.html" %}
 {% load static %}
+
 {% block content %}
-  <section class="py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 text-center">
-          <h1 class="display-4 mb-3">Lost in the moss</h1>
-          <p class="lead mb-4">The page you’re looking for seems to have wandered off.</p>
-          <p class="mb-4 text-muted">It might have moved, been renamed, or simply doesn’t exist.</p>
-          <div class="d-flex justify-content-center gap-3">
-            <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Shop Soaps</a>
-            <a href="/" class="btn btn-outline-secondary">Return Home</a>
-          </div>
-        </div>
-      </div>
+  <h1 class="display-4 mb-3">Something went wrong...</h1>
+
+  {% if request.user.is_authenticated and request.user.is_staff %}
+    <p class="lead mb-4">
+      This page doesn’t exist, or the URL is incorrect.
+    </p>
+    <p class="text-muted mb-4">
+      If you were working in the admin area, you can head back safely.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'owner:owner_dashboard' %}" class="btn btn-dark">
+        Back to dashboard
+      </a>
+      <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">
+        View shop
+      </a>
     </div>
-  </section>
+
+  {% else %}
+    <p class="lead mb-4">
+      The page you’re looking for seems to have wandered off.
+    </p>
+    <p class="text-muted mb-4">
+      It might have moved, been renamed, or simply doesn’t exist.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">
+        Shop soaps
+      </a>
+      <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">
+        Return home
+      </a>
+    </div>
+  {% endif %}
 {% endblock content %}
+
