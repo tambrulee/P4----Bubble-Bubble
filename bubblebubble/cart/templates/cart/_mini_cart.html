@@ -76,10 +76,12 @@
                 action="{% url 'cart:remove' item.id %}"
                 class="mt-1 js-mini-remove">
             {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-link text-danger p-0 bb-mini-remove">
+            <button type="submit"
+                    class="btn btn-sm btn-link text-danger p-0 bb-mini-remove">
               Remove
             </button>
           </form>
+
         </div>
 
       </div>

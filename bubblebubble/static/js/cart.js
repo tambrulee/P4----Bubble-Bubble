@@ -215,3 +215,46 @@ document.addEventListener("change", async (e) => {
     await refreshMiniCart();
   }
 });
+
+// Mini cart: remove item without closing offcanvas
+document.addEventListener("submit", async (e) => {
+  const form = e.target.closest("form.js-mini-remove");
+  if (!form) return;
+
+  e.preventDefault();
+
+  try {
+    const res = await fetch(form.action, {
+      method: "POST",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+    });
+
+    if (!res.ok) {
+      showCartToast("Couldn’t remove item.");
+      return;
+    }
+
+    const data = await res.json();
+
+    if (!data.ok) {
+      showCartToast("Couldn’t remove item.");
+      return;
+    }
+
+    // Refresh mini cart contents
+    await refreshMiniCart();
+
+    // Update cart badge
+    if (typeof data.cart_count !== "undefined") {
+      setCartCount(data.cart_count);
+    }
+
+  } catch (err) {
+    console.error("mini remove error:", err);
+    showCartToast("Network error — please try again.");
+  }
+});
+

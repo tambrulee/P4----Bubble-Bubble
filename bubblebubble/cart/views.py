@@ -60,7 +60,14 @@ def remove_item(request, item_id):
     cart = get_or_create_cart(request)
     item = get_object_or_404(CartItem, pk=item_id, cart=cart)
     item.delete()
-    return redirect("cart:view")
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({
+            "ok": True,
+            "cart_count": cart.items.count(),
+        })
+
+    return redirect(request.META.get("HTTP_REFERER", "cart:view"))
 
 
 def add(request, product_id):
