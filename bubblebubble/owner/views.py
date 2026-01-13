@@ -14,6 +14,9 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.db.models import Prefetch
+from django.db.models import Q
+from reviews.models import Review
+from .forms import OwnerReplyForm
 
 
 # ---------- Owner login ----------
@@ -386,3 +389,68 @@ def products_bulk_action(request):
 
     messages.error(request, "Unknown action.")
     return redirect("owner:owner_products")
+
+# ---------- Reviews management ----------
+
+LOW_RATING_THRESHOLD = 2  # 1–2 stars highlighted
+
+
+@staff_member_required
+def owner_reviews(request):
+    qs = Review.objects.select_related("product", "user").order_by("-created_at")
+
+    status = request.GET.get("status", "all")
+    if status == "pending":
+        qs = qs.filter(is_approved=False)
+    elif status == "low":
+        qs = qs.filter(rating__lte=LOW_RATING_THRESHOLD)
+    elif status == "unreplied":
+        qs = qs.filter(Q(owner_reply="") | Q(owner_reply__isnull=True))
+
+    return render(request, "owner/reviews.html", {
+        "reviews": qs,
+        "status": status,
+        "low_threshold": LOW_RATING_THRESHOLD,
+    })
+
+
+@staff_member_required
+def owner_review_detail(request, pk):
+    review = get_object_or_404(Review.objects.select_related("product", "user"), pk=pk)
+
+    if request.method == "POST":
+        form = OwnerReplyForm(request.POST, instance=review)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.owner_replied_at = timezone.now()
+            obj.save(update_fields=["owner_reply", "owner_replied_at", "updated_at"])
+            messages.success(request, "Reply saved.")
+            return redirect("owner:owner_review_detail", pk=review.pk)
+    else:
+        form = OwnerReplyForm(instance=review)
+
+    return render(request, "owner/review_detail.html", {
+        "review": review,
+        "form": form,
+        "is_low_rated": review.rating <= LOW_RATING_THRESHOLD,
+        "low_threshold": LOW_RATING_THRESHOLD,
+    })
+
+
+@staff_member_required
+def owner_review_approve(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    review.is_approved = True
+    review.save(update_fields=["is_approved", "updated_at"])
+    messages.success(request, "Review approved (visible on product page).")
+    return redirect(request.META.get("HTTP_REFERER", "owner:owner_reviews"))
+
+
+@staff_member_required
+def owner_review_hide(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    review.is_approved = False
+    review.save(update_fields=["is_approved", "updated_at"])
+    messages.warning(request, "Review hidden (not visible on product page).")
+    return redirect(request.META.get("HTTP_REFERER", "owner:owner_reviews"))
+

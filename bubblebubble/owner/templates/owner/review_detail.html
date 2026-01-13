@@ -1,0 +1,54 @@
+{% extends "owner/base_owner.html" %}
+{% block title %}Review · Shop Admin{% endblock title %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+  <div>
+    <h1 class="h4 mb-1">Review</h1>
+    <div class="text-muted small">{{ review.product.title }} · {{ review.created_at|date:"d M Y, H:i" }}</div>
+  </div>
+
+  <div class="d-flex gap-2">
+    {% if review.is_approved %}
+      <a class="btn btn-sm btn-outline-secondary" href="{% url 'owner:owner_review_hide' review.pk %}">Hide</a>
+    {% else %}
+      <a class="btn btn-sm btn-outline-success" href="{% url 'owner:owner_review_approve' review.pk %}">Approve</a>
+    {% endif %}
+    <a class="btn btn-sm btn-outline-dark" href="{% url 'owner:owner_reviews' %}">Back</a>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-3 {% if is_low_rated %}border border-danger{% endif %}">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="fw-semibold">{{ review.rating }}/5</div>
+      {% if is_low_rated %}
+        <span class="badge text-bg-danger">Low-rated (≤ {{ low_threshold }})</span>
+      {% endif %}
+    </div>
+
+    {% if review.verified_purchase %}
+      <span class="badge text-bg-success mb-2">Verified purchase</span>
+    {% endif %}
+
+    <p class="mb-0 text-muted">{{ review.comment|default:"(No comment)"|linebreaksbr }}</p>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <h2 class="h6 mb-3">Owner reply (public)</h2>
+
+    <form method="post" class="vstack gap-2">
+      {% csrf_token %}
+      {{ form.owner_reply }}
+      <div class="d-flex gap-2 align-items-center">
+        <button class="btn btn-sm btn-dark" type="submit">Save reply</button>
+        <span class="small text-muted">
+          {% if review.owner_replied_at %}Last replied: {{ review.owner_replied_at|date:"d M Y, H:i" }}{% endif %}
+        </span>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content%}

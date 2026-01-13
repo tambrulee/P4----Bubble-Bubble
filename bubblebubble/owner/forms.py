@@ -1,5 +1,7 @@
 from django import forms
 from catalog.models import Product, ProductImage
+from reviews.models import Review
+
 
 
 class ProductForm(forms.ModelForm):
@@ -50,3 +52,12 @@ class ProductImageForm(forms.ModelForm):
     class Meta:
         model = ProductImage
         fields = ["image", "alt_text"]
+
+
+class OwnerReplyForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ["owner_reply"]
+        widgets = {
+            "owner_reply": forms.Textarea(attrs={"rows": 4, "placeholder": "Write a public reply…"})
+        }

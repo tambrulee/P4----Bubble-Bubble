@@ -46,6 +46,13 @@ urlpatterns = [
         name="owner_order_set_fulfilment",
     ),
 
+    # /owner/reviews/...
+    
+    path("reviews/", views.owner_reviews, name="owner_reviews"),
+    path("reviews/<int:pk>/", views.owner_review_detail, name="owner_review_detail"),
+    path("reviews/<int:pk>/approve/", views.owner_review_approve, name="owner_review_approve"),
+    path("reviews/<int:pk>/hide/", views.owner_review_hide, name="owner_review_hide"),
+
     # password reset under /owner/...
     path(
         "password-reset/",

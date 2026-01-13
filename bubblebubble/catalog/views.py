@@ -125,9 +125,18 @@ def product_list(request):
 
 
 def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug, active=True)
+    product = get_object_or_404(Product, slug=slug)
+
+    reviews = (
+        product.reviews
+        .filter(is_approved=True)
+        .select_related("user")
+        .order_by("-created_at")
+    )
+
     return render(request, "catalog/product_detail.html", {
         "product": product,
+        "reviews": reviews,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
 

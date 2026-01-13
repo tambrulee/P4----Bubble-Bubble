@@ -1,0 +1,82 @@
+{% extends "owner/base_owner.html" %}
+{% block title %}Reviews · Shop Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <h1 class="h4 mb-1">Reviews</h1>
+    <div class="text-muted small">Moderate, hide, approve, and reply.</div>
+  </div>
+
+  <div class="btn-group">
+    <a class="btn btn-sm btn-outline-dark {% if status == 'all' %}active{% endif %}" href="?status=all">All</a>
+    <a class="btn btn-sm btn-outline-dark {% if status == 'pending' %}active{% endif %}" href="?status=pending">Hidden</a>
+    <a class="btn btn-sm btn-outline-dark {% if status == 'unreplied' %}active{% endif %}" href="?status=unreplied">Unreplied</a>
+    <a class="btn btn-sm btn-outline-danger {% if status == 'low' %}active{% endif %}" href="?status=low">
+      Low (≤ {{ low_threshold }})
+    </a>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table align-middle">
+    <thead>
+      <tr>
+        <th>Rating</th>
+        <th>Product</th>
+        <th>Comment</th>
+        <th>Visibility</th>
+        <th>Reply</th>
+        <th class="text-end"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for r in reviews %}
+      <tr class="{% if r.rating <= low_threshold %}table-warning{% endif %}">
+        <td>
+          <span class="fw-semibold">{{ r.rating }}/5</span>
+          {% if r.rating <= low_threshold %}
+            <span class="badge text-bg-danger ms-2">Low</span>
+          {% endif %}
+        </td>
+
+        <td>
+          <div class="fw-semibold">{{ r.product.title }}</div>
+          <div class="small text-muted">{{ r.created_at|date:"d M Y" }}</div>
+        </td>
+
+        <td style="min-width: 320px;">
+          <div class="text-muted small">{{ r.comment|default:"(No comment)"|truncatechars:120 }}</div>
+          {% if r.verified_purchase %}
+            <span class="badge text-bg-success mt-1">Verified</span>
+          {% endif %}
+        </td>
+
+        <td>
+          {% if r.is_approved %}
+            <span class="badge text-bg-success">Visible</span>
+          {% else %}
+            <span class="badge text-bg-secondary">Hidden</span>
+          {% endif %}
+        </td>
+
+        <td>
+          {% if r.owner_reply %}
+            <span class="badge text-bg-info">Replied</span>
+          {% else %}
+            <span class="badge text-bg-warning">No reply</span>
+          {% endif %}
+        </td>
+
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-dark" href="{% url 'owner:owner_review_detail' r.pk %}">Manage</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="text-center text-muted py-4">No reviews found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
