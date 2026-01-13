@@ -1,0 +1,218 @@
+/* =========================================================
+   Moon & Moss — Admin UI
+   ========================================================= */
+
+/* === Admin colour tokens === */
+:root {
+  --bb-primary: #5f7f6b;      /* moss green */
+  --bb-secondary: #8f8a83;    /* warm stone */
+  --bb-success: #6f9e7a;      /* muted green */
+  --bb-warning: #e3b35a;      /* soft amber */
+  --bb-danger: #c46a6a;       /* muted rose */
+  --bb-info: #7aa6c9;         /* dusty blue */
+
+  --bb-bg-soft: rgba(255, 255, 255, .85);
+  --bb-border-soft: rgba(0, 0, 0, .08);
+  --bb-shadow-soft: 0 12px 30px rgba(0, 0, 0, .06);
+}
+
+/* === Soft admin background === */
+body.bb-admin {
+  background:
+    radial-gradient(1200px 600px at 10% 0%, rgba(95, 127, 107, .18), transparent 55%),
+    radial-gradient(900px 500px at 90% 10%, rgba(122, 166, 201, .20), transparent 55%),
+    #f8f9fa;
+}
+
+/* === Gradient top bar === */
+.bb-admin-nav {
+  background: linear-gradient(
+    90deg,
+    rgba(95, 127, 107, .35),
+    rgba(227, 179, 90, .20),
+    rgba(122, 166, 201, .28)
+  );
+  backdrop-filter: blur(10px);
+}
+
+/* Brand */
+.bb-admin-brand {
+  letter-spacing: .2px;
+}
+
+/* === Pill nav links === */
+.bb-admin-nav .nav-link {
+  border-radius: 999px;
+  padding: .45rem .85rem;
+  color: rgba(0, 0, 0, .74);
+  transition: background-color .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.bb-admin-nav .nav-link:hover {
+  background: rgba(255, 255, 255, .60);
+}
+
+.bb-admin-nav .nav-link.active {
+  background: var(--bb-bg-soft);
+  border: 1px solid var(--bb-border-soft);
+  color: var(--bb-primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
+}
+
+/* === Content shell feel === */
+.bb-admin-shell {
+  background: rgba(255, 255, 255, .70);
+  border: 1px solid rgba(0, 0, 0, .06);
+  border-radius: 18px;
+  box-shadow: var(--bb-shadow-soft);
+}
+
+/* === Alerts === */
+.bb-admin-alerts .alert {
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, .06);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .05);
+}
+
+/* Tone alerts to match palette */
+.alert-success {
+  background: rgba(111, 158, 122, .15);
+  border-color: rgba(111, 158, 122, .40);
+}
+
+.alert-warning {
+  background: rgba(227, 179, 90, .18);
+  border-color: rgba(227, 179, 90, .45);
+}
+
+.alert-danger {
+  background: rgba(196, 106, 106, .18);
+  border-color: rgba(196, 106, 106, .45);
+}
+
+.alert-info {
+  background: rgba(122, 166, 201, .16);
+  border-color: rgba(122, 166, 201, .45);
+}
+
+/* === Buttons (consistent across admin) === */
+.btn-mm {
+  background: var(--bb-primary);
+  border-color: var(--bb-primary);
+  color: #fff;
+}
+
+.btn-mm:hover,
+.btn-mm:focus {
+  background: #557463;
+  border-color: #557463;
+  color: #fff;
+}
+
+.btn-mm-outline {
+  border-color: var(--bb-primary);
+  color: var(--bb-primary);
+  background: transparent;
+}
+
+.btn-mm-outline:hover,
+.btn-mm-outline:focus {
+  background: var(--bb-primary);
+  border-color: var(--bb-primary);
+  color: #fff;
+}
+
+/* Make standard outline buttons harmonise */
+.btn-outline-secondary {
+  background: var(--aa-primary);
+  border-color: var(--aa-primary);
+  color: #fff;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+  background: var(--aa-secondary);
+  border-color: var(--aa-secondary);
+  color: #fff;
+}
+
+.btn-outline-danger {
+  border-color: var(--bb-danger);
+  color: var(--bb-danger);
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus {
+  background: var(--bb-danger);
+  border-color: var(--bb-danger);
+  color: #fff;
+}
+
+.btn-outline-dark {
+  border-color: rgba(0, 0, 0, .35);
+}
+
+.btn-primary {
+  background: var(--bb-primary);
+  border-color: var(--bb-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: #557463;
+  border-color: #557463;
+}
+
+/* === Badges (consistent status colours) === */
+.badge {
+  border-radius: 999px;
+  font-weight: 500;
+  padding: .35em .6em;
+}
+
+/* Override Bootstrap contextual badge colours */
+.text-bg-success {
+  background-color: var(--bb-success) !important;
+}
+
+.text-bg-warning {
+  background-color: var(--bb-warning) !important;
+  color: #2d2d2d !important; 
+}
+
+.text-bg-danger {
+  background-color: var(--bb-danger) !important;
+}
+
+.text-bg-info {
+  background-color: var(--bb-info) !important;
+}
+
+.text-bg-secondary {
+  background-color: var(--bb-secondary) !important;
+}
+
+.text-bg-dark {
+  background-color: rgba(0, 0, 0, .80) !important;
+}
+
+.text-bg-light.border {
+  border-color: rgba(0, 0, 0, .10) !important;
+}
+
+/* === Thumbnails === */
+
+.bb-thumb{
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,.08);
+  background: rgba(255,255,255,.7);
+  flex: 0 0 auto;
+}
+
+.bb-thumb--placeholder{
+  display: inline-block;
+  background: rgba(0,0,0,.05);
+}
