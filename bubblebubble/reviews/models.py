@@ -15,7 +15,7 @@ class Review(models.Model):
     verified_purchase = models.BooleanField(default=False)
     order = models.ForeignKey(Order, null=True, blank=True, on_delete=models.SET_NULL)
 
-    is_approved = models.BooleanField(default=True)
+    is_approved = models.BooleanField(default=False)
     owner_reply = models.TextField(blank=True)
     owner_replied_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)

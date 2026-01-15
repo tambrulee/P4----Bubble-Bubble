@@ -191,7 +191,7 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
         "delivered_at",
         "cancelled_at",
     ])
-    return redirect("owner_orders")
+    return redirect("owner:owner_orders")
 
 
 @login_required

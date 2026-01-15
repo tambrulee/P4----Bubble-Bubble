@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block content %}
   <div class="container py-4 py-lg-5">
     <!-- Header -->
@@ -29,7 +30,22 @@
                     {{ form.saved_address }}
                     <div class="form-text">Pick one to use it, or type a new address below.</div>
                   </div>
+
+                  <script id="saved-addresses-data" type="application/json">
+                    {
+                      {% for a in user.shipping_addresses.all %}
+                        "{{ a.pk }}": {
+                          "full_name": "{{ a.full_name|default_if_none:''|escapejs }}",
+                          "address_line1": "{{ a.address_line1|escapejs }}",
+                          "address_line2": "{{ a.address_line2|default_if_none:''|escapejs }}",
+                          "city": "{{ a.city|escapejs }}",
+                          "postcode": "{{ a.postcode|escapejs }}"
+                        }{% if not forloop.last %},{% endif %}
+                      {% endfor %}
+                    }
+                  </script>
                 {% endif %}
+
                 <div class="col-12">
                   <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
@@ -137,15 +153,59 @@
   </div>
 {% endblock content %}
 {% block scripts %}
-  <style>
-  .card { border-radius: 1rem; }
-  .table thead th { border-bottom: 1px solid rgba(0,0,0,.08); }
-  .table tbody td { border-top: 1px solid rgba(0,0,0,.06); }
-  .position-lg-sticky { position: static; }
-  @media (min-width: 992px) {
-    .position-lg-sticky { position: sticky; }
-  }
-  .input-group-text { background: #fff; }
-  .form-control:focus { box-shadow: none; }
-  </style>
 {% endblock scripts %}
+{% block extra_js %}
+<script>
+(function () {
+  const select = document.getElementById("id_saved_address");
+  if (!select) return;
+
+  const dataEl = document.getElementById("saved-addresses-data");
+  if (!dataEl) return;
+
+  let map = {};
+  try { map = JSON.parse(dataEl.textContent || "{}"); }
+  catch (e) { console.warn("Bad saved address JSON", e); return; }
+
+  const f = {
+    full_name: document.getElementById("id_full_name"),
+    address_line1: document.getElementById("id_address_line1"),
+    address_line2: document.getElementById("id_address_line2"),
+    city: document.getElementById("id_city"),
+    postcode: document.getElementById("id_postcode"),
+  };
+
+  function nudgeFloating(input) {
+    if (!input) return;
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  function apply(pk) {
+    const a = map[String(pk)];
+    if (!a) return;
+
+    if (f.full_name) f.full_name.value = a.full_name || "";
+    if (f.address_line1) f.address_line1.value = a.address_line1 || "";
+    if (f.address_line2) f.address_line2.value = a.address_line2 || "";
+    if (f.city) f.city.value = a.city || "";
+    if (f.postcode) f.postcode.value = a.postcode || "";
+
+    // 👇 THIS IS WHERE IT GOES
+    const saveCb = document.getElementById("id_save_address");
+    if (saveCb) saveCb.checked = false;
+
+    Object.values(f).forEach(nudgeFloating);
+  }
+
+  select.addEventListener("change", () => {
+    if (!select.value) return;
+    apply(select.value);
+  });
+
+  if (select.value) apply(select.value);
+})();
+</script>
+
+
+{% endblock extra_js %}

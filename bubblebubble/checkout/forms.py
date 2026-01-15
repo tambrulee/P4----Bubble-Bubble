@@ -88,3 +88,18 @@ class CheckoutForm(forms.ModelForm):
             # ✅ Guests: hide them
             self.fields.pop("saved_address", None)
             self.fields.pop("save_address", None)
+        
+        if user and user.is_authenticated:
+            from accounts.models import ShippingAddress
+            qs = ShippingAddress.objects.filter(user=user).order_by("-is_default", "-created_at")
+            self.fields["saved_address"].queryset = qs
+
+            # Add data-* attributes to each option for JS autofill
+            choices = [("", "Use a saved address…")]
+            for addr in qs:
+                choices.append((
+                    addr.pk,
+                    str(addr),
+                ))
+            self.fields["saved_address"].choices = choices
+
