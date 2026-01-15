@@ -23,7 +23,7 @@
   --bb-nav-height: 64px;
   --bb-nav-height-sm: 56px;
 
-  --bb-logo-max: 90px;
+  --bb-logo-max: 120px;
   --bb-logo-max-sm: 90px;
 
   --bb-hit: 44px;
@@ -45,21 +45,50 @@
   --bb-shadow: 0 20px 40px rgba(0,0,0,0.18);
 }
 
-body {
-  background-color: var(--bb-cream);
-  color: var(--bb-text);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-
-/* Accent headings */
-h1, .h1, h2, .h2, h3, .h3 {
-  color: var(--bb-primary-dark);
-}
-
 /* Links */
 a { color: var(--bb-primary-dark); }
 a:hover { color: var(--bb-primary); }
+
+
+/* ====================================
+   TYPOGRAPHY — Moon & Moss
+   ==================================== */
+
+body {
+  font-family: 'Mandali', 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333333;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6,
+.brand-heading {
+  font-family: 'Old Standard TT', sans-serif;
+  color: var(--bb-primary-dark);
+  letter-spacing: 0.3px;
+}
+
+h1 { font-size: 2.4rem; font-weight: 700; }
+h2 { font-size: 2rem;   font-weight: 600; }
+h3 { font-size: 1.6rem; font-weight: 600; }
+h4 { font-size: 1.25rem;font-weight: 500; }
+
+/* UI text */
+label,
+.nav-link,
+.btn,
+.badge {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 500;
+}
+
+/* Subtle accent text (optional) */
+.text-ritual {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+}
+
 
 /* ====================================
    BUTTONS (consistent + Bootstrap overrides)
@@ -411,7 +440,8 @@ a:hover { color: var(--bb-primary); }
 /* ====================================
    PROMO BAR
    ==================================== */
-.bb-promo-bar{
+
+.bb-promo-bar {
   background: var(--bb-primary-dark);
   color: var(--bb-cream);
   font-size: 0.9rem;
@@ -419,27 +449,45 @@ a:hover { color: var(--bb-primary); }
   white-space: nowrap;
 }
 
-.bb-promo-track{
-  display: inline-flex;
-  align-items: center;
-  gap: 3rem;
-  padding: 0.45rem 0;
-  padding-left: 100%;
+.bb-promo-inner {
+  display: flex;
+  width: max-content;
   animation: bb-promo-scroll 22s linear infinite;
   will-change: transform;
 }
 
-@keyframes bb-promo-scroll{
-  from{ transform: translateX(0); }
-  to  { transform: translateX(-50%); }
+.bb-promo-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 5rem;
+  padding: 0.45rem 0;
+  padding-right: 3rem; /* breathing room at loop point */
 }
 
-@media (max-width: 576px){
-  .bb-promo-track{ animation-duration: 28s; gap: 2rem; }
+@keyframes bb-promo-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-@media (prefers-reduced-motion: reduce){
-  .bb-promo-track{ animation: none; padding-left: 0; }
+/* Slower on mobile */
+@media (max-width: 576px) {
+  .bb-promo-inner {
+    animation-duration: 28s;
+  }
+  .bb-promo-track {
+    gap: 2rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .bb-promo-inner {
+    animation: none;
+  }
 }
 
 
