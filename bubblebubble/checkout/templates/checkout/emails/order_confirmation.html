@@ -1,18 +1,107 @@
-Hi {{ order.full_name|default:"there" }},
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Order Confirmation</title>
+  </head>
 
-Thank you for your order with Moon & Moss ✨
+  <body style="margin:0; padding:0; background-color:#f6f4f0;">
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+      <tr>
+        <td align="center" style="padding:24px;">
+          
+          <!-- Email card -->
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; background:#ffffff; border-radius:8px; overflow:hidden; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color:#333333;">
 
-Order number: {{ order.id }}
-Status: {{ order.get_status_display }}
+            <!-- Header -->
+            <tr>
+              <td style="background:#6D8675; padding:24px; text-align:center;">
+                <h1 style="margin:0; font-size:22px; color:#ffffff; letter-spacing:0.5px;">
+                  Moon &amp; Moss
+                </h1>
+                <p style="margin:6px 0 0; font-size:13px; color:#eef3ef;">
+                  Little soap. Big impact.
+                </p>
+              </td>
+            </tr>
 
-Items:
-{% for item in order.items.all %}
-- {{ item.product.title }} × {{ item.qty }} — £{{ item.subtotal }}
-{% endfor %}
+            <!-- Body -->
+            <tr>
+              <td style="padding:32px 28px;">
+                <p style="margin:0 0 16px;">
+                  Hi {{ order.full_name|default:"there" }},
+                </p>
 
-Total: £{{ order.total }}
+                <p style="margin:0 0 20px;">
+                  Thank you for your order — we’re so happy you chose Moon &amp; Moss ✨
+                </p>
 
-We'll email you again when your order has been dispatched.
+                <!-- Order meta -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                  <tr>
+                    <td style="font-size:14px; padding:6px 0;">
+                      <strong>Order number:</strong> {{ order.id }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-size:14px; padding:6px 0;">
+                      <strong>Status:</strong> {{ order.get_status_display }}
+                    </td>
+                  </tr>
+                </table>
 
-Love,
-Moon & Moss
+                <!-- Items -->
+                <h3 style="margin:0 0 12px; font-size:16px; color:#29403e;">
+                  Your items
+                </h3>
+
+                <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; margin-bottom:20px;">
+                  {% for item in order.items.all %}
+                  <tr>
+                    <td style="padding:8px 0;">
+                      {{ item.product.title }} × {{ item.qty }}
+                    </td>
+                    <td align="right" style="padding:8px 0;">
+                      £{{ item.subtotal }}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </table>
+
+                <!-- Total -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #e5e5e5; margin-top:16px;">
+                  <tr>
+                    <td style="padding-top:16px; font-size:15px;">
+                      <strong>Total</strong>
+                    </td>
+                    <td align="right" style="padding-top:16px; font-size:15px;">
+                      <strong>£{{ order.total }}</strong>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin:24px 0 0; font-size:14px;">
+                  We’ll email you again when your order has been dispatched.
+                </p>
+
+                <p style="margin:24px 0 0;">
+                  Love,<br>
+                  <strong>Moon &amp; Moss</strong>
+                </p>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="background:#f2f2f2; padding:16px; text-align:center; font-size:12px; color:#777777;">
+                © {{ now|date:"Y" }} Moon &amp; Moss · Handmade with care
+              </td>
+            </tr>
+
+          </table>
+
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
