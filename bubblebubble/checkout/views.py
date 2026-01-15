@@ -184,18 +184,32 @@ def checkout_success(request):
         return redirect("catalog:product_list")
 
     order = Order.objects.filter(stripe_session_id=session.id).first()
+    if not order:
+        return redirect("catalog:product_list")
 
-    if order and order.status != Order.PAID:
+    # Always fetch items for the summary page (works on refresh too)
+    order_items = (
+        OrderItem.objects
+        .filter(order=order)
+        .select_related("product")
+    )
+
+    # Only do "one-time" actions when transitioning to PAID
+    if order.status != Order.PAID:
         order.status = Order.PAID
-        # NEW fulfilment tag
-        if hasattr(order, "fulfilment_status") and not order.fulfilment_status:
-            order.fulfilment_status = Order.NEW
 
-        # even if it's already set, this keeps it consistent:
-        if hasattr(Order, "NEW"):
-            order.fulfilment_status = Order.NEW
+        # fulfilment status (safe)
+        if hasattr(order, "fulfilment_status"):
+            # if Order.NEW exists use it, else leave as-is
+            if hasattr(Order, "NEW"):
+                order.fulfilment_status = Order.NEW
 
-        order.save(update_fields=["status", "fulfilment_status"])
+        # Save the fields that actually exist
+        update_fields = ["status"]
+        if hasattr(order, "fulfilment_status"):
+            update_fields.append("fulfilment_status")
+
+        order.save(update_fields=update_fields)
 
         deduct_stock_for_order(order.id)
 
@@ -204,7 +218,7 @@ def checkout_success(request):
 
         send_order_confirmation_email(order)
 
-    return render(request, "checkout/success.html", {"order": order})
+    return render(request, "checkout/success.html", {"order": order, "order_items": order_items})
 
 
 def checkout_cancel(request):

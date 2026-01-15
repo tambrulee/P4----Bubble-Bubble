@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from catalog.models import Product
-
+from decimal import Decimal
 
 class Order(models.Model):
     PENDING = "PENDING"
@@ -79,3 +79,7 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product} x {self.qty}"
+
+    @property
+    def subtotal(self):
+        return (self.unit_price or Decimal("0.00")) * (self.qty or 0)

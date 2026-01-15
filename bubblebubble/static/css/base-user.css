@@ -1664,3 +1664,24 @@ label,
   }
   .input-group-text { background: #fff; }
   .form-control:focus { box-shadow: none; }
+
+  /* Checkout Success */
+
+  .bb-order-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.03);
+}
+
+.bb-order-thumb--empty {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px dashed rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.02);
+}
+
