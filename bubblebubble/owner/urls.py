@@ -47,7 +47,7 @@ urlpatterns = [
     ),
 
     # /owner/reviews/...
-    
+
     path("reviews/", views.owner_reviews, name="owner_reviews"),
     path("reviews/<int:pk>/", views.owner_review_detail, name="owner_review_detail"),
     path("reviews/<int:pk>/approve/", views.owner_review_approve, name="owner_review_approve"),

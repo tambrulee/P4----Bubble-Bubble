@@ -3,7 +3,6 @@ from catalog.models import Product, ProductImage
 from reviews.models import Review
 
 
-
 class ProductForm(forms.ModelForm):
 
     class Meta:

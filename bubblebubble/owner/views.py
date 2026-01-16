@@ -98,8 +98,9 @@ def orders(request):
         qs = base.filter(
             status=Order.PAID,
             fulfilment_status__in=[
-                    Order.DELIVERED, Order.DISPATCHED, Order.NEW,
-    ],)
+                    Order.DELIVERED,
+                    Order.DISPATCHED,
+                    Order.NEW,],)
     elif tab == "new":
         # Paid orders that still need dispatching
         qs = base.filter(
@@ -392,6 +393,7 @@ def products_bulk_action(request):
 
 # ---------- Reviews management ----------
 
+
 LOW_RATING_THRESHOLD = 2  # 1–2 stars highlighted
 
 
@@ -453,4 +455,3 @@ def owner_review_hide(request, pk):
     review.save(update_fields=["is_approved", "updated_at"])
     messages.warning(request, "Review hidden (not visible on product page).")
     return redirect(request.META.get("HTTP_REFERER", "owner:owner_reviews"))
-

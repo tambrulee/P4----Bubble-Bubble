@@ -4,7 +4,6 @@ from .models import Order
 
 
 class CheckoutForm(forms.ModelForm):
-    # ✅ Add the fields (this is the missing bit)
     saved_address = forms.ModelChoiceField(
         queryset=None,  # set in __init__
         required=False,
@@ -77,7 +76,7 @@ class CheckoutForm(forms.ModelForm):
         self.fields["city"].label = "City"
         self.fields["postcode"].label = "Postcode"
 
-        # ✅ Logged-in users: show dropdown + checkbox
+        # Logged-in users: show dropdown + checkbox
         if user and user.is_authenticated:
             from accounts.models import ShippingAddress
             self.fields["saved_address"].queryset = (
@@ -85,10 +84,10 @@ class CheckoutForm(forms.ModelForm):
                     user=user).order_by("-is_default", "-created_at")
             )
         else:
-            # ✅ Guests: hide them
+            # Guests: hide them
             self.fields.pop("saved_address", None)
             self.fields.pop("save_address", None)
-        
+
         if user and user.is_authenticated:
             from accounts.models import ShippingAddress
             qs = ShippingAddress.objects.filter(user=user).order_by("-is_default", "-created_at")
@@ -102,4 +101,3 @@ class CheckoutForm(forms.ModelForm):
                     str(addr),
                 ))
             self.fields["saved_address"].choices = choices
-

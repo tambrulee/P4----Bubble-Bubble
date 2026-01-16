@@ -26,8 +26,10 @@ urlpatterns = [
 
 ]
 
+
 def trigger_error(request):
     1 / 0
+
 
 # Serve media locally even when DEBUG=False
 urlpatterns += [
