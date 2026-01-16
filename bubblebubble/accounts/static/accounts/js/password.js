@@ -14,6 +14,9 @@
   const ruleLetter = document.getElementById("rule-letter");
   const ruleCommon = document.getElementById("rule-common");
 
+  /***
+   * Set or clear a rule tick
+   */
   function setRule(el, ok) {
     if (!el) return;
     el.textContent = el.textContent.replace(/^✔|^✖/, ok ? "✔" : "✖");
@@ -28,6 +31,9 @@
     "qwerty", "qwerty123", "letmein", "iloveyou", "admin", "welcome"
   ]);
 
+  /**
+    * Score the password and return { score, text }
+   */
   function scorePassword(pw) {
     const lengthOK = pw.length >= 8;
     const hasNumber = /\d/.test(pw);
@@ -60,6 +66,8 @@
     return { score, text };
   }
 
+  /*** 
+   * Update the UI based on current password */
   function update() {
     const { score, text } = scorePassword(pwInput.value);
 

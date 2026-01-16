@@ -25,6 +25,7 @@ class Product(models.Model):
         ordering = ["title"]
 
     def save(self, *args, **kwargs):
+        """Auto-generate slug from title if not provided."""
         if not self.slug:
             base = slugify(self.title)
             slug = base
@@ -36,6 +37,7 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
+        """Return a string representation of the product."""
         return self.title
 
 
@@ -47,4 +49,5 @@ class ProductImage(models.Model):
     alt_text = models.CharField(max_length=140, blank=True)
 
     def __str__(self):
+        """Return a string representation of the product image."""
         return f"Image for {self.product.title}"

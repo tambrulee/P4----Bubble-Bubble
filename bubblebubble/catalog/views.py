@@ -5,6 +5,7 @@ from django.db.models import Count
 
 
 def home(request):
+    """Display the home page with featured products and promos."""
     best_sellers = (
         Product.objects
         .filter(
@@ -62,6 +63,7 @@ RANGES = [
 
 
 def product_list(request):
+    """Display the product listing with filtering and sorting."""
     range_tag = request.GET.get("range", "").strip().lower()
     scent_family = request.GET.get("scent_family", "").strip().lower()
     price_min = request.GET.get("price_min", "").strip()
@@ -97,8 +99,6 @@ def product_list(request):
     elif sort == "price_desc":
         qs = qs.order_by("-price", "-created_at")
     elif sort == "popularity":
-        # Only use this if you have a related reviews name "reviews".
-        # Otherwise fallback to newest.
         try:
             qs = qs.annotate(
                 review_count=Count("reviews")).order_by(
@@ -125,6 +125,7 @@ def product_list(request):
 
 
 def product_detail(request, slug):
+    """Display the product detail page."""
     product = get_object_or_404(Product, slug=slug)
 
     reviews = (
@@ -142,10 +143,12 @@ def product_detail(request, slug):
 
 
 def about(request):
+    """Display the About Us page."""
     return render(request, "catalog/about.html")
 
 
 def winter_isles(request):
+    """Display products tagged as 'winter'."""
     products = Product.objects.filter(
         active=True, tags__icontains="winter").order_by("-created_at")
     return render(request, "catalog/category_page.html", {
@@ -155,12 +158,13 @@ def winter_isles(request):
         "page_description":
         "Limited edition seasonal blends inspired by the "
         "UK landscape — sea air, hedgerow berries, juniper and frost.",
-        "hero_image": "img/hero/slide2.png",  # change to your real hero
+        "hero_image": "img/hero/slide2.png",
         "tag": "winter",
     })
 
 
 def refillables(request):
+    """Display products tagged as 'refillable'."""
     products = Product.objects.filter(
         active=True, tags__icontains="refillable").order_by("-created_at")
     return render(request, "catalog/category_page.html", {
@@ -170,6 +174,6 @@ def refillables(request):
         "page_description":
         "Low-waste favourites designed for everyday rituals — "
         "refill options so you don’t have to keep buying new bottles.",
-        "hero_image": "img/hero/slide3.png",  # change to your real hero
+        "hero_image": "img/hero/slide3.png",
         "tag": "refillable",
     })

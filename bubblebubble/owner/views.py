@@ -24,6 +24,7 @@ from .forms import OwnerReplyForm
 
 @require_http_methods(["GET", "POST"])
 def owner_login(request):
+    """Handle owner/staff login with redirection and access control."""
     # Already logged in
     if request.user.is_authenticated:
         if request.user.is_staff:
@@ -68,6 +69,7 @@ def owner_login(request):
 
 @staff_member_required
 def dashboard(request):
+    """Display the owner dashboard with key metrics."""
     low_qs = Product.objects.filter(
         active=True,
         stock_qty__lte=settings.LOW_STOCK_THRESHOLD
@@ -90,6 +92,7 @@ def dashboard(request):
 
 @staff_member_required
 def orders(request):
+    """Display the list of orders with filtering by fulfilment status."""
     tab = request.GET.get("tab", "new")
 
     base = Order.objects.all().order_by("-created_at")
@@ -136,6 +139,7 @@ def orders(request):
 
 @staff_member_required
 def order_detail(request, order_id):
+    """Display the detail page for a specific order."""
     order = get_object_or_404(Order, pk=order_id)
     return render(request, "owner/order_detail.html", {"order": order})
 
@@ -143,6 +147,7 @@ def order_detail(request, order_id):
 # ---------- Analytics ----------
 @staff_member_required
 def owner_analytics(request):
+    """Display sales analytics for the owner dashboard."""
     now = timezone.now()
     d7 = now - timedelta(days=7)
     d30 = now - timedelta(days=30)
@@ -169,6 +174,7 @@ def owner_analytics(request):
 @staff_member_required
 @require_POST
 def owner_order_set_fulfilment(request, order_id, fulfilment):
+    """Set the fulfilment status of an order."""
     order = get_object_or_404(Order, pk=order_id)
 
     allowed = {Order.DISPATCHED, Order.DELIVERED, Order.CANCELLED}
@@ -198,6 +204,7 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
 @login_required
 @staff_member_required
 def products(request):
+    """Display the owner product list with filtering and sorting."""
     # --- GET params (must match template name="...") ---
     active_status = request.GET.get("status", "").strip().lower()
     active_tag = request.GET.get("tag", "").strip().lower()
@@ -277,6 +284,7 @@ def products(request):
 
 @staff_member_required
 def product_create(request):
+    """Create a new product."""
     form = ProductForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -288,6 +296,7 @@ def product_create(request):
 
 @staff_member_required
 def product_edit(request, pk):
+    """Edit an existing product."""
     product = get_object_or_404(Product, pk=pk)
     form = ProductForm(request.POST or None, instance=product)
     if request.method == "POST" and form.is_valid():
@@ -300,6 +309,7 @@ def product_edit(request, pk):
 
 @staff_member_required
 def product_toggle_active(request, pk):
+    """Toggle a product's active status."""
     product = get_object_or_404(Product, pk=pk)
     product.active = not product.active
     product.save(update_fields=["active"])
@@ -309,6 +319,7 @@ def product_toggle_active(request, pk):
 # ---------- Product images ----------
 @staff_member_required
 def product_images(request, pk):
+    """Manage images for a specific product."""
     product = get_object_or_404(Product, pk=pk)
     images = product.images.all().order_by("-id")
 
@@ -329,6 +340,7 @@ def product_images(request, pk):
 
 @staff_member_required
 def product_image_delete(request, image_id):
+    """Delete a product image."""
     img = get_object_or_404(ProductImage, pk=image_id)
     product_id = img.product_id
     img.delete()
@@ -340,6 +352,7 @@ def product_image_delete(request, image_id):
 
 @login_required
 def product_duplicate(request, pk):
+    """Duplicate a product."""
     original = get_object_or_404(Product, pk=pk)
 
     # Create a new product (slug handled automatically in save())
@@ -363,6 +376,7 @@ def product_duplicate(request, pk):
 @staff_member_required
 @require_POST
 def products_bulk_action(request):
+    """Perform bulk actions on selected products."""
     action = request.POST.get("action")
     ids = request.POST.getlist("product_ids")
 
@@ -399,6 +413,7 @@ LOW_RATING_THRESHOLD = 2  # 1–2 stars highlighted
 
 @staff_member_required
 def owner_reviews(request):
+    """Display and filter product reviews for the owner."""
     qs = Review.objects.select_related("product", "user").order_by("-created_at")
 
     status = request.GET.get("status", "all")
@@ -418,6 +433,7 @@ def owner_reviews(request):
 
 @staff_member_required
 def owner_review_detail(request, pk):
+    """View and reply to a specific product review."""
     review = get_object_or_404(Review.objects.select_related("product", "user"), pk=pk)
 
     if request.method == "POST":
@@ -441,6 +457,7 @@ def owner_review_detail(request, pk):
 
 @staff_member_required
 def owner_review_approve(request, pk):
+    """Approve a product review."""
     review = get_object_or_404(Review, pk=pk)
     review.is_approved = True
     review.save(update_fields=["is_approved", "updated_at"])
@@ -450,6 +467,7 @@ def owner_review_approve(request, pk):
 
 @staff_member_required
 def owner_review_hide(request, pk):
+    """Hide a product review."""
     review = get_object_or_404(Review, pk=pk)
     review.is_approved = False
     review.save(update_fields=["is_approved", "updated_at"])

@@ -64,6 +64,7 @@ class Order(models.Model):
     cancelled_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
+        """Return a string representation of the order."""
         who = self.user or self.email or "guest"
         return f"Order #{self.id} for {who}"
 
@@ -78,7 +79,9 @@ class OrderItem(models.Model):
 
     @property
     def subtotal(self):
+        """Calculate the subtotal for this order item."""
         return (self.unit_price or Decimal("0.00")) * (self.qty or 0)
 
     def __str__(self):
+        """Return a string representation of the order item."""
         return f"{self.product} x {self.qty}"

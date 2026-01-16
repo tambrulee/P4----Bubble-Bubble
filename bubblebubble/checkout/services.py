@@ -1,7 +1,6 @@
 from django.db import transaction
 from django.db.models import F
 from django.core.exceptions import ValidationError
-
 from catalog.models import Product
 from .models import Order
 

@@ -1,9 +1,36 @@
+/**
+ * Get a cookie value by name.
+ *
+ * Used mainly for grabbing Django's CSRF token from `document.cookie`.
+ *
+ * @param {string} name - The cookie name to look up (e.g. `"csrftoken"`).
+ * @returns {string|undefined} The cookie value if found; otherwise `undefined`.
+ *
+ * @example
+ * const csrf = getCookie("csrftoken");
+ */
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
+/**
+ * Show a Bootstrap toast message for cart actions.
+ *
+ * Requires:
+ * - A toast element with id `cart-toast`
+ * - A toast body element with id `cart-toast-body`
+ * - Bootstrap JS available on `window.bootstrap`
+ *
+ * If required elements/libraries are missing, this function does nothing.
+ *
+ * @param {string} [message] - The message to display. Defaults to `"Added to cart."`.
+ * @returns {void}
+ *
+ * @example
+ * showCartToast("Added to cart!");
+ */
 function showCartToast(message) {
   const toastEl = document.getElementById("cart-toast");
   const bodyEl = document.getElementById("cart-toast-body");
@@ -13,6 +40,21 @@ function showCartToast(message) {
   bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 2200 }).show();
 }
 
+/**
+ * Update the cart count badge in the navbar (or wherever it's rendered).
+ *
+ * Updates the element text and toggles the `d-none` class so the badge hides
+ * when the count is 0/empty.
+ *
+ * Requires an element with id `cart-count`.
+ *
+ * @param {number|string} count - The cart item count.
+ * @returns {void}
+ *
+ * @example
+ * setCartCount(3); // shows badge with "3"
+ * setCartCount(0); // hides badge
+ */
 function setCartCount(count) {
   const badge = document.getElementById("cart-count");
   if (!badge) return;
@@ -20,6 +62,22 @@ function setCartCount(count) {
   badge.classList.toggle("d-none", !(Number(count) > 0));
 }
 
+/**
+ * Fetch and render the mini cart HTML into the offcanvas drawer.
+ *
+ * Reads the mini cart endpoint from `#miniCart[data-mini-url]`.
+ * Expects JSON shaped like:
+ * - `{ ok: true, html: "<...>", cart_count: 3 }`
+ * and optionally `mini_html` in other flows.
+ *
+ * Side effects:
+ * - Updates `#mini-cart-content` with returned HTML.
+ * - Updates the cart badge via `setCartCount` when `cart_count` is present.
+ *
+ * If the URL is missing or the request fails, an error message is rendered.
+ *
+ * @returns {Promise<void>}
+ */
 async function refreshMiniCart() {
   const container = document.getElementById("mini-cart-content");
   const offcanvasEl = document.getElementById("miniCart");
@@ -56,6 +114,7 @@ async function refreshMiniCart() {
     container.innerHTML = `<div class="text-danger">Couldn’t load cart.</div>`;
   }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const offcanvasEl = document.getElementById("miniCart");
@@ -128,6 +187,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+/**
+ * POST an updated quantity for a cart line item.
+ *
+ * Sends `qty` as form data to the provided `updateUrl`, with Django CSRF + AJAX headers.
+ * Expects a JSON response such as:
+ * - `{ ok: true, cart_count: 3, mini_html: "<...>" }`
+ *
+ * Throws if the HTTP response is not OK (non-2xx).
+ *
+ * @param {string} updateUrl - Endpoint URL that accepts `POST qty=<number>`.
+ * @param {number|string} qty - Desired quantity.
+ * @returns {Promise<any>} Parsed JSON response from the server.
+ *
+ * @throws {Error} If the request fails at the HTTP level.
+ */
 async function postQtyUpdate(updateUrl, qty) {
   const formData = new FormData();
   formData.append("qty", qty);
@@ -145,7 +219,7 @@ async function postQtyUpdate(updateUrl, qty) {
   return await res.json();
 }
 
-// Click +/-
+
 document.addEventListener("click", async (e) => {
   const btn = e.target.closest(".js-qty");
   if (!btn) return;
@@ -187,7 +261,7 @@ document.addEventListener("click", async (e) => {
   }
 });
 
-// Typing in the qty input (debounced on change)
+
 document.addEventListener("change", async (e) => {
   const input = e.target.closest(".js-qty-input");
   if (!input) return;
@@ -216,7 +290,7 @@ document.addEventListener("change", async (e) => {
   }
 });
 
-// Mini cart: remove item without closing offcanvas
+
 document.addEventListener("submit", async (e) => {
   const form = e.target.closest("form.js-mini-remove");
   if (!form) return;
@@ -251,10 +325,8 @@ document.addEventListener("submit", async (e) => {
     if (typeof data.cart_count !== "undefined") {
       setCartCount(data.cart_count);
     }
-
   } catch (err) {
     console.error("mini remove error:", err);
     showCartToast("Network error — please try again.");
   }
 });
-

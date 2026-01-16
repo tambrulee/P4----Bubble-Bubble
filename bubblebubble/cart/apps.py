@@ -6,5 +6,5 @@ class CartConfig(AppConfig):
     name = 'cart'
 
     def ready(self):
-        # Import signals so user_logged_in receiver is registered
+        """Import signals so user_logged_in receiver is registered."""
         import cart.signals  # noqa

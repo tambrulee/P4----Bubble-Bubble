@@ -14,10 +14,12 @@ class Cart(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+        """Return a string representation of the cart."""
         return f"Cart {self.pk} for {self.user or self.session_key}"
 
     @property
     def total(self):
+        """Calculate the total cost of all items in the cart."""
         return sum(
             item.subtotal for item in self.items.select_related("product"))
 
@@ -33,4 +35,5 @@ class CartItem(models.Model):
 
     @property
     def subtotal(self):
+        """Calculate the subtotal for this cart item."""
         return self.qty * self.product.price

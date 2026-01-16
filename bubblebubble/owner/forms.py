@@ -38,6 +38,7 @@ class ProductForm(forms.ModelForm):
         }
 
     def clean_tags(self):
+        """Clean and standardize tags input."""
         tags = self.cleaned_data.get("tags", "")
         cleaned = ", ".join(
             t.strip().lower()

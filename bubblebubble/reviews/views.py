@@ -9,6 +9,7 @@ from .models import Review
 
 @login_required
 def add_review(request, slug):
+    """Allow a user to add a review for a product they have purchased."""
     product = get_object_or_404(Product, slug=slug, active=True)
     # Check if user has a PAID order containing this product
     has_purchased = OrderItem.objects.filter(
@@ -47,6 +48,7 @@ def add_review(request, slug):
 
 @login_required
 def review_from_order(request, order_id, product_id):
+    """Allow a user to add a review for a product from their order history."""
     order = get_object_or_404(Order, id=order_id, user=request.user)
     if order.fulfilment_status != Order.DELIVERED:
         messages.error(request, "You can only review items after delivery.")

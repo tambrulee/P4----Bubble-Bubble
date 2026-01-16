@@ -60,6 +60,7 @@ class CheckoutForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize form, set required fields and handle user-specific logic."""
         user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
 

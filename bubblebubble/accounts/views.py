@@ -11,6 +11,7 @@ from django.contrib import messages
 
 
 def signup(request):
+    """User signup view."""
     next_url = request.GET.get("next") or "catalog:product_list"
 
     if request.method == "POST":
@@ -27,6 +28,7 @@ def signup(request):
 
 @login_required
 def my_orders(request):
+    """View for listing user's orders."""
     orders = (
         Order.objects
         .filter(user=request.user, status=Order.PAID)
@@ -37,12 +39,14 @@ def my_orders(request):
 
 @login_required
 def my_order_detail(request, order_id):
+    """View for displaying a specific order's details."""
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, "accounts/my_order_detail.html", {"order": order})
 
 
 @login_required
 def address_list(request):
+    """View for listing user's shipping addresses."""
     addresses = ShippingAddress.objects.filter(
         user=request.user).order_by("-is_default", "-created_at")
     return render(request,
@@ -52,6 +56,7 @@ def address_list(request):
 @login_required
 @transaction.atomic
 def address_set_default(request, pk):
+    """Set a shipping address as the default address."""
     addr = get_object_or_404(ShippingAddress, pk=pk, user=request.user)
     ShippingAddress.objects.filter(
         user=request.user, is_default=True).update(is_default=False)
@@ -62,6 +67,7 @@ def address_set_default(request, pk):
 
 @login_required
 def address_create(request):
+    """Create a new shipping address."""
     if request.method == "POST":
         form = ShippingAddressForm(request.POST)
         if form.is_valid():
@@ -88,6 +94,7 @@ def address_create(request):
 
 @login_required
 def address_update(request, pk):
+    """Update an existing shipping address."""
     addr = get_object_or_404(ShippingAddress, pk=pk, user=request.user)
 
     if request.method == "POST":
@@ -115,6 +122,7 @@ def address_update(request, pk):
 
 @login_required
 def address_delete(request, pk):
+    """Delete a shipping address."""
     addr = get_object_or_404(ShippingAddress, pk=pk, user=request.user)
 
     if request.method == "POST":

@@ -7,7 +7,7 @@ app_name = "owner"
 
 urlpatterns = [
 
-    # /owner/login/  (your custom staff-gated login view)
+    # /owner/login/  (custom staff-gated login view)
     path("login/", views.owner_login, name="owner_login"),
 
     # /owner/logout/

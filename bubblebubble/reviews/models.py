@@ -1,4 +1,3 @@
-# reviews/models.py
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -21,11 +20,14 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """Meta options for Review model."""
         unique_together = ("user", "product")
         ordering = ["-created_at"]
 
     def __str__(self):
+        """Return a string representation of the review."""
         return f"Review of {self.product} by {self.user}"
 
     def set_owner_reply_timestamp(self):
+        """Set the timestamp when the owner replies to the review."""
         self.owner_replied_at = timezone.now()

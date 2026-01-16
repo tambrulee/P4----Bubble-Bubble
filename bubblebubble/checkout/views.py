@@ -16,6 +16,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def checkout_summary(request):
+    """Display the checkout summary page with prefilled form data."""
     cart = get_or_create_cart(request)
     if not cart.items.exists():
         return redirect("cart:view")
@@ -52,6 +53,7 @@ def checkout_summary(request):
 
 
 def start_checkout(request):
+    """Process the checkout form and create a Stripe Checkout Session."""
     if request.method != "POST":
         return HttpResponseBadRequest("POST required")
 
@@ -174,6 +176,7 @@ def start_checkout(request):
 
 
 def checkout_success(request):
+    """Handle successful checkout and display order summary."""
     session_id = request.GET.get("session_id")
     if not session_id:
         return redirect("catalog:product_list")
@@ -222,6 +225,7 @@ def checkout_success(request):
 
 
 def checkout_cancel(request):
+    """Display the checkout cancellation page."""
     return render(request, "checkout/cancel.html")
 
 

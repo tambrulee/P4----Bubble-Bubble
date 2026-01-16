@@ -5,16 +5,14 @@
 :root {
   --bb-btn-radius: 20px;
   /* Brand */
-  --bb-primary: #618280;         /* main button colour (your request) */
+  --bb-primary: #618280;         /* main button colour*/
   --bb-primary-dark: #29403e;    /* darker version */
   --bb-cream: #f6f4f0;
   --bb-text: #333333;
 
-  /* Useful */
   --bb-radius-pill: 999px;
   --bb-focus: rgba(97, 130, 128, 0.35);
 
-  /* Keep (nav + layout tokens you already use) */
   --bb-nav-bg: #6D8675;
   --bb-nav-text: #f6f4f0;
   --bb-nav-border: rgba(246, 244, 240, 0.18);
@@ -83,7 +81,7 @@ label,
   font-weight: 500;
 }
 
-/* Subtle accent text (optional) */
+/* Subtle accent text */
 .text-ritual {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
@@ -130,7 +128,6 @@ label,
   border-color: var(--bb-primary);
 }
 
-/* If you're using outline-secondary for "View all" etc */
 .btn-outline-secondary {
   color: var(--bb-primary-dark);
   border-color: rgba(41, 64, 62, 0.35);
@@ -142,7 +139,6 @@ label,
   border-color: var(--bb-primary-dark);
 }
 
-/* Your custom pill buttons map to the same brand colours */
 .btn-bb-primary {
   background: var(--bb-primary);
   border: 0;
@@ -682,16 +678,14 @@ label,
   box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.08);
 }
 
-/* Hero CTA buttons – slimmer, calmer */
+/* Hero CTA buttons */
 .bb-hero-carousel .btn-bb-primary {
-  padding: 0.45rem 0.9rem;   /* was ~0.75rem 1.25rem */
-  font-size: 0.875rem;       /* slightly smaller text */
+  padding: 0.45rem 0.9rem;
+  font-size: 0.875rem;
   line-height: 1.2;
-  border-radius: 0.4rem;     /* softer, less pill-like */
+  border-radius: 0.4rem;
 }
 
-
-/* Optional reusable glass */
 .bb-glass{
   background: var(--bb-glass-bg);
   backdrop-filter: blur(var(--bb-glass-blur));
@@ -775,7 +769,6 @@ label,
   text-shadow: 0 6px 18px rgba(0,0,0,0.35);
 }
 
-/* If you have action buttons under the text */
 .bb-hero-actions{
   display: flex;
   gap: .5rem;
@@ -1409,7 +1402,7 @@ label,
   background: linear-gradient(to right, transparent, rgba(41,64,62,.18), transparent);
 }
 
-/* Mobile: allow title to wrap if needed */
+/* Mobile tweaks */
 @media (max-width: 420px){
   .bb-mini-item{
     grid-template-columns: 52px 1fr;
