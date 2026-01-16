@@ -3,46 +3,45 @@
 {% block content %}
 
 <!-- HERO -->
-<section class="bb-about-hero">
-  <div class="bb-hero-bg bb-hero-our-story">
-    <div class="bb-about-scrim" aria-hidden="true"></div>
+<section class="bb-about-hero bb-about-hero--imageled">
+  <div class="container">
+    <div class="bb-about-hero-media">
 
-    <div class="container">
-      <div class="row align-items-center g-4 py-5">
+      <!-- Background image -->
+      <img
+        src="{% static 'img/hero/our_story.png' %}"
+        alt="Moon &amp; Moss soaps and botanicals"
+        class="bb-about-hero-img"
+      >
 
-        <!-- Copy -->
-        <div class="col-12 col-lg-6">
-          <div class="bb-about-hero-card">
-            <span class="bb-kicker">Moon &amp; Moss</span>
-            <h1 class="bb-about-title mb-2">Our Story</h1>
-            <p class="bb-about-sub mb-4">
-              Organic soaps inspired by nature, comfort, and quiet rituals.
-            </p>
+      <!-- Soft overlay/scrim -->
+      <div class="bb-about-hero-scrim" aria-hidden="true"></div>
 
-            <div class="d-flex flex-wrap gap-2">
-              <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Shop soaps</a>
-              <a href="#values" class="btn btn-outline-primary">Our values</a>
-            </div>
+      <!-- Copy overlay -->
+      <div class="bb-about-hero-copy">
+        <span class="bb-kicker">Moon &amp; Moss</span>
+        <h1 class="bb-about-title mb-2">Our Story</h1>
+        <p class="bb-about-sub mb-3">
+          Organic soaps inspired by nature, comfort, and quiet rituals.
+        </p>
 
-            <div class="bb-about-micro mt-4">
-              <span class="bb-micro-chip"><i class="fa-solid fa-leaf" aria-hidden="true"></i> Vegan</span>
-              <span class="bb-micro-chip"><i class="fa-solid fa-paw" aria-hidden="true"></i> Cruelty-free</span>
-              <span class="bb-micro-chip"><i class="fa-solid fa-map-pin" aria-hidden="true"></i> Made in UK</span>
-            </div>
-          </div>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="{% url 'catalog:product_list' %}" class="btn btn-primary">Shop soaps</a>
+          <a href="#values" class="btn btn-outline-primary">Our values</a>
         </div>
 
-        <!-- Image -->
-        <div class="col-12 col-lg-6">
-          <a href="{% url 'catalog:product_list' %}" class="bb-about-image-card" aria-label="Browse soaps">
-            <img src="{% static 'img/hero/our_story.png' %}" class="w-100" alt="Moon &amp; Moss soaps and botanicals">
-          </a>
+        <div class="bb-about-micro">
+          <span><i class="fa-solid fa-leaf" aria-hidden="true"></i> Vegan</span>
+          <span><i class="fa-solid fa-paw" aria-hidden="true"></i> Cruelty-free</span>
+          <span><i class="fa-solid fa-map-pin" aria-hidden="true"></i> Made in the UK</span>
         </div>
 
       </div>
+
     </div>
   </div>
 </section>
+
 
 <!-- BODY -->
 <section class="py-5 bb-story-body">
