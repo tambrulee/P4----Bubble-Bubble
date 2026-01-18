@@ -1,4 +1,4 @@
-@import url("user-pages.css");
+@import url("user-pages.d6e272ec87f0.css");
 
 /* ====================================
    GLOBAL
@@ -120,7 +120,7 @@ label,
 /* Outline primary (Bootstrap .btn-outline-primary) */
 .btn-outline-primary {
   color: var(--bb-primary);
-  background-color: #6d867540 !important;
+  background-color: transparent;
   border-color: var(--bb-primary);
 }
 .btn-outline-primary:hover,
@@ -131,9 +131,9 @@ label,
 }
 
 .btn-outline-secondary {
-  background-color: #6d867540 !important;
   color: var(--bb-primary-dark);
   border-color: rgba(41, 64, 62, 0.35);
+  background-color: var(--bb-nav-bg);
 }
 .btn-outline-secondary:hover,
 .btn-outline-secondary:focus {

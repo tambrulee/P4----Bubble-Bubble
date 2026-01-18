@@ -78,15 +78,20 @@
                   data-bs-target="#mainNav"
                   aria-controls="mainNav"
                   aria-expanded="false"
-                  aria-label="Toggle navigation">
-            <span class="bb-icon"><i class="fa-solid fa-bars"></i></span>
+                  aria-label="Toggle navigation menu">
+            <span class="visually-hidden">Toggle navigation</span>
+            <span class="bb-icon" aria-hidden="true">
+              <i class="bi bi-list"></i>
+            </span>
           </button>
         </div>
 
         <!-- LOGO -->
         <div class="bb-nav-center">
           <a class="navbar-brand bb-brand" href="{% url 'catalog:home' %}">
-            <img src="{% static 'img/logo.png' %}" alt="Moon & Moss" class="bb-logo">
+            <img src="{% static 'img/logo.png' %}" alt="Moon & Moss" class="bb-logo"
+              width="135"
+              height="90">
           </a>
         </div>
 
