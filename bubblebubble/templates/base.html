@@ -89,9 +89,20 @@
         <!-- LOGO -->
         <div class="bb-nav-center">
           <a class="navbar-brand bb-brand" href="{% url 'catalog:home' %}">
-            <img src="{% static 'img/logo.png' %}" alt="Moon & Moss" class="bb-logo"
+            <img
+              src="{% static 'img/logo-135.png' %}"
+              srcset="
+                {% static 'img/logo-135.png' %} 1x,
+                {% static 'img/logo-270.png' %} 2x,
+                {% static 'img/logo-405.png' %} 3x
+              "
               width="135"
-              height="90">
+              height="90"
+              alt="Moon & Moss"
+              class="bb-logo"
+              decoding="async"
+            >
+
           </a>
         </div>
 

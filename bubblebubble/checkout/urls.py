@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = "checkout"
 
@@ -9,3 +11,6 @@ urlpatterns = [
     path("success/", views.checkout_success, name="success"),
     path("cancel/", views.checkout_cancel, name="cancel"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
