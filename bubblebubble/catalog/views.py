@@ -158,7 +158,7 @@ def winter_isles(request):
         "page_description":
         "Limited edition seasonal blends inspired by the "
         "UK landscape — sea air, hedgerow berries, juniper and frost.",
-        "hero_image": "img/hero/slide2.webp",
+        "hero_image": "img/hero/slide2-1200.webp",
         "tag": "winter",
     })
 
@@ -174,6 +174,6 @@ def refillables(request):
         "page_description":
         "Low-waste favourites designed for everyday rituals — "
         "refill options so you don’t have to keep buying new bottles.",
-        "hero_image": "img/hero/slide3.webp",
+        "hero_image": "img/hero/slide3-1200.webp",
         "tag": "refillable",
     })

@@ -115,6 +115,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if DEBUG:
+    MIDDLEWARE.append("bubblebubble.middleware.MediaCacheControlMiddleware")
+
+
 ROOT_URLCONF = 'bubblebubble.urls'
 
 TEMPLATES = [

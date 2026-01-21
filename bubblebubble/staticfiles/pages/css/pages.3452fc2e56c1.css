@@ -1,0 +1,90 @@
+/* =========================
+   CONTACT PAGE
+   ========================= */
+
+.bb-contact-card{
+  background: rgba(255,255,255,.85);
+  border-radius: 20px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid rgba(41,64,62,.10);
+  box-shadow: 0 16px 34px rgba(0,0,0,.08);
+}
+
+.bb-contact-card .form-label{
+  font-weight: 600;
+  color: var(--bb-primary-dark);
+}
+
+.bb-contact-card input,
+.bb-contact-card textarea,
+.bb-contact-card select{
+  border-radius: 14px;
+  border: 1px solid rgba(41,64,62,.18);
+  padding: .65rem .75rem;
+  font-size: .95rem;
+}
+
+.bb-contact-card textarea{
+  min-height: 140px;
+  resize: vertical;
+}
+
+.bb-contact-card input:focus,
+.bb-contact-card textarea:focus,
+.bb-contact-card select:focus{
+  border-color: var(--bb-primary);
+  box-shadow: 0 0 0 3px rgba(97,130,128,.18);
+}
+
+.bb-contact-card .text-danger{
+  font-size: .8rem;
+}
+
+.bb-contact-card .btn{
+  border-radius: 999px;
+  padding: .7rem 1rem;
+  font-weight: 600;
+}
+
+/* ensure django widgets stretch */
+.bb-contact-card input,
+.bb-contact-card textarea,
+.bb-contact-card select{
+  width: 100%;
+  display: block;
+}
+
+/* ensure django widgets stretch */
+.bb-contact-card input,
+.bb-contact-card textarea,
+.bb-contact-card select{
+  width: 100%;
+  display: block;
+}
+
+.bb-contact-card{
+  padding: clamp(1.25rem, 4vw, 2.25rem);
+}
+
+.bb-contact-card .form-label{
+  margin-top: 1rem;
+}
+
+
+.bb-contact-alert{
+  border-radius: 14px;
+  padding: .75rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: .9rem;
+}
+
+.bb-contact-alert--success{
+  background: rgba(97,130,128,.15);
+  color: var(--bb-primary-dark);
+}
+
+.bb-contact-alert--error,
+.bb-contact-alert--danger{
+  background: rgba(180,70,70,.12);
+  color: #7a2a2a;
+}
