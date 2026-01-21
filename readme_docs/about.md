@@ -35,6 +35,17 @@ Branding principles include:
 
 The visual identity supports trust and reflects the handcrafted, small-batch nature of the products.
 
+As part of my research for the project, I used two real-life soap ecommerce websites for inspiration to develop branding, UX and user stories:
+
+### [Little Soap Company](https://www.littlesoapcompany.co.uk/)
+- Branding - Organic, ethical, sustainable
+- Navigation - Mobile Responsive (Burger toggle in mobile view), shop logo, links and account/cart management
+- Homepage & Product/Collection UX
+
+### [Highland Soap Co.](https://www.highlandsoaps.com/)
+- Homepage & Product/Collection UX
+- Customer user stories
+- Mini cart (side draw)
 ---
 
 ## Target Market
@@ -129,7 +140,7 @@ User journeys are kept short and intentional, particularly around **browsing, ca
 
 ## UX-Driven Development Using GitHub Issues & Milestones
 
-GitHub Issues and Milestones were used as a **UX planning and decision-making tool**, not just a task tracker. Each milestone represented a distinct UX focus area or phase of development, allowing features to be grouped around user needs rather than technical components alone.
+[GitHub Issues](/readme_docs/milestone-2.png) and [Milestones](/readme_docs/milestones.png) were used as a **UX planning and decision-making tool**, not just a task tracker. Each milestone represented a distinct UX focus area or phase of development, allowing features to be grouped around user needs rather than technical components alone.
 
 Issues were written from a **user-centric perspective**, often framed around usability improvements, clarity, or interaction behaviour. This ensured UX considerations were addressed alongside functional development.
 
@@ -321,16 +332,13 @@ The wireframes demonstrate that the original concept:
 
 Many of these original ideas directly informed later development milestones, particularly those focused on **Shopping UX**, **Owner Dashboard UX**, and **Enhanced UX**.
 
----
-
-## Conclusion
-
-The wireframes provided a strong conceptual foundation for the project, allowing UX decisions to be validated early and iterated on throughout development. By focusing on journeys, roles, and decision points rather than aesthetics, the original design supported a smoother transition from concept to implementation.
-
 
 ---
 
 ## Database
+
+[Model Documentation](/readme_docs/models.md)
+[Database Schema](/readme_docs/dbschema.png)
 
 The project uses a relational database managed through Django’s ORM.
 

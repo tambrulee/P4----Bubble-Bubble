@@ -1,4 +1,4 @@
-# BubbleBubble / Moon & Moss — Data Model Write-up
+# Data Models
 
 This document explains the core Django models used across the project, how they relate to each other, and why certain modelling decisions were made (e.g., `on_delete` choices, uniqueness constraints, and integrity rules).
 
