@@ -19,14 +19,14 @@ The sign-up page is responsible for collecting user credentials and providing im
 
 ## Server-Side Validation Integration
 
-The sign-up template renders a Django form derived from `UserCreationForm`, which enforces several validation rules automatically, including:
+The [sign-up template](/readme_docs/pw_valid.png) renders a Django form derived from `UserCreationForm`, which enforces several validation rules automatically, including:
 
 - Password length requirements
 - Password confirmation matching
 - Protection against weak or common passwords
 
 Additional custom validation is implemented in the form logic to ensure:
-- Email addresses are unique
+- [Email addresses are unique](/readme_docs/em_valid.png)
 - Email input is normalised (lowercased and trimmed)
 - User accounts cannot be duplicated using case variations
 
