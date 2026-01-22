@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tag_extras %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'catalog/css/catalog.css' %}">
+{% endblock extra_css %}
 {% block content %}
 
 <!-- HERO -->
