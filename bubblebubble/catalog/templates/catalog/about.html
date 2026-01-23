@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'catalog/css/catalog.css' %}">
+<link rel="stylesheet" href="{% static 'catalog/css/about.css' %}">
 {% endblock extra_css %}
 {% block content %}
 
@@ -18,8 +18,8 @@
               {% static 'img/hero/our_story-960.webp' %} 960w,
               {% static 'img/hero/our_story-1200.webp' %} 1200w
             "
-            sizes="(max-width: 992px) 100vw, 540px"
-            class="w-100"
+            sizes="(max-width: 992px) 100vw, 1200px"
+            class="w-100 bb-about-hero-img"
             loading="lazy"
             decoding="async"
             width="1200"
@@ -44,9 +44,9 @@
         </div>
 
         <div class="bb-about-micro">
-          <span><i class="fa-solid fa-leaf" aria-hidden="true"></i> Vegan</span>
-          <span><i class="fa-solid fa-paw" aria-hidden="true"></i> Cruelty-free</span>
-          <span><i class="fa-solid fa-map-pin" aria-hidden="true"></i> Made in the UK</span>
+          <span class="bb-micro-chip"><i class="fa-solid fa-leaf"></i> Vegan</span>
+          <span class="bb-micro-chip"><i class="fa-solid fa-paw"></i> Cruelty-free</span>
+          <span class="bb-micro-chip"><i class="fa-solid fa-map-pin"></i> Made in the UK</span>
         </div>
 
       </div>
