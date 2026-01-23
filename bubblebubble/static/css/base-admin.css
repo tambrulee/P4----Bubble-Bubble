@@ -14,6 +14,12 @@
   --bb-bg-soft: rgba(255, 255, 255, .85);
   --bb-border-soft: rgba(0, 0, 0, .08);
   --bb-shadow-soft: 0 12px 30px rgba(0, 0, 0, .06);
+
+  /* Brand */
+  --bb-primary: #29403e;         /* main button colour*/
+  --bb-primary-dark: #29403e;    /* darker version */
+  --bb-cream: #f6f4f0;
+  --bb-text: #333333;
 }
 
 /* === Soft admin background === */
@@ -126,14 +132,14 @@ body.bb-admin {
 .btn-outline-secondary {
   background: var(--aa-primary);
   border-color: var(--aa-primary);
-  color: #fff;
+  color: #000000;
 }
 
 .btn-outline-secondary:hover,
 .btn-outline-secondary:focus {
   background: var(--aa-secondary);
   border-color: var(--aa-secondary);
-  color: #fff;
+  color: #000000;
 }
 
 .btn-outline-danger {
