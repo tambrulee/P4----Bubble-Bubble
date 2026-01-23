@@ -306,3 +306,17 @@
   }
 }
 
+/* Product */
+
+.bb-product-main-img-wrap{
+  height: clamp(320px, 45vw, 520px);
+  overflow: hidden;
+  border-radius: 14px; /* optional; your div already has rounded */
+}
+
+.bb-product-main-img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* crops instead of stretching */
+  display: block;
+}

@@ -1,14 +1,19 @@
 {% extends "base.html" %}
+{% load static %}
+{% load tag_extras %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'catalog/css/catalog.css' %}">
+{% endblock extra_css %}
 {% block content %}
   <div class="row">
     <!-- Images -->
     <div class="col-md-6 mb-3">
       {% if product.images.all %}
-        <div class="border rounded p-2">
+        <div class="border rounded p-2 bb-product-main-img-wrap">
           <img id="main-img"
-               src="{{ product.images.first.image.url }}"
-               class="img-fluid"
-               alt="{{ product.images.first.alt_text }}">
+              src="{{ product.images.first.image.url }}"
+              class="bb-product-main-img"
+              alt="{{ product.images.first.alt_text }}">
         </div>
         <div class="d-flex gap-2 mt-2 flex-wrap">
           {% for img in product.images.all %}

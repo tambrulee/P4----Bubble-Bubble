@@ -2,6 +2,18 @@
 
 This document explains the core Django models used across the project, how they relate to each other, and why certain modelling decisions were made (e.g., `on_delete` choices, uniqueness constraints, and integrity rules).
 
+[Database Schema](/readme_docs/img/dbschema.png)
+
+The project uses a relational database managed through Django’s ORM.
+
+Core models include:
+- **User** – authentication and user accounts
+- **Product** – product details, pricing, stock, and availability
+- **Order** – completed customer orders
+- **OrderLineItem** – individual products within each order
+
+Model relationships enforce data integrity and allow for future scalability, such as adding reviews, wishlists, or extended product categorisation.
+
 ---
 
 ## High-level structure

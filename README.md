@@ -8,7 +8,11 @@ BubbleBubble (rebranded as *Moon & Moss*) demonstrates a modular Django architec
 ## [About](/readme_docs/about.md)
 ## [Project Structure & Architecture](/readme_docs/django.md)
 ## [User Stories](/readme_docs/user_stories.md)
+## [UX](/readme_docs/ux.md)
+## [Models](/readme_docs/models.md)
 ## [CRUD](/readme_docs/crud.md)
 ## [Form Validation](/readme_docs/form_validation.md)
 ## [Testing](/readme_docs/testing.md)
+## [Installation & Deployment](/readme_docs/testing/heroku.md)
 ## [References](/readme_docs/refs.md)
+
