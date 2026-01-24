@@ -237,7 +237,18 @@
                   <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
                     <img src="{{ p.images.first.image.url }}"
                         class="card-img-top"
-                        alt="{{ p.images.first.alt_text }}">
+                        alt="{{ p.images.first.alt_text }}"
+                        srcset="
+                          {{ image_400.url }} 400w,
+                          {{ image_656.url }} 656w,
+                          {{ image_984.url }} 984w
+                        "
+                        sizes="(max-width: 575px) 92vw, (max-width: 991px) 50vw, 33vw"
+                        width="656"
+                        height="437"
+                        loading="lazy"
+                        decoding="async"
+                        alt="{{ product.name }}">
                   </a>
                 {% endif %}
 
