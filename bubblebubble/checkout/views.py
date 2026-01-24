@@ -292,3 +292,5 @@ def send_order_confirmation_email(order):
         [order.email],
         html_message=html_message,
     )
+
+

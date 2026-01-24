@@ -18,6 +18,7 @@ from django.db.models import Q
 from reviews.models import Review
 from .forms import OwnerReplyForm
 from django.core.paginator import Paginator
+from django.db.models.deletion import ProtectedError
 
 
 
@@ -410,9 +411,30 @@ def products_bulk_action(request):
         return redirect("owner:owner_products")
 
     if action == "delete":
-        count = qs.count()
-        qs.delete()
-        messages.success(request, f"Deleted {count} product(s).")
+        deleted = 0
+        hidden = 0
+
+        for p in qs:
+            try:
+                p.delete()
+                deleted += 1
+            except ProtectedError:
+                # Product is referenced by OrderItem/CartItem → can't delete.
+                # Hide it instead.
+                if p.active:
+                    p.active = False
+                    p.save(update_fields=["active"])
+                hidden += 1
+
+        if deleted:
+            messages.success(request, f"Deleted {deleted} product(s).")
+        if hidden:
+            messages.warning(
+                request,
+                f"{hidden} product(s) couldn’t be deleted because they’re linked to orders/carts. "
+                "They were hidden instead."
+            )
+
         return redirect("owner:owner_products")
 
     messages.error(request, "Unknown action.")
