@@ -1,13 +1,5 @@
 # About
 
-## [About](/readme_docs/about.md)
-## [Features](/readme_docs/features.md)
-## [User Stories](/readme_docs/user_stories.md)
-## [CRUD](/readme_docs/crud.md)
-## [Form Validation](/readme_docs/form_validation.md)
-## [Testing](/readme_docs/testing.md)
-## [References](/readme_docs/refs.md)
-
 ## Executive Summary
 
 **Bubble Bubble (Moon & Moss)** is a full-stack Django e-commerce application showcasing a small online shop for handmade, organic soap products. 

@@ -1,20 +1,20 @@
-# Project Structure & Architecture
+# Django Environment Set Up
 
 ## Project Overview
 
 This project follows a **conventional Django architecture**, with a single project container and multiple modular applications, each responsible for a distinct area of functionality.
 
-The project was originally named **BubbleBubble** and later rebranded to **Moon & Moss**.  
+The project was originally named **BubbleBubble** and later rebranded to **Moon & Moss**.
+
 The internal project folder name was intentionally left unchanged to avoid introducing unnecessary risk or breaking existing imports, settings, or deployment configuration.
 
-The main Django project folder containing `settings.py` is located at:
-
-
-The application is composed of **six Django apps**, each designed with a clear separation of concerns.
+The main Django project folder containing `settings.py` is located at: `/bubblebubble/bubblebubble/settings.py`
 
 ---
 
 ## Applications Overview
+
+The application is composed of **six Django apps**, each designed with a clear separation of concerns.
 
 ### `accounts`
 Handles **user authentication and account management**.
