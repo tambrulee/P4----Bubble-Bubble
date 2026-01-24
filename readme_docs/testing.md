@@ -20,4 +20,4 @@
 - [Lighthouse](/readme_docs/testing/lighthouse.md)
 
 ## Mobile Responsiveness
-- []()
+- [Responsively](/readme_docs/testing/responsive.md)
