@@ -17,6 +17,8 @@ from django.db.models import Prefetch
 from django.db.models import Q
 from reviews.models import Review
 from .forms import OwnerReplyForm
+from django.core.paginator import Paginator
+
 
 
 # ---------- Owner login ----------
@@ -130,11 +132,18 @@ def orders(request):
             status=Order.PAID, fulfilment_status=Order.DELIVERED).count(),
     }
 
+    paginator = Paginator(qs, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "owner/orders.html", {
-        "orders": qs,
-        "tab": tab,
-        "counts": counts,
-    })
+    "orders": page_obj,
+    "page_obj": page_obj,
+    "paginator": paginator,
+    "tab": tab,
+    "counts": counts,
+})
+
 
 
 @staff_member_required
@@ -261,22 +270,26 @@ def products(request):
         if t.strip()
     })
 
+    # --- Pagination ---
+    paginator = Paginator(qs, 12)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+
     return render(request, "owner/products.html", {
-        "products": qs,
-        "LOW_STOCK_THRESHOLD": low_threshold,
+    "products": page_obj,
+    "page_obj": page_obj,
+    "paginator": paginator,
 
-        # mirror user-side "active_*"
-        "active_status": active_status,
-        "active_tag": active_tag,
-        "active_stock": active_stock,
-        "active_sort": active_sort,
+    "LOW_STOCK_THRESHOLD": low_threshold,
+    "active_status": active_status,
+    "active_tag": active_tag,
+    "active_stock": active_stock,
+    "active_sort": active_sort,
+    "tag_options": tag_options,
+    "debug_qs": request.GET.urlencode(),
+})
 
-        # options for dropdown
-        "tag_options": tag_options,
-
-        # debug helper
-        "debug_qs": request.GET.urlencode(),
-    })
 
 
 # ---------- Product create / edit / toggle active ----------
@@ -424,11 +437,18 @@ def owner_reviews(request):
     elif status == "unreplied":
         qs = qs.filter(Q(owner_reply="") | Q(owner_reply__isnull=True))
 
+    paginator = Paginator(qs, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "owner/reviews.html", {
-        "reviews": qs,
-        "status": status,
-        "low_threshold": LOW_RATING_THRESHOLD,
-    })
+    "reviews": page_obj,
+    "page_obj": page_obj,
+    "paginator": paginator,
+    "status": status,
+    "low_threshold": LOW_RATING_THRESHOLD,
+})
+
 
 
 @staff_member_required
