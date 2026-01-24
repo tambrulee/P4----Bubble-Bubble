@@ -16,8 +16,8 @@
   --bb-shadow-soft: 0 12px 30px rgba(0, 0, 0, .06);
 
   /* Brand */
-  --bb-primary: #29403e;         /* main button colour*/
-  --bb-primary-dark: #29403e;    /* darker version */
+  --bb-primary: #0a0b0b;         /* main button colour*/
+  --bb-primary-dark: #0a0b0b;     /* darker version */
   --bb-cream: #f6f4f0;
   --bb-text: #333333;
 }
@@ -221,4 +221,30 @@ body.bb-admin {
 .bb-thumb--placeholder{
   display: inline-block;
   background: rgba(0,0,0,.05);
+}
+
+/* =========================
+   PAGINATION – Moon & Moss theme
+   ========================= */
+
+.pagination .page-link{
+  color: var(--bb-primary);
+  border-color: rgba(0,0,0,.12);
+}
+
+.pagination .page-link:hover{
+  color: #fff;
+  background-color: var(--bb-primary);
+  border-color: var(--bb-primary);
+}
+
+.pagination .page-item.active .page-link{
+  color: #fff;
+  background-color: var(--bb-primary);
+  border-color: var(--bb-primary);
+}
+
+.pagination .page-item.disabled .page-link{
+  color: rgba(0,0,0,.35);
+  background-color: transparent;
 }

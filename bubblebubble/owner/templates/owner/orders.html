@@ -118,7 +118,7 @@
 
             <!-- Actions -->
             <td class="text-end">
-              <div class="d-inline-flex align-items-center gap-1">
+              <div class="d-flex flex-wrap justify-content-end align-items-center gap-2">
                 <a class="btn btn-sm btn-outline-secondary"
                   href="{% url 'owner:owner_order_detail' o.id %}">
                   View
@@ -129,7 +129,7 @@
                     <form method="post"
                           action="{% url 'owner:owner_order_set_fulfilment' o.id 'DISPATCHED' %}">
                       {% csrf_token %}
-                      <button class="btn btn-sm btn-mm" type="submit">
+                      <button class="btn btn-sm btn-mm text-nowrap" type="submit">
                         Mark dispatched
                       </button>
                     </form>
@@ -139,7 +139,7 @@
                     <form method="post"
                           action="{% url 'owner:owner_order_set_fulfilment' o.id 'DELIVERED' %}">
                       {% csrf_token %}
-                      <button class="btn btn-sm btn-mm-outline" type="submit">
+                      <button class="btn btn-sm btn-mm-outline text-nowrap" type="submit">
                         Mark delivered
                       </button>
                     </form>
