@@ -248,3 +248,22 @@ body.bb-admin {
   color: rgba(0,0,0,.35);
   background-color: transparent;
 }
+
+/* =========================
+   Admin login
+   ========================= */
+
+.bb-admin-login-card{
+  border-radius: 18px;
+}
+
+.bb-admin-login-card .form-control{
+  border-radius: 12px;
+  padding: .6rem .75rem;
+}
+
+.bb-admin-login-card .form-control:focus{
+  border-color: var(--bb-primary-dark);
+  box-shadow: 0 0 0 .15rem rgba(41, 64, 62, .15);
+}
+

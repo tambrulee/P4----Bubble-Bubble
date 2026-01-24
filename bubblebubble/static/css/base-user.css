@@ -982,4 +982,9 @@ label,
   background: rgba(0,0,0,0.02);
 }
 
+/* Checkout - Email success */
+
+  .card { border-radius: 1rem; }
+  .table thead th { border-bottom: 1px solid rgba(0,0,0,.08); }
+  .table tbody td { border-top: 1px solid rgba(0,0,0,.06); }
 
