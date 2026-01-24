@@ -91,7 +91,9 @@
 }
 
 
-/* Best sellers */
+/* =========================
+   Bestsellers / Favourites
+   ========================= */
 
 .bb-viewall-btn{
   white-space: nowrap;
@@ -128,7 +130,72 @@
   border-radius: 12px;
 }
 
-/* Our Story feature */
+/* Scrollable sections */
+
+@media (max-width: 1024px){
+
+  .bb-scroll-wrap{
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: .25rem;
+  }
+
+  .bb-scroll-row{
+    display: flex;
+    flex-wrap: nowrap;
+    margin-left: 0;
+    margin-right: 0;
+    gap: 1rem;
+  }
+
+  /* Card width per device */
+  .bb-scroll-item{
+    flex: 0 0 85%;
+    max-width: 85%;
+  }
+}
+
+/* Tweak widths for tablets */
+@media (min-width: 576px) and (max-width: 1024px){
+  .bb-scroll-item{
+    flex: 0 0 45%;
+    max-width: 45%;
+  }
+}
+
+/* Hide scrollbar */
+.bb-scroll-wrap::-webkit-scrollbar{
+  display: none;
+}
+.bb-scroll-wrap{
+  scrollbar-width: none;
+}
+
+/* Back to normal grid above iPad Pro */
+@media (min-width: 1025px){
+  .bb-scroll-wrap{
+    overflow: visible;
+  }
+
+  .bb-scroll-row{
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: calc(-.5 * var(--bs-gutter-x));
+    margin-right: calc(-.5 * var(--bs-gutter-x));
+    gap: 0;
+  }
+
+  .bb-scroll-item{
+    flex: initial;
+    max-width: initial;
+  }
+}
+
+
+/* =========================
+    Stories / Blog Posts
+   ========================= */
 
 .bb-story-feature{
   background:

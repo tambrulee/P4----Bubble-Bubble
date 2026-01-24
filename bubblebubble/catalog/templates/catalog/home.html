@@ -212,58 +212,75 @@
   <!-- Best sellers / favourites -->
   <section class="py-5">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-3 bb-bestsellers-head">
+      <div class="d-flex justify-content-between align-items-end mb-3 bb-bestsellers-head">
+        <div>
           <h2 class="h4 mb-1">Best sellers</h2>
           <p class="text-muted mb-0">Start with proven favourites people come back for.</p>
         </div>
-        <div class="d-flex justify-content-between align-items-end mb-3">
-          <a href="{% url 'catalog:product_list' %}"
-            class="btn btn-outline-secondary bb-viewall-btn">
-            View all
-          </a>   
-        </div>
-    </div>
-      
-      <div class="row g-3">
-        {% for p in best_sellers %}
-          <div class="col-12 col-sm-6 col-lg-3">
-            <div class="card h-100 shadow-sm">
-              {% if p.images.first %}
-                <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
-                  <img src="{{ p.images.first.image.url }}"
-                      class="card-img-top"
-                      alt="{{ p.images.first.alt_text }}">
-                </a>
-              {% endif %}
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title mb-1">{{ p.title }}</h5>
-                <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
-                <p class="mb-2 product-price">£{{ p.price }}</p>
-                <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
-                  <a href="{% url 'catalog:product_detail' p.slug %}"
-                     class="btn btn-sm btn-outline-primary">View</a>
-                  <form method="post"
-                        action="{% url 'cart:add_to_cart' p.id %}"
-                        class="js-add-to-cart">
-                    {% csrf_token %}
-                    <input type="hidden" name="qty" value="1">
-                    <button type="submit"
-                            class="btn btn-primary"
-                            {% if p.stock_qty == 0 %}disabled{% endif %}>Add to cart</button>
-                  </form>
-                </div>
 
-                {% if p.stock_qty == 0 %}
-                  <p class="small text-muted mt-2 mb-0">Out of stock</p>
+        <a href="{% url 'catalog:product_list' %}"
+          class="btn btn-outline-secondary bb-viewall-btn">
+          View all
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile horizontal scroll wrapper -->
+    <div class="container">
+      <div class="bb-scroll-wrap">
+        <div class="row g-3 bb-scroll-row">
+          {% for p in best_sellers %}
+            <!-- col-10 gives a nice card width for swipe scrolling on mobile -->
+            <div class="col-10 col-sm-6 col-lg-3 bb-scroll-item">
+              <div class="card h-100 shadow-sm">
+                {% if p.images.first %}
+                  <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
+                    <img src="{{ p.images.first.image.url }}"
+                        class="card-img-top"
+                        alt="{{ p.images.first.alt_text }}">
+                  </a>
                 {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title mb-1">{{ p.title }}</h5>
+                  <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
+                  <p class="mb-2 product-price">£{{ p.price }}</p>
+
+                  <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
+                    <a href="{% url 'catalog:product_detail' p.slug %}"
+                      class="btn btn-sm btn-outline-primary">
+                      View
+                    </a>
+
+                    <form method="post"
+                          action="{% url 'cart:add_to_cart' p.id %}"
+                          class="js-add-to-cart">
+                      {% csrf_token %}
+                      <input type="hidden" name="qty" value="1">
+                      <button type="submit"
+                              class="btn btn-primary"
+                              {% if p.stock_qty == 0 %}disabled{% endif %}>
+                        Add to cart
+                      </button>
+                    </form>
+                  </div>
+
+                  {% if p.stock_qty == 0 %}
+                    <p class="small text-muted mt-2 mb-0">Out of stock</p>
+                  {% endif %}
+                </div>
               </div>
             </div>
-          </div>
-        {% empty %}
-          <p class="text-muted">No best sellers yet.</p>
-        {% endfor %}
+          {% empty %}
+            <div class="col-12">
+              <p class="text-muted mb-0">No best sellers yet.</p>
+            </div>
+          {% endfor %}
+        </div>
       </div>
+    </div>
   </section>
+
 
   <!-- Our Story -->
   <section class="py-3 py-lg-4 bb-story-feature">
