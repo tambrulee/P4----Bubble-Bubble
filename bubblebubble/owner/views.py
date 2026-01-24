@@ -70,7 +70,7 @@ def owner_login(request):
 # ---------- Dashboard ----------
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def dashboard(request):
     """Display the owner dashboard with key metrics."""
     low_qs = Product.objects.filter(
@@ -96,7 +96,7 @@ def dashboard(request):
 # ---------- Orders ----------
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def orders(request):
     """Display the list of orders with filtering by fulfilment status."""
     tab = request.GET.get("tab", "new")
@@ -150,7 +150,7 @@ def orders(request):
 
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def order_detail(request, order_id):
     """Display the detail page for a specific order."""
     order = get_object_or_404(Order, pk=order_id)
@@ -158,7 +158,7 @@ def order_detail(request, order_id):
 
 
 # ---------- Analytics ----------
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def owner_analytics(request):
     """Display sales analytics for the owner dashboard."""
     now = timezone.now()
@@ -184,7 +184,7 @@ def owner_analytics(request):
 
 
 # ---------- Owner product list with filters ----------
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 @require_POST
 def owner_order_set_fulfilment(request, order_id, fulfilment):
     """Set the fulfilment status of an order."""
@@ -215,7 +215,7 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
 
 
 @login_required
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def products(request):
     """Display the owner product list with filtering and sorting."""
     # --- GET params (must match template name="...") ---
@@ -299,7 +299,7 @@ def products(request):
 # ---------- Product create / edit / toggle active ----------
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_create(request):
     """Create a new product."""
     form = ProductForm(request.POST or None)
@@ -311,7 +311,7 @@ def product_create(request):
             "form": form, "mode": "Create"})
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_edit(request, pk):
     """Edit an existing product."""
     product = get_object_or_404(Product, pk=pk)
@@ -324,7 +324,7 @@ def product_edit(request, pk):
             "form": form, "mode": "Edit", "product": product})
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_toggle_active(request, pk):
     """Toggle a product's active status."""
     product = get_object_or_404(Product, pk=pk)
@@ -334,7 +334,7 @@ def product_toggle_active(request, pk):
 
 
 # ---------- Product images ----------
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_images(request, pk):
     """Manage images for a specific product."""
     product = get_object_or_404(Product, pk=pk)
@@ -355,7 +355,7 @@ def product_images(request, pk):
     })
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_image_delete(request, image_id):
     """Delete a product image."""
     img = get_object_or_404(ProductImage, pk=image_id)
@@ -390,7 +390,7 @@ def product_duplicate(request, pk):
 # --------- Bulk actions ----------
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 @require_POST
 def products_bulk_action(request):
     """Perform bulk actions on selected products."""
@@ -449,7 +449,7 @@ def products_bulk_action(request):
 LOW_RATING_THRESHOLD = 2  # 1–2 stars highlighted
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def owner_reviews(request):
     """Display and filter product reviews for the owner."""
     qs = Review.objects.select_related("product", "user").order_by("-created_at")
@@ -476,7 +476,7 @@ def owner_reviews(request):
 
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def owner_review_detail(request, pk):
     """View and reply to a specific product review."""
     review = get_object_or_404(Review.objects.select_related("product", "user"), pk=pk)
@@ -500,7 +500,7 @@ def owner_review_detail(request, pk):
     })
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def owner_review_approve(request, pk):
     """Approve a product review."""
     review = get_object_or_404(Review, pk=pk)
@@ -510,7 +510,7 @@ def owner_review_approve(request, pk):
     return redirect(request.META.get("HTTP_REFERER", "owner:owner_reviews"))
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def owner_review_hide(request, pk):
     """Hide a product review."""
     review = get_object_or_404(Review, pk=pk)
