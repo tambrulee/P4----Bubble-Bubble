@@ -96,7 +96,6 @@ def add(request, product_id):
         })
 
     messages.success(request, added_msg)
-    # keep your current behaviour for non-JS users
     return redirect("cart:view")
 
 

@@ -31,3 +31,12 @@
   border: 1px dashed rgba(0,0,0,0.15);
   background: rgba(0,0,0,0.02);
 }
+
+/* Never show validation styling for optional Saved Address dropdown */
+.was-validated select[data-no-validate],
+select[data-no-validate].is-invalid,
+select[data-no-validate]:invalid {
+  border-color: rgba(0,0,0,.15) !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
