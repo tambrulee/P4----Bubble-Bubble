@@ -192,11 +192,12 @@
       <div class="bb-testimonials-row">
         {% for t in testimonials %}
         <article class="bb-quote-card">
-          <div class="bb-quote-top">
-            <span class="bb-quote-mark" aria-hidden="true">“</span>
-            <div class="bb-stars" aria-label="5 star rating">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </div>
+          <div class="bb-stars" role="img" aria-label="5 star rating">
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
           </div>
 
           <p class="mb-2">“{{ t.quote }}”</p>
@@ -217,7 +218,6 @@
           <h2 class="h4 mb-1">Best sellers</h2>
           <p class="text-muted mb-0">Start with proven favourites people come back for.</p>
         </div>
-
         <a href="{% url 'catalog:product_list' %}"
           class="btn btn-outline-secondary bb-viewall-btn">
           View all
@@ -230,25 +230,18 @@
       <div class="bb-scroll-wrap">
         <div class="row g-3 bb-scroll-row">
           {% for p in best_sellers %}
-            <!-- col-10 gives a nice card width for swipe scrolling on mobile -->
             <div class="col-10 col-sm-6 col-lg-3 bb-scroll-item">
               <div class="card h-100 shadow-sm">
                 {% if p.images.first %}
                   <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
-                    <img src="{{ p.images.first.image.url }}"
-                        class="card-img-top"
-                        alt="{{ p.images.first.alt_text }}"
-                        srcset="
-                          {{ image_400.url }} 400w,
-                          {{ image_656.url }} 656w,
-                          {{ image_984.url }} 984w
-                        "
-                        sizes="(max-width: 575px) 92vw, (max-width: 991px) 50vw, 33vw"
-                        width="656"
-                        height="437"
-                        loading="lazy"
-                        decoding="async"
-                        alt="{{ product.name }}">
+                    <img
+                      src="{{ p.images.first.image.url }}"
+                      class="card-img-top"
+                      alt="{{ p.images.first.alt_text|default:p.title }}"
+                      width="656"
+                      height="437"
+                      loading="lazy"
+                      decoding="async">
                   </a>
                 {% endif %}
 
@@ -258,8 +251,7 @@
                   <p class="mb-2 product-price">£{{ p.price }}</p>
 
                   <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
-                    <a href="{% url 'catalog:product_detail' p.slug %}"
-                      class="btn btn-sm btn-outline-primary">
+                    <a href="{% url 'catalog:product_detail' p.slug %}" class="btn btn-sm btn-outline-primary">
                       View
                     </a>
 

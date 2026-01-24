@@ -192,6 +192,41 @@
   }
 }
 
+/* =========================
+   Bestsellers card height tuning
+   ========================= */
+
+/* Make images a consistent height so cards feel uniform */
+.bb-scroll-item .card-img-top{
+  height: clamp(180px, 22vw, 240px);
+  object-fit: cover;
+}
+
+/* Tighten the body spacing a touch */
+.bb-scroll-item .card-body{
+  padding: .9rem;
+}
+
+/* Prevent long titles making cards huge */
+.bb-scroll-item .card-title{
+  line-height: 1.2;
+  margin-bottom: .25rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Slightly tighter meta/price spacing */
+.bb-scroll-item .product-meta{
+  margin-bottom: .4rem;
+}
+
+.bb-scroll-item .product-price{
+  margin-bottom: .5rem;
+  font-weight: 600;
+}
+
+
 
 /* =========================
     Stories / Blog Posts
