@@ -84,7 +84,7 @@ Using Responsively helped confirm that the application remains fully functional 
 **Admin Views**
 - [Admin Login – iPad](/readme_docs/responsively/ipad-admin_login.jpeg)
 - [Admin Dashboard – iPad](/readme_docs/responsively/ipad-admin_dash.jpeg)
-- [Admin Orders – iPad](/readme_docs/responsively/ipad-admin_orders.jpeg)
+- [Admin Orders – iPad](/readme_docs/responsively/ipad-admin_orders.jpeg)*
 - [Admin Order Detail – iPad](/readme_docs/responsively/ipad-admin_order_detail.jpeg)
 - [Admin Product Edit – iPad](/readme_docs/responsively/ipad-admin_product_edit.jpeg)
 - [Admin Gallery Manager – iPad](/readme_docs/responsively/ipad-admin_gallery.jpeg)
@@ -126,3 +126,29 @@ Using Responsively helped confirm that the application remains fully functional 
 - [Admin Gallery Manager – Desktop](/readme_docs/responsively/macbookpro-admin_gallery.jpeg)
 - [Admin Reviews – Desktop](/readme_docs/responsively/macbookpro-admin_reviews.jpeg)
 - [Admin Review Manager – Desktop](/readme_docs/responsively/macbookpro-admin_review_manager.jpeg)
+
+
+**Fixes**
+
+After the initial tests, improvements were made to increase mobile/tablet responsiveness. The bestseller section was changed from wrapping the products to a scrollable product section. Shop all page and admin management pages were amended to manange product, order and review overflow by inputting a threshold within the relevant views.
+
+📱 iPhone
+
+- [Home Page Layout – iPhone (Version 3)](/readme_docs/responsively/iphone-home_v3.jpeg)
+- [Admin Orders Table – iPhone (Improved Layout)](/readme_docs/responsively/iphone-admin_orders_max.jpeg)
+- [Admin Product Edit – iPhone (Improved Layout)](/readme_docs/responsively/iphone-admin_product_max.jpeg)
+- [Admin Reviews – iPhone (Improved Layout)](/readme_docs/responsively/iphone-admin_reviews_max.jpeg)
+
+📱 iPad
+
+- [Home Page Layout – iPad (Version 3)](/readme_docs/responsively/ipad-home_v3.jpeg)
+- [Admin Orders Table – iPad (Improved Layout)](/readme_docs/responsively/ipad-admin_orders_max.jpeg)
+- [Admin Product Edit – iPad (Improved Layout)](/readme_docs/responsively/ipad-admin_product_max.jpeg)
+- [Admin Reviews – iPad (Improved Layout)](/readme_docs/responsively/ipad-admin_reviews_max.jpeg)
+
+💻 Desktop (MacBook Pro)
+
+- [Home Page Layout – Desktop (Version 3)](/readme_docs/responsively/macbookpro-home_v3.jpeg)
+- [Admin Orders Table – Desktop (Improved Layout)](/readme_docs/responsively/macbookpro-admin_orders_max.jpeg)
+- [Admin Product Edit – Desktop (Improved Layout)](/readme_docs/responsively/macbookpro-admin_product_max.jpeg)
+- [Admin Reviews – Desktop (Improved Layout)](/readme_docs/responsively/macbookpro-admin_reviews_max.jpeg)

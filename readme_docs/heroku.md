@@ -194,7 +194,7 @@ Create custom `404.html` and `500.html` templates.
 
 ## Conclusion
 
-The project is fully deployed and operational on Heroku. The deployment process required resolving several non-trivial issues related to Django structure, Gunicorn configuration, and Heroku buildpack expectations.
+The project is [fully deployed and operational on Heroku](/readme_docs/img/heroku_success.png). The deployment process required resolving several non-trivial issues related to Django structure, Gunicorn configuration, and Heroku buildpack expectations.
 
 All core functionality works as intended, and remaining issues are minor and clearly documented for future improvement.
 

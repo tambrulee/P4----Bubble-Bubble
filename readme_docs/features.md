@@ -46,6 +46,7 @@ The mini cart allows users to adjust quantities and proceed to checkout without 
 ### Checkout Flow
 [Checkout page layout](/readme_docs/features/checkout.png)  
 [Checkout form validation and error handling](/readme_docs/features/checkout_validation.png)
+[Validation signals for checkout form](/readme_docs/features/toast_saved_addresses.png)
 
 The checkout process supports both guest checkout and logged-in users, with inline validation to reduce errors and abandonment.
 
@@ -126,6 +127,7 @@ A custom dashboard provides a high-level overview of store activity, including p
 [Admin product edit form](/readme_docs/features/edit_product_admin.png)  
 [Product image management interface](/readme_docs/features/image_manager_admin.png)  
 [Toast notification when deleting a product](/readme_docs/features/toast_product_delete.png)
+[Error message when owner attempts to delete product that is in the cart or has been ordered - archives instead](/readme_docs/features/product_delete_error.png)
 
 Admins can efficiently manage product listings using bulk actions, filtering, and image management tools.
 
