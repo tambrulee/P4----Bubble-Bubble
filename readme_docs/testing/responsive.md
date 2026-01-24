@@ -128,7 +128,7 @@ Using Responsively helped confirm that the application remains fully functional 
 - [Admin Review Manager – Desktop](/readme_docs/responsively/macbookpro-admin_review_manager.jpeg)
 
 
-**Fixes**
+## Fixes
 
 After the initial tests, improvements were made to increase mobile/tablet responsiveness. The bestseller section was changed from wrapping the products to a scrollable product section. Shop all page and admin management pages were amended to manange product, order and review overflow by inputting a threshold within the relevant views.
 

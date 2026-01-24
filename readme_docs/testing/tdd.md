@@ -27,7 +27,7 @@ Testing was carried out at multiple levels:
 
 Manual testing was used extensively to validate user-facing functionality.
 
-[Click here to view all manual tests](/readme_docs/manual_testing.md)
+[Click here to view all manual tests](/readme_docs/testing/manual_testing.md)
 
 ### Areas Covered
 - Product browsing and category filtering

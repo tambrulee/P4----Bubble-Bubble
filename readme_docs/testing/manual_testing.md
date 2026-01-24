@@ -54,11 +54,58 @@ Each test includes the expected outcome and a final pass/fail sign-off to confir
 ## Owner / Admin Functionality
 
 | Test Case | Action Performed | Expected Outcome | Result (Y/N) |
-|---------|----------------|------------------|--------------|
-| Staff access | Login as staff user | Owner dashboard accessible | Y |
-| Non-staff access | Login as normal user | Owner routes blocked | Y |
-| Create product | Add product via owner dashboard | Product saved and visible in store | Y |
-| View orders | Access order list | Orders display correctly | Y |
+|---------|-------------------|------------------|--------------|
+| Admin login | Login as staff user | Owner dashboard loads successfully | Y |
+| Non-staff blocked | Attempt to access owner routes as normal user | Redirected / access denied | Y |
+| Dashboard navigation | Use dashboard shortcut cards/links | Correct admin pages open | Y |
+| Dashboard image links | Click image / CTA links from dashboard | Redirects correctly (no broken routes) | Y |
+
+---
+
+### Product Management (Owner)
+
+| Test Case | Action Performed | Expected Outcome | Result (Y/N) |
+|---------|-------------------|------------------|--------------|
+| View products list | Open Products admin list | Products display with correct status labels | Y |
+| Filter products | Apply filters (active/inactive/low stock/tags) | Product list updates correctly | Y |
+| Pagination limit | Load product list with many products | Max products per page applied + pagination works | Y |
+| Create product | Submit new product form | Product saved and appears in store | Y |
+| Edit product | Update title/price/stock/tags | Changes persist and display correctly | Y |
+| Duplicate product | Duplicate an existing product | New product created with copied fields and unique slug | Y |
+| Hide product | Click hide / deactivate action | Product no longer visible to shoppers | Y |
+| Activate product | Reactivate a hidden product | Product becomes visible in store again | Y |
+| Image manager | Upload/update product images | Images saved and render on product cards/detail pages | Y |
+| Delete product (safe) | Delete product that has **no** orders/cart references | Product is deleted successfully | Y |
+| Delete product (protected) | Attempt to delete product that is **in a cart** or has **OrderItems** | Deletion blocked; product is archived/inactivated instead and user sees message | Y |
+| Stock/availability behaviour | Set stock to 0 | Add-to-cart disabled and “Out of stock” displayed | Y |
+
+---
+
+### Order Management (Owner)
+
+| Test Case | Action Performed | Expected Outcome | Result (Y/N) |
+|---------|-------------------|------------------|--------------|
+| View orders list | Open Orders admin list | Paid orders display correctly | Y |
+| Abandoned checkout hidden | Attempt to view unpaid/abandoned checkouts | Not shown in default admin list | Y |
+| Order detail view | Click view on an order | Full order summary loads (items, customer, totals) | Y |
+| Fulfilment status grouping | Switch between New/Dispatched/Delivered | Orders filter/group correctly | Y |
+| Dispatch order | Mark order as dispatched | Status updates; UI remains usable/responsive | Y |
+| Deliver order | Mark order as delivered | Status updates correctly | Y |
+| Button layout (admin) | View dispatch/deliver buttons on different screens | Buttons not squished; readable and clickable | Y |
+
+---
+
+### Review Management (Owner)
+
+| Test Case | Action Performed | Expected Outcome | Result (Y/N) |
+|---------|-------------------|------------------|--------------|
+| View reviews list | Open Reviews admin list | Reviews display with rating, product, user, and status | Y |
+| Filter reviews | Filter by rating/replied/hidden/approved | Results update correctly | Y |
+| Approve review | Approve a pending review | Review becomes visible on product page | Y |
+| Hide review | Hide an approved review | Review removed from public display | Y |
+| Reply to review | Submit admin reply | Reply saved and displayed appropriately | Y |
+| Toast feedback | Approve/hide/reply actions | Toast/confirmation feedback displayed | Y |
+| Verified purchase flag | View a review linked to an order | Verified purchase shown correctly | Y |
 
 ---
 
