@@ -158,33 +158,81 @@ def about(request):
     return render(request, "catalog/about.html")
 
 
+from django.core.paginator import Paginator
+
 def winter_isles(request):
     """Display products tagged as 'winter'."""
-    products = Product.objects.filter(
-        active=True, tags__icontains="winter").order_by("-created_at")
+    qs = Product.objects.filter(
+        active=True, tags__icontains="winter"
+    ).order_by("-created_at")
+
+    paginator = Paginator(qs, 12)  # or 20 if you prefer
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "catalog/category_page.html", {
-        "products": products,
+        "products": page_obj,     # IMPORTANT: send the page object as products
+        "page_obj": page_obj,
+        "paginator": paginator,
+
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
         "page_title": "Winter Isles",
         "page_description":
-        "Limited edition seasonal blends inspired by the "
-        "UK landscape — sea air, hedgerow berries, juniper and frost.",
+            "Limited edition seasonal blends inspired by the "
+            "UK landscape — sea air, hedgerow berries, juniper and frost.",
         "hero_image": "img/hero/slide2-1200.webp",
         "tag": "winter",
     })
 
 
+def winter_isles(request):
+    """Display products tagged as 'winter'."""
+    qs = Product.objects.filter(
+        active=True, tags__icontains="winter"
+    ).order_by("-created_at")
+
+    paginator = Paginator(qs, 12)  # or 20 if you prefer
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "catalog/category_page.html", {
+        "products": page_obj,     # IMPORTANT: send the page object as products
+        "page_obj": page_obj,
+        "paginator": paginator,
+
+        "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
+        "page_title": "Winter Isles",
+        "page_description":
+            "Limited edition seasonal blends inspired by the "
+            "UK landscape — sea air, hedgerow berries, juniper and frost.",
+        "hero_image": "img/hero/slide2-1200.webp",
+        "tag": "winter",
+    })
+
+
+
+from django.core.paginator import Paginator
+
 def refillables(request):
     """Display products tagged as 'refillable'."""
-    products = Product.objects.filter(
-        active=True, tags__icontains="refillable").order_by("-created_at")
+    qs = Product.objects.filter(
+        active=True, tags__icontains="refillable"
+    ).order_by("-created_at")
+
+    paginator = Paginator(qs, 12)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "catalog/category_page.html", {
-        "products": products,
+        "products": page_obj,
+        "page_obj": page_obj,
+        "paginator": paginator,
+
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
         "page_title": "Refillable Soaps",
         "page_description":
-        "Low-waste favourites designed for everyday rituals — "
-        "refill options so you don’t have to keep buying new bottles.",
+            "Low-waste favourites designed for everyday rituals — "
+            "refill options so you don’t have to keep buying new bottles.",
         "hero_image": "img/hero/slide3-1200.webp",
         "tag": "refillable",
     })
