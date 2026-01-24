@@ -320,3 +320,29 @@
   object-fit: cover;      /* crops instead of stretching */
   display: block;
 }
+
+/* =========================
+   PAGINATION – THEMED
+   ========================= */
+
+.pagination .page-link {
+  color: var(--bb-primary);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.pagination .page-link:hover {
+  color: #fff;
+  background-color: var(--bb-primary);
+  border-color: var(--bb-primary);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--bb-primary);
+  border-color: var(--bb-primary);
+  color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: rgba(0, 0, 0, 0.35);
+  background-color: transparent;
+}

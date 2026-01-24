@@ -155,9 +155,9 @@ Occasionally, Django admin styling may not load fully in the Heroku environment.
 Static files are not currently collected and served via a dedicated static file handler.
 
 **Status:**
-Unresolved
+Resolved
 
-**Planned Fix:**
+**Fix:**
 - Configure `collectstatic`
 - Add WhiteNoise or a cloud-based static file service
 
@@ -172,9 +172,9 @@ Requests to `/favicon.ico` return a 404 error.
 No favicon file has been added to the static assets.
 
 **Status:**
-Minor / cosmetic
+Resolved
 
-**Planned Fix:**
+**Fix:**
 Add a favicon file and configure static paths.
 
 ---
@@ -185,9 +185,9 @@ Add a favicon file and configure static paths.
 Default Django error pages are shown for 404 and 500 errors.
 
 **Status:**
-Unresolved
+Resolved
 
-**Planned Fix:**
+**Fix:**
 Create custom `404.html` and `500.html` templates.
 
 ---

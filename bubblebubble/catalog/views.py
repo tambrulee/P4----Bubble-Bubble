@@ -2,6 +2,8 @@ from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from .models import Product
 from django.db.models import Count
+from django.core.paginator import Paginator
+
 
 
 def home(request):
@@ -109,8 +111,16 @@ def product_list(request):
         sort = "newest"
         qs = qs.order_by("-created_at")
 
+    # Pagination
+    paginator = Paginator(qs, 12)  # 16 products per page
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "catalog/shop_all.html", {
-        "products": qs,
+        "products": page_obj,          
+        "page_obj": page_obj,          # for pagination controls
+        "paginator": paginator,
+
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
 
         "active_range": range_tag,
@@ -122,6 +132,7 @@ def product_list(request):
         "RANGES": RANGES,
         "SCENT_FAMILIES": SCENT_FAMILIES,
     })
+
 
 
 def product_detail(request, slug):

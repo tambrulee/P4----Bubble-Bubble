@@ -80,6 +80,7 @@ Account creation includes password validation and clear feedback to support secu
 ### User Panel & Address Book
 [User account dropdown and navigation](/readme_docs/features/user_panel.png)  
 [Saved address book management](/readme_docs/features/address_book.png)
+[Toast notification when user deletes address](/readme_docs/features/toast_address_delete.png)
 
 Registered users can manage delivery addresses and access their order history through a dedicated account panel.
 
