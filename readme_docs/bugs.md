@@ -88,12 +88,19 @@ This section documents bugs identified during development and testing, how they 
 
 - **Button margins on product edit page (#159)**  
   Minor cosmetic spacing issue.
+  
+  * Resolved: 24/01/2025
+  * Resolution: Changes to Bootstrap and Custom CSS
 
 - **Missing page titles (#156)**  
   SEO/accessibility enhancement pending.
+  * Resolved: 24/01/2025
+  * Resolution: Page titles added to relevant templates
 
 - **Django shell visible on admin access (#155)**  
   Requires stricter access control and custom error handling.
+  * Resolved: 24/01/2025
+  * Resolution: Added explicit redirect to owner view authentication
 
 ---
 
