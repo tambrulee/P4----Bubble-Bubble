@@ -1,3 +1,5 @@
+
+
 /* Trust badges */
 
 .bb-trust-bar{
@@ -89,7 +91,9 @@
 }
 
 
-/* Best sellers */
+/* =========================
+   Bestsellers / Favourites
+   ========================= */
 
 .bb-viewall-btn{
   white-space: nowrap;
@@ -126,7 +130,107 @@
   border-radius: 12px;
 }
 
-/* Our Story feature */
+/* Scrollable sections */
+
+@media (max-width: 1024px){
+
+  .bb-scroll-wrap{
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: .25rem;
+  }
+
+  .bb-scroll-row{
+    display: flex;
+    flex-wrap: nowrap;
+    margin-left: 0;
+    margin-right: 0;
+    gap: 1rem;
+  }
+
+  /* Card width per device */
+  .bb-scroll-item{
+    flex: 0 0 85%;
+    max-width: 85%;
+  }
+}
+
+/* Tweak widths for tablets */
+@media (min-width: 576px) and (max-width: 1024px){
+  .bb-scroll-item{
+    flex: 0 0 45%;
+    max-width: 45%;
+  }
+}
+
+/* Hide scrollbar */
+.bb-scroll-wrap::-webkit-scrollbar{
+  display: none;
+}
+.bb-scroll-wrap{
+  scrollbar-width: none;
+}
+
+/* Back to normal grid above iPad Pro */
+@media (min-width: 1025px){
+  .bb-scroll-wrap{
+    overflow: visible;
+  }
+
+  .bb-scroll-row{
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: calc(-.5 * var(--bs-gutter-x));
+    margin-right: calc(-.5 * var(--bs-gutter-x));
+    gap: 0;
+  }
+
+  .bb-scroll-item{
+    flex: initial;
+    max-width: initial;
+  }
+}
+
+/* =========================
+   Bestsellers card height tuning
+   ========================= */
+
+/* Make images a consistent height so cards feel uniform */
+.bb-scroll-item .card-img-top{
+  height: clamp(180px, 22vw, 240px);
+  object-fit: cover;
+}
+
+/* Tighten the body spacing a touch */
+.bb-scroll-item .card-body{
+  padding: .9rem;
+}
+
+/* Prevent long titles making cards huge */
+.bb-scroll-item .card-title{
+  line-height: 1.2;
+  margin-bottom: .25rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Slightly tighter meta/price spacing */
+.bb-scroll-item .product-meta{
+  margin-bottom: .4rem;
+}
+
+.bb-scroll-item .product-price{
+  margin-bottom: .5rem;
+  font-weight: 600;
+}
+
+
+
+/* =========================
+    Stories / Blog Posts
+   ========================= */
 
 .bb-story-feature{
   background:
@@ -155,6 +259,8 @@
 .bb-story-card img{
   display:block;
   transition: transform 200ms ease;
+  height: clamp(220px, 32vw, 360px);
+  object-fit: cover;
 }
 
 .bb-story-card:hover img{
@@ -302,261 +408,43 @@
   }
 }
 
+/* Product */
 
-/* =========================
-   ABOUT HERO 
-   ========================= */
-
-.bb-about-hero--imageled{
-  padding: 1.25rem 0 0;
-}
-
-.bb-about-hero-media{
-  position: relative;
-  border-radius: 22px;
+.bb-product-main-img-wrap{
+  height: clamp(320px, 45vw, 520px);
   overflow: hidden;
-  min-height: clamp(360px, 52vh, 560px);
-  box-shadow: 0 14px 30px rgba(0,0,0,.10);
-  border: 1px solid rgba(41,64,62,.10); 
-  background: #fff;
+  border-radius: 14px;
 }
 
-
-.bb-about-hero-img{
-  position: absolute;
-  inset: 0;
+.bb-product-main-img{
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transform: scale(1.02);
+  object-fit: cover;      /* crops instead of stretching */
+  display: block;
 }
 
-/* warm readable overlay (less “blocky”) */
-.bb-about-hero-scrim{
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(900px 420px at 18% 22%, rgba(255,255,255,.65), transparent 60%),
-    linear-gradient(to top, rgba(0,0,0,.28), rgba(0,0,0,.06) 45%, rgba(0,0,0,0) 70%);
-}
+/* =========================
+   PAGINATION – THEMED
+   ========================= */
 
-/* copy becomes a soft “pillowy” overlay, not a big slab */
-.bb-about-hero-copy{
-  position: absolute;
-  left: clamp(16px, 4vw, 36px);
-  bottom: clamp(16px, 4vw, 36px);
-  max-width: 520px;
-  padding: clamp(14px, 2.6vw, 22px);
-  border-radius: 20px;
-
-  background: rgba(255,255,255,.62);
-  backdrop-filter: blur(12px) saturate(120%);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-
-  border: 1px solid rgba(255,255,255,.35);
-  box-shadow: 0 10px 24px rgba(0,0,0,.10);
-}
-
-.bb-about-micro{
-  display:flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  font-size: .9rem;
-  color: rgba(41,64,62,.85);
-  padding-top: 15px;
-}
-
-.bb-about-micro span{
-  display:inline-flex;
-  align-items:center;
-  gap:.45rem;
-}
-
-.bb-about-micro i{
+.pagination .page-link {
   color: var(--bb-primary);
-  opacity:.9;
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
-
-/* mobile: overlay becomes full-width strip */
-@media (max-width: 575.98px){
-  .bb-about-hero-copy{
-    left: 12px;
-    right: 12px;
-    max-width: none;
-  }
+.pagination .page-link:hover {
+  color: #fff;
+  background-color: var(--bb-primary);
+  border-color: var(--bb-primary);
 }
 
-
-.bb-kicker{
-  display:inline-block;
-  font-size:.8rem;
-  letter-spacing:.14em;
-  text-transform: uppercase;
-  color: rgba(41,64,62,.75);
-  margin-bottom:.35rem;
+.pagination .page-item.active .page-link {
+  background-color: var(--bb-primary);
+  border-color: var(--bb-primary);
+  color: #fff;
 }
 
-.bb-about-title{
-  color: var(--bb-primary-dark);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
-}
-
-.bb-about-sub{
-  color: rgba(41,64,62,.82);
-  font-size: 1.05rem;
-}
-
-/* Micro chips */
-.bb-about-micro{
-  display:flex;
-  flex-wrap: wrap;
-  gap: .5rem;
-}
-
-/* chips: slightly softer */
-.bb-micro-chip{
-  background: rgba(255,255,255,.70);
-  border: 1px solid rgba(41,64,62,.10);
-}
-
-/* mobile: overlay becomes full-width strip */
-@media (max-width: 575.98px){
-  .bb-about-hero-copy{
-    left: 12px;
-    right: 12px;
-    max-width: none;
-  }
-}
-.bb-micro-chip i{ color: var(--bb-primary); }
-
-/* Image card */
-.bb-about-image-card{
-  display:block;
-  position: relative;
-  border-radius: 18px;
-  overflow:hidden;
-  box-shadow: 0 18px 36px rgba(0,0,0,.14);
-  border: 1px solid rgba(255,255,255,.22);
-  z-index: 2;
-}
-
-.bb-about-image-card img{
-  display:block;
-  transition: transform 220ms ease;
-}
-.bb-about-image-card:hover img{
-  transform: scale(1.03);
-}
-
-.bb-about-image-chip{
-  position:absolute;
-  left: 14px;
-  bottom: 14px;
-  display:flex;
-  align-items:center;
-  gap:.5rem;
-  padding:.55rem .75rem;
-  border-radius: 14px;
-  background: rgba(255,255,255,.78);
-  backdrop-filter: blur(10px) saturate(120%);
-  -webkit-backdrop-filter: blur(10px) saturate(120%);
-  border: 1px solid rgba(41,64,62,.14);
-  color: rgba(41,64,62,.92);
-  font-size:.9rem;
-}
-.bb-about-image-chip i{ color: var(--bb-primary); }
-
-/* Story card */
-.bb-story-card-wrap{
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-}
-
-/* Keep spacing + readability */
-.bb-story-card-inner{
-  padding: clamp(1.1rem, 2.8vw, 2rem);
-}
-
-/* Gentle divider instead of a box */
-.bb-story-card-inner > hr{
-  border: 0;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(41,64,62,.18),
-    transparent
-  );
-}
-
-
-.bb-story-aside{
-  border-radius: 16px;
-  padding: 16px;
-  background: rgba(255,255,255,.85);
-  border: 1px solid rgba(41,64,62,.10);
-}
-
-.bb-values{
-  display:grid;
-  gap: 12px;
-}
-
-.bb-value{
-  display:flex;
-  gap: 10px;
-  align-items:flex-start;
-  padding: 12px;
-  border-radius: 14px;
-  background: rgba(97,130,128,.08);
-  border: 1px solid rgba(97,130,128,.12);
-}
-
-.bb-value i{
-  margin-top: 2px;
-  color: var(--bb-primary);
-  width: 1.2rem;
-  text-align:center;
-}
-
-.bb-value strong{
-  display:block;
-  color: var(--bb-primary-dark);
-  line-height: 1.1;
-}
-.bb-value span{
-  display:block;
-  color: rgba(41,64,62,.75);
-  font-size: .9rem;
-  margin-top: 2px;
-}
-
-/* CTA strip */
-.bb-about-cta-inner{
-  border-radius: 18px;
-  padding: 18px;
-  background:
-    radial-gradient(900px 320px at 10% 10%, rgba(97,130,128,.18), transparent 60%),
-    rgba(255,255,255,.78);
-  border: 1px solid rgba(41,64,62,.10);
-  box-shadow: 0 18px 36px rgba(0,0,0,.08);
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.bb-muted{ color: rgba(41,64,62,.75); }
-
-@media (max-width: 575.98px){
-  .bb-about-cta-inner{
-    flex-direction: column;
-    align-items: stretch;
-    text-align: left;
-  }
+.pagination .page-item.disabled .page-link {
+  color: rgba(0, 0, 0, 0.35);
+  background-color: transparent;
 }

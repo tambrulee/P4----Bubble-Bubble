@@ -4,7 +4,7 @@
 
 /* === Admin colour tokens === */
 :root {
-  --bb-primary: #5f7f6b;      /* moss green */
+  --bb-primary: #0a0b0b;      /* moss green */
   --bb-secondary: #8f8a83;    /* warm stone */
   --bb-success: #8f8a83;      /* warm stone */
   --bb-warning: #e3b35a;      /* soft amber */
@@ -14,6 +14,12 @@
   --bb-bg-soft: rgba(255, 255, 255, .85);
   --bb-border-soft: rgba(0, 0, 0, .08);
   --bb-shadow-soft: 0 12px 30px rgba(0, 0, 0, .06);
+
+  /* Brand */
+  --bb-primary: #0a0b0b;         /* main button colour*/
+  --bb-primary-dark: #0a0b0b;     /* darker version */
+  --bb-cream: #f6f4f0;
+  --bb-text: #333333;
 }
 
 /* === Soft admin background === */
@@ -104,8 +110,8 @@ body.bb-admin {
 
 .btn-mm:hover,
 .btn-mm:focus {
-  background: #557463;
-  border-color: #557463;
+  background: var(--bb-primary);
+  border-color: var(--bb-primary);
   color: #fff;
 }
 
@@ -126,14 +132,14 @@ body.bb-admin {
 .btn-outline-secondary {
   background: var(--aa-primary);
   border-color: var(--aa-primary);
-  color: #fff;
+  color: var(--bb-primary);
 }
 
 .btn-outline-secondary:hover,
 .btn-outline-secondary:focus {
   background: var(--aa-secondary);
   border-color: var(--aa-secondary);
-  color: #fff;
+  color: var(--bb-primary);
 }
 
 .btn-outline-danger {
@@ -159,8 +165,8 @@ body.bb-admin {
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background: #557463;
-  border-color: #557463;
+  background: var(--bb-primary);
+  border-color: var(--bb-primary);
 }
 
 /* === Badges (consistent status colours) === */
@@ -216,3 +222,222 @@ body.bb-admin {
   display: inline-block;
   background: rgba(0,0,0,.05);
 }
+
+/* =========================
+   PAGINATION – Moon & Moss theme
+   ========================= */
+
+.pagination .page-link{
+  color: var(--bb-primary);
+  border-color: rgba(0,0,0,.12);
+}
+
+.pagination .page-link:hover{
+  color: #fff;
+  background-color: var(--bb-primary);
+  border-color: var(--bb-primary);
+}
+
+.pagination .page-item.active .page-link{
+  color: #fff;
+  background-color: var(--bb-primary);
+  border-color: var(--bb-primary);
+}
+
+.pagination .page-item.disabled .page-link{
+  color: rgba(0,0,0,.35);
+  background-color: transparent;
+}
+
+/* =========================
+   Admin login
+   ========================= */
+
+.bb-admin-login-card{
+  border-radius: 18px;
+}
+
+.bb-admin-login-card .form-control{
+  border-radius: 12px;
+  padding: .6rem .75rem;
+}
+
+.bb-admin-login-card .form-control:focus{
+  border-color: var(--bb-primary-dark);
+  box-shadow: 0 0 0 .15rem rgba(41, 64, 62, .15);
+}
+/* =========================
+   Owner product edit
+   ========================= */
+
+.owner-form-wrap{
+  max-width: 980px;
+}
+
+/* Header */
+.owner-pagehead{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.owner-subtitle{
+  color: #5a5a5a; /* better contrast than Bootstrap muted */
+  font-size: .92rem;
+}
+
+.owner-slug{
+  margin-left: .4rem;
+  color: #6b6b6b;
+}
+
+/* Header layout */
+.owner-pagehead{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Button container */
+.owner-pagehead__actions{
+  display: flex;
+  gap: .5rem;
+  flex-wrap: nowrap;          /* never wrap */
+  align-items: center;
+}
+
+/* Buttons themselves */
+.owner-pagehead__actions .btn{
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* =========================
+   Tablet (iPad etc.)
+   ========================= */
+@media (max-width: 991.98px){
+  .owner-pagehead{
+    align-items: flex-start;
+  }
+
+  .owner-pagehead__actions{
+    justify-content: flex-start; /* stop fighting for space */
+  }
+}
+
+/* =========================
+   Mobile
+   ========================= */
+@media (max-width: 575.98px){
+  .owner-pagehead{
+    flex-direction: column;
+  }
+
+  .owner-pagehead__actions{
+    width: 100%;
+  }
+
+  .owner-pagehead__actions .btn{
+    flex: 1 1 auto;            /* equal width buttons */
+  }
+}
+
+
+/* Main card */
+.owner-form-card{
+  border: 0;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 14px 36px rgba(0,0,0,.10);
+}
+
+/* Blocks (clean separators instead of lots of boxes) */
+.owner-block{
+  padding: 1rem 0;
+  border-top: 1px solid rgba(0,0,0,.06);
+}
+
+.owner-block:first-child{
+  border-top: 0;
+  padding-top: 0;
+}
+
+.owner-block__head{
+  margin-bottom: .75rem;
+}
+
+.owner-block__head--row{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: .75rem;
+}
+
+.owner-block__title{
+  font-size: .95rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin: 0 0 .25rem 0;
+  color: #1f2f2e;
+}
+
+.owner-block__hint{
+  margin: 0;
+  font-size: .88rem;
+  color: #565656;
+}
+
+/* Inputs */
+.owner-form-card .form-control,
+.owner-form-card .form-select{
+  border-radius: 14px;
+  border: 1px solid rgba(41,64,62,.18);
+  padding: .65rem .75rem;
+}
+
+.owner-form-card .form-control:focus,
+.owner-form-card .form-select:focus{
+  border-color: rgba(41,64,62,.45);
+  box-shadow: 0 0 0 .2rem rgba(41,64,62,.12);
+}
+
+/* Image cards */
+.owner-img-card{
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.owner-img-meta{
+  color: #3f3f3f;
+  font-weight: 500;
+}
+
+/* Footer actions */
+.owner-form-footer{
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,.06);
+  padding: 1rem 1rem;
+}
+
+.owner-actions{
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 575.98px){
+  .owner-actions .btn{
+    flex: 1 1 auto;
+  }
+}
+
+/* Section spacing (product edit page) */
+.owner-form-card section.owner-block + section.owner-block{
+  margin-top: 1.5rem !important;
+}
+
