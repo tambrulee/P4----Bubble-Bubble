@@ -2,6 +2,59 @@
 
 Performance was evaluated using **Google Lighthouse** in Chrome DevTools, with a focus on real-world user experience rather than chasing artificial 100/100 scores. The application achieves a **strong overall Performance score (mid-to-high 70s and above)**, with clear evidence of deliberate optimisation across images, CSS delivery, caching, and render behaviour.
 
+## Initial Analysis (Lighthouse)
+
+An initial Lighthouse analysis was conducted early in development to act primarily as an **accessibility diagnostic tool**, rather than as a performance benchmarking exercise.
+
+The purpose of this first audit was to:
+- identify accessibility issues affecting real users (screen readers, keyboard navigation, low-vision users)
+- highlight semantic and structural problems in templates and forms
+- surface contrast, labelling, and ARIA-related issues that are difficult to detect visually
+
+While Lighthouse also reports performance metrics, these were treated as **contextual signals** rather than absolute targets. Performance optimisation was considered where it aligned naturally with accessibility improvements or where issues were clearly impacting user experience.
+
+---
+
+### Accessibility Focus of the Initial Analysis
+
+The initial Lighthouse reports highlighted several common accessibility concerns, including:
+- form inputs without explicit label associations
+- low-contrast text and outline-only buttons
+- misuse or overuse of ARIA attributes
+- layout instability caused by images without intrinsic dimensions
+- inconsistent navigation visibility across categories
+
+These findings informed a series of targeted refinements across both user-facing and administrative templates.
+
+---
+
+### Performance Considerations During Initial Analysis
+
+Although accessibility was the primary focus, opportunities to improve performance were addressed where they supported accessibility goals, such as:
+
+- resizing and compressing images to reduce load time and visual delay
+- reducing layout shift to improve reading and interaction stability
+- reviewing render-blocking CSS that delayed meaningful content display
+- improving asset caching behaviour to support repeat visits
+
+These changes were made pragmatically, without attempting to eliminate all Lighthouse warnings or artificially inflate performance scores.
+
+---
+
+### Outcome of the Initial Analysis
+
+The initial Lighthouse analysis served as a **baseline reference point**, guiding subsequent iterations rather than acting as a final measure of success.
+
+Insights from this stage directly informed the v2 accessibility and performance refinements documented below, enabling:
+- more robust form semantics
+- clearer navigation and hierarchy
+- improved contrast and readability
+- better layout predictability across devices
+
+This approach ensured that Lighthouse was used as an **evidence-based auditing tool**, supporting meaningful accessibility improvements rather than superficial optimisation.
+
+The following results were achieve during the initial Lighthouse audit:
+
 ## User Reports :
 [Home](/readme_docs/lighthouse/home.png)
 [Shop All](/readme_docs/lighthouse/shop.png)
@@ -96,8 +149,129 @@ These decisions prioritise **maintainability, clarity, and user experience** ove
 
 ---
 
-## Conclusion
+## Accessibility & Performance Audit (Lighthouse)
 
-The application demonstrates **strong performance fundamentals** and a clear understanding of Lighthouse metrics, browser rendering behaviour, and real-world optimisation techniques. Remaining Lighthouse suggestions primarily relate to production-level infrastructure (CDNs, advanced media pipelines) rather than application-level inefficiencies.
+Lighthouse audits were conducted primarily as an **accessibility assessment tool**, with performance metrics used as a secondary indicator of overall user experience quality.
 
-Within the scope of this project, the achieved performance score represents a well-optimised, scalable foundation suitable for further enhancement in a production environment.
+While Lighthouse provides synthetic performance scores, the primary objective of this audit was to evaluate and improve:
+- semantic HTML structure
+- form labelling and control relationships
+- colour contrast and readability
+- predictable layout behaviour
+- keyboard and assistive technology compatibility
+
+Where possible, accessibility improvements were implemented alongside **practical performance enhancements**, recognising that many accessibility fixes (such as layout stability and image optimisation) also contribute positively to perceived performance.
+
+---
+
+## User-Facing Accessibility Audits (v2)
+
+The following Lighthouse reports represent the **final audit state (v2)** after accessibility-focused refinements were applied across the storefront.
+
+- **Home Page**  
+  [/readme_docs/lighthouse/home_v2.png](readme_docs/lighthouse/home_v2.png)
+
+- **Shop – All Products**  
+  [/readme_docs/lighthouse/shop_v2.png](readme_docs/lighthouse/shop_v2.png)
+
+- **Winter Isles Collection**  
+  [/readme_docs/lighthouse/winter_isles.png](readme_docs/lighthouse/winter_isles.png)
+
+  > *Audit correction:*  
+  > During accessibility review, it was identified that the **Winter Isles** category was missing from the main shop navigation in earlier iterations.  
+  > This was corrected in v2 and positioned alongside **Refillables**, ensuring consistent navigation structure and equal access to all product categories.
+
+Key accessibility considerations addressed in these views include:
+- improved colour contrast for product metadata text
+- stabilised layouts to prevent content shift during load
+- clearer navigation hierarchy and category discoverability
+- consistent focus behaviour across interactive elements
+
+---
+
+## Admin Accessibility Audits (v2)
+
+Administrative interfaces were also audited to ensure that internal tooling remains **accessible, readable, and navigable**, particularly for users relying on assistive technologies.
+
+- **Admin Dashboard**  
+  [/readme_docs/lighthouse/admin_dash_v2.png](readme_docs/lighthouse/admin_dash_v2.png)
+
+- **Admin – Orders List**  
+  [/readme_docs/lighthouse/admin_order_v2.png](readme_docs/lighthouse/admin_order_v2.png)
+
+- **Admin – Products List**  
+  [/readme_docs/lighthouse/admin_prod_v2.png](readme_docs/lighthouse/admin_prod_v2.png)
+
+- **Admin – Product Edit Page**  
+  [/readme_docs/lighthouse/admin_prod_edit_v2.png](readme_docs/lighthouse/admin_prod_edit_v2.png)
+
+- **Admin – Reviews**  
+  [/readme_docs/lighthouse/admin_review_v2.png](readme_docs/lighthouse/admin_review_v2.png)
+
+Accessibility improvements applied to admin views include:
+- explicit `<label for>` associations for all form inputs
+- removal of prohibited ARIA attributes and correction of ARIA roles
+- improved contrast for buttons, cards, and metadata text
+- predictable button layout across desktop, tablet, and mobile breakpoints
+- reduced cognitive load through clearer section grouping and headings
+
+These changes ensure that administrative workflows are usable with screen readers and keyboard navigation, while also improving clarity for all users.
+
+---
+
+## Accessibility Improvements Identified & Implemented
+
+Across both user-facing and admin areas, the Lighthouse audit highlighted several opportunities for improved accessibility. These were addressed as follows:
+
+### Semantic Structure & Form Labelling
+- All form controls were explicitly associated with labels
+- Visually-hidden labels were used where a visual label would be redundant, ensuring screen reader compatibility without visual clutter
+- Form grouping was clarified using section headings and consistent layout patterns
+
+### Colour Contrast & Readability
+- Low-contrast metadata and muted text styles were adjusted to meet WCAG contrast requirements
+- Outline-only buttons with insufficient contrast were replaced or reinforced with solid variants where appropriate
+- Text opacity was avoided in favour of contrast-safe colour values
+
+### Layout Stability & Predictability
+- Intrinsic dimensions (`width` and `height`) were applied to images to prevent layout shift
+- Section spacing was standardised to avoid visual crowding
+- Button groups were explicitly managed at mobile, tablet, and desktop breakpoints to prevent wrapping or unpredictable reflow
+
+### Navigation & Discoverability
+- Missing navigation elements (e.g. Winter Isles category) were restored and aligned with existing category structures
+- Admin navigation and action buttons were reorganised to maintain consistent placement across viewports
+
+---
+
+## Relationship Between Accessibility & Performance
+
+While accessibility was the primary audit goal, several accessibility-driven changes also improved perceived performance:
+
+- Layout stability improvements reduced cumulative layout shift (CLS)
+- Image resizing and compression reduced visual loading delays
+- Reduced render-blocking behaviour improved time-to-interaction
+- Clearer visual hierarchy reduced cognitive load during page use
+
+These changes demonstrate an understanding that **accessible design and good performance are closely linked**, particularly in real-world usage scenarios.
+
+---
+
+## Final Accessibility Summary
+
+The final Lighthouse audits demonstrate a **clear and deliberate approach to accessibility** across the application.
+
+Accessibility improvements were not treated as isolated fixes, but instead integrated into:
+- layout structure
+- form design
+- navigation hierarchy
+- visual contrast decisions
+- responsive behaviour across devices
+
+The resulting interface is:
+- usable with assistive technologies
+- predictable and readable across screen sizes
+- compliant with key WCAG principles
+- improved through iterative, evidence-based refinement
+
+Within the scope of this project, the application demonstrates a **strong accessibility foundation**, with Lighthouse audits used appropriately as a diagnostic and validation tool rather than as a target for superficial scoring optimisation.
