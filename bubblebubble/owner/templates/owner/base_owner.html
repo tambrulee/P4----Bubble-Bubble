@@ -71,11 +71,12 @@
       </a>
     {% endif %}
 
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ownerNav" aria-label="Toggle navigation menu"></button>>
+      <!-- Burger toggle -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ownerNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
+      <!-- Links -->
       <div class="collapse navbar-collapse" id="ownerNav">
 
         {% if request.user.is_authenticated and request.user.is_staff %}
