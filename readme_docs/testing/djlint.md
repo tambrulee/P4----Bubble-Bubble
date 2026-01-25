@@ -16,7 +16,7 @@ max_line_length = 120
 ```
 
 ### Testing Process
-The linter was run across all Django templates using the following command:
+The linter was run across all Django templates (run from root) using the following command:
 
 ```bash
 djlint . --check

@@ -85,7 +85,7 @@
                 <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
                   <img src="{{ p.images.first.image.url }}"
                       class="card-img-top"
-                      aria-label="View {{ p.title }}">
+                      aria-label="View {{ p.title }}"
                       alt="{{ p.images.first.alt_text }}">
                 </a>
               {% endif %}
@@ -159,7 +159,6 @@
                 </a>
               </li>
             {% endif %}
-
           </ul>
         </nav>
       {% endif %}
