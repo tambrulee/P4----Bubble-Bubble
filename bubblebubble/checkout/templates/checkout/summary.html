@@ -155,7 +155,7 @@
                       <td class="fw-medium">{{ item.product.title }}</td>
                       <td class="text-center">{{ item.qty }}</td>
                       <td class="text-end">£{{ item.product.price|floatformat:2 }}</td>
-                      <td class="text-end fw-semibold">£{{ item.subtotal|floatformat:2 }}</td>
+                      <td class="text-end">£{{ item.subtotal|floatformat:2 }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>

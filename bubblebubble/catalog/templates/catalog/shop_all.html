@@ -96,7 +96,7 @@
                   {% if p.tags|has_tag:"limited" %}<span class="badge bg-warning text-dark">Limited Edition</span>{% endif %}
                   {% if p.tags|has_tag:"refillable" %}<span class="badge bg-success">Refillable</span>{% endif %}
                 </div>
-                <h2 class="card-title mb-1">{{ p.title }}</h2>
+                <h5 class="card-title mb-1">{{ p.title }}</h5>
                 <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
                 <p class="mb-2 product-price">£{{ p.price }}</p>
                 <div class="mt-auto d-flex justify-content-between align-items-center gap-2">

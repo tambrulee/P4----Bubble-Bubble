@@ -257,6 +257,26 @@ These changes demonstrate an understanding that **accessible design and good per
 
 ---
 
+## Heading Hierarchy & Lighthouse Considerations
+
+During development, heading levels were chosen to balance **semantic HTML structure**, **visual design**, and **automated audit feedback**.
+
+In some components (such as product cards within grid layouts), using lower-level heading elements (e.g. `h5`) is visually appropriate but can trigger Lighthouse or accessibility warnings if the surrounding document hierarchy does not follow a strict, linear heading order.
+
+To address this:
+- Higher-level page sections use consistent `h1`–`h3` headings to define the overall document structure.
+- Product card titles use smaller heading levels or Bootstrap heading utility classes (e.g. `.h5`, `.h6`) to maintain visual hierarchy without disrupting the page’s semantic outline.
+- Where appropriate, Bootstrap’s heading utility classes are used to control appearance while preserving meaningful heading structure.
+
+This approach ensures:
+- Clear visual hierarchy for users
+- A logical document structure for assistive technologies
+- Minimal false-positive warnings from automated tools such as Lighthouse
+
+Any remaining Lighthouse warnings related to heading order were reviewed and deemed acceptable trade-offs in favour of consistent UX and maintainable component design.
+
+---
+
 ## Final Accessibility Summary
 
 The final Lighthouse audits demonstrate a **clear and deliberate approach to accessibility** across the application.
