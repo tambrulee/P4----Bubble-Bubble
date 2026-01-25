@@ -201,12 +201,9 @@ All core security best practices such as CSRF protection, authentication checks,
 ## Future Improvements
 
 Potential enhancements identified for future development include:
-- Persistent user carts
-- Product search and advanced filtering
-- Customer reviews and ratings
 - Enhanced order analytics for owners
 - Improved test automation coverage
-- Progressive Web App (PWA) support
+- Delivery/dispatch order user updates
 
 ---
 
@@ -214,7 +211,5 @@ Potential enhancements identified for future development include:
 
 All known issues were reviewed and deemed non-critical.  
 The application meets the project requirements and performs reliably within its defined scope.
-
-**Overall Status:** ✅ **ACCEPTABLE FOR SUBMISSION**
 
 

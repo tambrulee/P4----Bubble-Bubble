@@ -14,7 +14,7 @@
 - [ESLint](/readme_docs/testing/eslint.md)
 
 ## CSS
-- [W3C CSS Validator]()
+- [W3C CSS Validator](/readme_docs/css_validation.md)
 
 ## Performance & Accessibility
 - [Lighthouse](/readme_docs/testing/lighthouse.md)
