@@ -100,7 +100,7 @@
   </div>
 
   <div class="d-grid gap-2">
-    <form method="post" action="{% url 'checkout:start_checkout' %}">
+    <form method="post" action="{% url 'checkout:summary' %}">
       {% csrf_token %}
       <button class="btn btn-primary w-100" type="submit">Checkout</button>
     </form>
