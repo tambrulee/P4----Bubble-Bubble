@@ -70,7 +70,6 @@ def review_from_order(request, order_id, product_id):
             review.user = request.user
             review.product = product
             review.verified_purchase = True
-            # only if you added this field:
             if hasattr(review, "order_id"):
                 review.order = order
             review.save()

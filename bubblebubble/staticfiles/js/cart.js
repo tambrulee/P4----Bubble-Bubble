@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showCartToast(data.message || "Added to cart!");
       if (typeof data.cart_count !== "undefined") setCartCount(data.cart_count);
 
-      // If your add_to_cart returns mini_html, inject it immediately
+      // If add_to_cart returns mini_html, inject it immediately
       const container = document.getElementById("mini-cart-content");
       if (container && data.mini_html) container.innerHTML = data.mini_html;
 

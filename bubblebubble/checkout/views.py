@@ -108,12 +108,15 @@ def create_stripe_session(request):
     if not cart.items.exists():
         return HttpResponseBadRequest("Cart is empty")
 
-    data = request.session.get(CHECKOUT_SESSION_KEY)
-    if not data:
-        return redirect("checkout:details")
+    form = CheckoutForm(request.POST, user=request.user)
+    if not form.is_valid():
+        return render(request, "checkout/checkout.html", {
+            "cart": cart,
+            "form": form,
+        }, status=400)
 
-    # Re-validate server-side to be safe (prevents tampering)
-    form = CheckoutForm(data, user=request.user)
+    data = form.cleaned_data
+
     if not form.is_valid():
         # If somehow invalid, send them back to details with errors
         return render(request, "checkout/summary.html", {

@@ -162,7 +162,7 @@ def winter_isles(request):
         active=True, tags__icontains="winter"
     ).order_by("-created_at")
 
-    paginator = Paginator(qs, 12)  # or 20 if you prefer
+    paginator = Paginator(qs, 12)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
