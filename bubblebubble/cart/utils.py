@@ -1,5 +1,6 @@
 from .models import Cart
 
+
 def get_or_create_cart(request):
     """Retrieve or create a cart for the current user or session."""
     if not request.session.session_key:

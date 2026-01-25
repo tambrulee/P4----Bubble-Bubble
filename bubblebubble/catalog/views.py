@@ -5,7 +5,6 @@ from django.db.models import Count
 from django.core.paginator import Paginator
 
 
-
 def home(request):
     """Display the home page with featured products and promos."""
     best_sellers = (
@@ -117,7 +116,7 @@ def product_list(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "catalog/shop_all.html", {
-        "products": page_obj,          
+        "products": page_obj,
         "page_obj": page_obj,          # for pagination controls
         "paginator": paginator,
 
@@ -132,7 +131,6 @@ def product_list(request):
         "RANGES": RANGES,
         "SCENT_FAMILIES": SCENT_FAMILIES,
     })
-
 
 
 def product_detail(request, slug):
@@ -158,8 +156,6 @@ def about(request):
     return render(request, "catalog/about.html")
 
 
-from django.core.paginator import Paginator
-
 def winter_isles(request):
     """Display products tagged as 'winter'."""
     qs = Product.objects.filter(
@@ -184,34 +180,6 @@ def winter_isles(request):
         "tag": "winter",
     })
 
-
-def winter_isles(request):
-    """Display products tagged as 'winter'."""
-    qs = Product.objects.filter(
-        active=True, tags__icontains="winter"
-    ).order_by("-created_at")
-
-    paginator = Paginator(qs, 12)  # or 20 if you prefer
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    return render(request, "catalog/category_page.html", {
-        "products": page_obj,     # IMPORTANT: send the page object as products
-        "page_obj": page_obj,
-        "paginator": paginator,
-
-        "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
-        "page_title": "Winter Isles",
-        "page_description":
-            "Limited edition seasonal blends inspired by the "
-            "UK landscape — sea air, hedgerow berries, juniper and frost.",
-        "hero_image": "img/hero/slide2-1200.webp",
-        "tag": "winter",
-    })
-
-
-
-from django.core.paginator import Paginator
 
 def refillables(request):
     """Display products tagged as 'refillable'."""

@@ -2,7 +2,6 @@ import re
 
 from django import forms
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
 
 from .models import Order
 
@@ -117,7 +116,6 @@ class CheckoutForm(forms.ModelForm):
             self.fields[name].required = True
             self.fields[name].widget.attrs["required"] = "required"
 
-
         # --- Postcode validator ---
         self.fields["postcode"].validators.append(postcode_validator)
 
@@ -162,7 +160,6 @@ class CheckoutForm(forms.ModelForm):
         cleaned["postcode"] = saved.postcode
 
         return cleaned
-
 
     def clean_postcode(self):
         """

@@ -21,7 +21,6 @@ from django.core.paginator import Paginator
 from django.db.models.deletion import ProtectedError
 
 
-
 # ---------- Owner login ----------
 
 
@@ -141,13 +140,12 @@ def orders(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "owner/orders.html", {
-    "orders": page_obj,
-    "page_obj": page_obj,
-    "paginator": paginator,
-    "tab": tab,
-    "counts": counts,
-})
-
+        "orders": page_obj,
+        "page_obj": page_obj,
+        "paginator": paginator,
+        "tab": tab,
+        "counts": counts,
+    })
 
 
 @staff_member_required(login_url="owner:owner_login")
@@ -279,21 +277,20 @@ def products(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    return render(
+        request, "owner/products.html", {
+            "products": page_obj,
+            "page_obj": page_obj,
+            "paginator": paginator,
 
-    return render(request, "owner/products.html", {
-    "products": page_obj,
-    "page_obj": page_obj,
-    "paginator": paginator,
-
-    "LOW_STOCK_THRESHOLD": low_threshold,
-    "active_status": active_status,
-    "active_tag": active_tag,
-    "active_stock": active_stock,
-    "active_sort": active_sort,
-    "tag_options": tag_options,
-    "debug_qs": request.GET.urlencode(),
-})
-
+            "LOW_STOCK_THRESHOLD": low_threshold,
+            "active_status": active_status,
+            "active_tag": active_tag,
+            "active_stock": active_stock,
+            "active_sort": active_sort,
+            "tag_options": tag_options,
+            "debug_qs": request.GET.urlencode(),
+        })
 
 
 # ---------- Product create / edit / toggle active ----------
@@ -466,14 +463,14 @@ def owner_reviews(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "owner/reviews.html", {
-    "reviews": page_obj,
-    "page_obj": page_obj,
-    "paginator": paginator,
-    "status": status,
-    "low_threshold": LOW_RATING_THRESHOLD,
-})
-
+    return render(
+        request, "owner/reviews.html", {
+            "reviews": page_obj,
+            "page_obj": page_obj,
+            "paginator": paginator,
+            "status": status,
+            "low_threshold": LOW_RATING_THRESHOLD,
+        })
 
 
 @staff_member_required(login_url="owner:owner_login")
