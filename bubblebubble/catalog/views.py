@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product
 from django.db.models import Count
 from django.core.paginator import Paginator
-
+from django.http import JsonResponse
 
 def home(request):
     """Display the home page with featured products and promos."""
@@ -204,3 +204,19 @@ def refillables(request):
         "hero_image": "img/hero/slide3-1200.webp",
         "tag": "refillable",
     })
+
+def products_api(request):
+    products = Product.objects.filter(active=True).order_by("-created_at")
+
+    data = [
+        {
+            "id": product.id,
+            "name": product.title,
+            "price": float(product.price),
+            "slug": product.slug,
+            "tags": product.tags,
+        }
+        for product in products
+    ]
+
+    return JsonResponse(data, safe=False)
