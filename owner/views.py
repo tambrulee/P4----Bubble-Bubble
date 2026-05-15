@@ -14,6 +14,11 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.db.models import Prefetch
+from django.db.models import Q
+from reviews.models import Review
+from .forms import OwnerReplyForm
+from django.core.paginator import Paginator
+from django.db.models.deletion import ProtectedError
 
 
 # ---------- Owner login ----------
@@ -21,6 +26,7 @@ from django.db.models import Prefetch
 
 @require_http_methods(["GET", "POST"])
 def owner_login(request):
+    """Handle owner/staff login with redirection and access control."""
     # Already logged in
     if request.user.is_authenticated:
         if request.user.is_staff:
@@ -63,19 +69,23 @@ def owner_login(request):
 # ---------- Dashboard ----------
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def dashboard(request):
+    """Display the owner dashboard with key metrics."""
     low_qs = Product.objects.filter(
         active=True,
         stock_qty__lte=settings.LOW_STOCK_THRESHOLD
     ).order_by("stock_qty", "title")
 
+    pending_dispatch_qs = Order.objects.filter(
+        status=Order.PAID,
+        fulfilment_status=Order.NEW,
+    )
+
     return render(request, "owner/dashboard.html", {
         "product_count": Product.objects.count(),
-        "inactive_count": Product.objects.filter(
-            active=False).count(),
-        "pending_orders": Order.objects.filter(
-            status=Order.PENDING).count(),
+        "inactive_count": Product.objects.filter(active=False).count(),
+        "pending_orders": pending_dispatch_qs.count(),
         "low_stock_count": low_qs.count(),
         "low_stock": low_qs[:10],
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
@@ -85,8 +95,9 @@ def dashboard(request):
 # ---------- Orders ----------
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def orders(request):
+    """Display the list of orders with filtering by fulfilment status."""
     tab = request.GET.get("tab", "new")
 
     base = Order.objects.all().order_by("-created_at")
@@ -95,8 +106,9 @@ def orders(request):
         qs = base.filter(
             status=Order.PAID,
             fulfilment_status__in=[
-                    Order.DELIVERED, Order.DISPATCHED, Order.NEW,
-    ],)
+                    Order.DELIVERED,
+                    Order.DISPATCHED,
+                    Order.NEW,],)
     elif tab == "new":
         # Paid orders that still need dispatching
         qs = base.filter(
@@ -123,22 +135,30 @@ def orders(request):
             status=Order.PAID, fulfilment_status=Order.DELIVERED).count(),
     }
 
+    paginator = Paginator(qs, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "owner/orders.html", {
-        "orders": qs,
+        "orders": page_obj,
+        "page_obj": page_obj,
+        "paginator": paginator,
         "tab": tab,
         "counts": counts,
     })
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def order_detail(request, order_id):
+    """Display the detail page for a specific order."""
     order = get_object_or_404(Order, pk=order_id)
     return render(request, "owner/order_detail.html", {"order": order})
 
 
 # ---------- Analytics ----------
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def owner_analytics(request):
+    """Display sales analytics for the owner dashboard."""
     now = timezone.now()
     d7 = now - timedelta(days=7)
     d30 = now - timedelta(days=30)
@@ -162,9 +182,10 @@ def owner_analytics(request):
 
 
 # ---------- Owner product list with filters ----------
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 @require_POST
 def owner_order_set_fulfilment(request, order_id, fulfilment):
+    """Set the fulfilment status of an order."""
     order = get_object_or_404(Order, pk=order_id)
 
     allowed = {Order.DISPATCHED, Order.DELIVERED, Order.CANCELLED}
@@ -188,12 +209,13 @@ def owner_order_set_fulfilment(request, order_id, fulfilment):
         "delivered_at",
         "cancelled_at",
     ])
-    return redirect("owner_orders")
+    return redirect("owner:owner_orders")
 
 
 @login_required
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def products(request):
+    """Display the owner product list with filtering and sorting."""
     # --- GET params (must match template name="...") ---
     active_status = request.GET.get("status", "").strip().lower()
     active_tag = request.GET.get("tag", "").strip().lower()
@@ -250,29 +272,33 @@ def products(request):
         if t.strip()
     })
 
-    return render(request, "owner/products.html", {
-        "products": qs,
-        "LOW_STOCK_THRESHOLD": low_threshold,
+    # --- Pagination ---
+    paginator = Paginator(qs, 12)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
-        # mirror user-side "active_*"
-        "active_status": active_status,
-        "active_tag": active_tag,
-        "active_stock": active_stock,
-        "active_sort": active_sort,
+    return render(
+        request, "owner/products.html", {
+            "products": page_obj,
+            "page_obj": page_obj,
+            "paginator": paginator,
 
-        # options for dropdown
-        "tag_options": tag_options,
-
-        # debug helper
-        "debug_qs": request.GET.urlencode(),
-    })
+            "LOW_STOCK_THRESHOLD": low_threshold,
+            "active_status": active_status,
+            "active_tag": active_tag,
+            "active_stock": active_stock,
+            "active_sort": active_sort,
+            "tag_options": tag_options,
+            "debug_qs": request.GET.urlencode(),
+        })
 
 
 # ---------- Product create / edit / toggle active ----------
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_create(request):
+    """Create a new product."""
     form = ProductForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -282,8 +308,9 @@ def product_create(request):
             "form": form, "mode": "Create"})
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_edit(request, pk):
+    """Edit an existing product."""
     product = get_object_or_404(Product, pk=pk)
     form = ProductForm(request.POST or None, instance=product)
     if request.method == "POST" and form.is_valid():
@@ -294,8 +321,9 @@ def product_edit(request, pk):
             "form": form, "mode": "Edit", "product": product})
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_toggle_active(request, pk):
+    """Toggle a product's active status."""
     product = get_object_or_404(Product, pk=pk)
     product.active = not product.active
     product.save(update_fields=["active"])
@@ -303,8 +331,9 @@ def product_toggle_active(request, pk):
 
 
 # ---------- Product images ----------
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_images(request, pk):
+    """Manage images for a specific product."""
     product = get_object_or_404(Product, pk=pk)
     images = product.images.all().order_by("-id")
 
@@ -323,8 +352,9 @@ def product_images(request, pk):
     })
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 def product_image_delete(request, image_id):
+    """Delete a product image."""
     img = get_object_or_404(ProductImage, pk=image_id)
     product_id = img.product_id
     img.delete()
@@ -336,6 +366,7 @@ def product_image_delete(request, image_id):
 
 @login_required
 def product_duplicate(request, pk):
+    """Duplicate a product."""
     original = get_object_or_404(Product, pk=pk)
 
     # Create a new product (slug handled automatically in save())
@@ -356,9 +387,10 @@ def product_duplicate(request, pk):
 # --------- Bulk actions ----------
 
 
-@staff_member_required
+@staff_member_required(login_url="owner:owner_login")
 @require_POST
 def products_bulk_action(request):
+    """Perform bulk actions on selected products."""
     action = request.POST.get("action")
     ids = request.POST.getlist("product_ids")
 
@@ -379,10 +411,107 @@ def products_bulk_action(request):
         return redirect("owner:owner_products")
 
     if action == "delete":
-        count = qs.count()
-        qs.delete()
-        messages.success(request, f"Deleted {count} product(s).")
+        deleted = 0
+        hidden = 0
+
+        for p in qs:
+            try:
+                p.delete()
+                deleted += 1
+            except ProtectedError:
+                # Product is referenced by OrderItem/CartItem → can't delete.
+                # Hide it instead.
+                if p.active:
+                    p.active = False
+                    p.save(update_fields=["active"])
+                hidden += 1
+
+        if deleted:
+            messages.success(request, f"Deleted {deleted} product(s).")
+        if hidden:
+            messages.warning(
+                request,
+                f"{hidden} product(s) couldn’t be deleted because they’re linked to orders/carts. "
+                "They were hidden instead."
+            )
+
         return redirect("owner:owner_products")
 
     messages.error(request, "Unknown action.")
     return redirect("owner:owner_products")
+
+# ---------- Reviews management ----------
+
+
+LOW_RATING_THRESHOLD = 2  # 1–2 stars highlighted
+
+
+@staff_member_required(login_url="owner:owner_login")
+def owner_reviews(request):
+    """Display and filter product reviews for the owner."""
+    qs = Review.objects.select_related("product", "user").order_by("-created_at")
+
+    status = request.GET.get("status", "all")
+    if status == "pending":
+        qs = qs.filter(is_approved=False)
+    elif status == "low":
+        qs = qs.filter(rating__lte=LOW_RATING_THRESHOLD)
+    elif status == "unreplied":
+        qs = qs.filter(Q(owner_reply="") | Q(owner_reply__isnull=True))
+
+    paginator = Paginator(qs, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(
+        request, "owner/reviews.html", {
+            "reviews": page_obj,
+            "page_obj": page_obj,
+            "paginator": paginator,
+            "status": status,
+            "low_threshold": LOW_RATING_THRESHOLD,
+        })
+
+
+@staff_member_required(login_url="owner:owner_login")
+def owner_review_detail(request, pk):
+    """View and reply to a specific product review."""
+    review = get_object_or_404(Review.objects.select_related("product", "user"), pk=pk)
+
+    if request.method == "POST":
+        form = OwnerReplyForm(request.POST, instance=review)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.owner_replied_at = timezone.now()
+            obj.save(update_fields=["owner_reply", "owner_replied_at", "updated_at"])
+            messages.success(request, "Reply saved.")
+            return redirect("owner:owner_review_detail", pk=review.pk)
+    else:
+        form = OwnerReplyForm(instance=review)
+
+    return render(request, "owner/review_detail.html", {
+        "review": review,
+        "form": form,
+        "is_low_rated": review.rating <= LOW_RATING_THRESHOLD,
+        "low_threshold": LOW_RATING_THRESHOLD,
+    })
+
+
+@staff_member_required(login_url="owner:owner_login")
+def owner_review_approve(request, pk):
+    """Approve a product review."""
+    review = get_object_or_404(Review, pk=pk)
+    review.is_approved = True
+    review.save(update_fields=["is_approved", "updated_at"])
+    messages.success(request, "Review approved (visible on product page).")
+    return redirect(request.META.get("HTTP_REFERER", "owner:owner_reviews"))
+
+
+@staff_member_required(login_url="owner:owner_login")
+def owner_review_hide(request, pk):
+    """Hide a product review."""
+    review = get_object_or_404(Review, pk=pk)
+    review.is_approved = False
+    review.save(update_fields=["is_approved", "updated_at"])
+    messages.warning(request, "Review hidden (not visible on product page).")
+    return redirect(request.META.get("HTTP_REFERER", "owner:owner_reviews"))

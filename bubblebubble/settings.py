@@ -23,7 +23,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR.parent / "media"
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -114,6 +114,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE.append("bubblebubble.middleware.MediaCacheControlMiddleware")
+
 
 ROOT_URLCONF = 'bubblebubble.urls'
 

@@ -7,7 +7,7 @@ app_name = "owner"
 
 urlpatterns = [
 
-    # /owner/login/  (your custom staff-gated login view)
+    # /owner/login/  (custom staff-gated login view)
     path("login/", views.owner_login, name="owner_login"),
 
     # /owner/logout/
@@ -46,12 +46,20 @@ urlpatterns = [
         name="owner_order_set_fulfilment",
     ),
 
+    # /owner/reviews/...
+
+    path("reviews/", views.owner_reviews, name="owner_reviews"),
+    path("reviews/<int:pk>/", views.owner_review_detail, name="owner_review_detail"),
+    path("reviews/<int:pk>/approve/", views.owner_review_approve, name="owner_review_approve"),
+    path("reviews/<int:pk>/hide/", views.owner_review_hide, name="owner_review_hide"),
+
     # password reset under /owner/...
     path(
         "password-reset/",
         auth_views.PasswordResetView.as_view(
             template_name="owner/password_reset_form.html",
-            email_template_name="owner/password_reset_email.html",
+            email_template_name="owner/password_reset_email.txt",
+            html_email_template_name="owner/password_reset_email.html",
             subject_template_name="owner/password_reset_subject.txt",
             success_url=reverse_lazy("owner:password_reset_done"),
         ),

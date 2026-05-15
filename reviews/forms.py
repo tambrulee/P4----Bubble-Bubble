@@ -8,6 +8,7 @@ class ReviewForm(forms.ModelForm):
         fields = ["rating", "comment"]
 
     def clean_rating(self):
+        """Ensure rating is between 1 and 5."""
         r = self.cleaned_data["rating"]
         if not 1 <= r <= 5:
             raise forms.ValidationError("Rating must be between 1 and 5.")

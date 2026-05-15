@@ -19,5 +19,4 @@ class OrderAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
     inlines = [OrderItemInline]
 
-    # usually you don't want staff editing financial truth by accident:
     readonly_fields = ("total", "stripe_session_id", "created_at")

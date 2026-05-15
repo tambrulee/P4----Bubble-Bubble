@@ -9,12 +9,14 @@ from django.template.loader import render_to_string
 
 
 def view_cart(request):
+    """Display the current user's cart."""
     cart = get_or_create_cart(request)
     return render(request, "cart/view.html", {"cart": cart})
 
 
 @require_POST
 def add_to_cart(request, product_id):
+    """Add a product to the cart or update its quantity."""
     product = get_object_or_404(Product, pk=product_id, active=True)
     cart = get_or_create_cart(request)
 
@@ -57,13 +59,22 @@ def add_to_cart(request, product_id):
 
 @require_POST
 def remove_item(request, item_id):
+    """Remove an item from the cart."""
     cart = get_or_create_cart(request)
     item = get_object_or_404(CartItem, pk=item_id, cart=cart)
     item.delete()
-    return redirect("cart:view")
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({
+            "ok": True,
+            "cart_count": cart.items.count(),
+        })
+
+    return redirect(request.META.get("HTTP_REFERER", "cart:view"))
 
 
 def add(request, product_id):
+    """Add a product to the cart."""
     product = get_object_or_404(Product, id=product_id)
     qty = int(request.POST.get("qty", 1))
 
@@ -85,11 +96,11 @@ def add(request, product_id):
         })
 
     messages.success(request, added_msg)
-    # keep your current behaviour for non-JS users
     return redirect("cart:view")
 
 
 def mini_cart(request):
+    """Return mini cart HTML snippet and cart data as JSON."""
     cart = get_or_create_cart(request)
     html = render_to_string(
         "cart/_mini_cart.html", {"cart": cart}, request=request)
@@ -108,6 +119,7 @@ def mini_cart(request):
 
 @require_POST
 def update_item(request, item_id):
+    """Update the quantity of a cart item."""
     cart = get_or_create_cart(request)
     item = get_object_or_404(CartItem, pk=item_id, cart=cart)
 

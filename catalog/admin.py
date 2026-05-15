@@ -11,11 +11,13 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.action(description="Deactivate selected products")
 def deactivate_products(modeladmin, request, queryset):
+    """Deactivate selected products."""
     queryset.update(active=False)
 
 
 @admin.action(description="Activate selected products")
 def activate_products(modeladmin, request, queryset):
+    """Activate selected products."""
     queryset.update(active=True)
 
 

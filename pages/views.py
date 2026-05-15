@@ -7,30 +7,37 @@ from .forms import ContactForm
 
 
 def delivery(request):
+    """Render the delivery information page."""
     return render(request, "pages/delivery.html")
 
 
 def returns(request):
+    """Render the returns policy page."""
     return render(request, "pages/returns.html")
 
 
 def faq(request):
+    """Render the frequently asked questions page."""
     return render(request, "pages/faq.html")
 
 
 def terms(request):
+    """Render the terms and conditions page."""
     return render(request, "pages/terms.html")
 
 
 def privacy(request):
+    """Render the privacy policy page."""
     return render(request, "pages/privacy.html")
 
 
 def cookies(request):
+    """Render the cookies policy page."""
     return render(request, "pages/cookies.html")
 
 
 def contact(request):
+    """Handle the contact form page."""
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():

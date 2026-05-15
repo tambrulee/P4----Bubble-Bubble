@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %}{{ page_title }} | Moon & Moss{% endblock %}
 {% load tag_extras %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'catalog/css/catalog.css' %}">
+{% endblock extra_css %}
 {% block content %}
 
 <!-- HERO -->
@@ -163,6 +167,47 @@
         <p class="text-muted">No products in this range yet.</p>
       {% endfor %}
     </div>
+    <!-- Pagination -->
+      {% if page_obj %}
+        <nav class="mt-4">
+          <ul class="pagination justify-content-center">
+
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link"
+                  href="?{% querystring request.GET 'page' page_obj.previous_page_number %}">
+                  Previous
+                </a>
+              </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                <li class="page-item">
+                  <a class="page-link"
+                    href="?{% querystring request.GET 'page' num %}">
+                    {{ num }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link"
+                  href="?{% querystring request.GET 'page' page_obj.next_page_number %}">
+                  Next
+                </a>
+              </li>
+            {% endif %}
+
+          </ul>
+        </nav>
+      {% endif %}
   </div>
 </section>
 

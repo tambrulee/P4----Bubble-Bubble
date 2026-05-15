@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setStars(getCurrentValue());
   });
 
-  // tidy comment textarea (if your widget didn't already have a class)
   const comment = document.getElementById("id_comment") || document.querySelector("textarea");
   if (comment) comment.classList.add("review-textarea");
 });

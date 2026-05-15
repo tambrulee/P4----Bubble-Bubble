@@ -2,9 +2,11 @@ from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from .models import Product
 from django.db.models import Count
-
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 def home(request):
+    """Display the home page with featured products and promos."""
     best_sellers = (
         Product.objects
         .filter(
@@ -62,6 +64,7 @@ RANGES = [
 
 
 def product_list(request):
+    """Display the product listing with filtering and sorting."""
     range_tag = request.GET.get("range", "").strip().lower()
     scent_family = request.GET.get("scent_family", "").strip().lower()
     price_min = request.GET.get("price_min", "").strip()
@@ -97,8 +100,6 @@ def product_list(request):
     elif sort == "price_desc":
         qs = qs.order_by("-price", "-created_at")
     elif sort == "popularity":
-        # Only use this if you have a related reviews name "reviews".
-        # Otherwise fallback to newest.
         try:
             qs = qs.annotate(
                 review_count=Count("reviews")).order_by(
@@ -109,8 +110,16 @@ def product_list(request):
         sort = "newest"
         qs = qs.order_by("-created_at")
 
+    # Pagination
+    paginator = Paginator(qs, 12)  # 16 products per page
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "catalog/shop_all.html", {
-        "products": qs,
+        "products": page_obj,
+        "page_obj": page_obj,          # for pagination controls
+        "paginator": paginator,
+
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
 
         "active_range": range_tag,
@@ -125,42 +134,89 @@ def product_list(request):
 
 
 def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug, active=True)
+    """Display the product detail page."""
+    product = get_object_or_404(Product, slug=slug)
+
+    reviews = (
+        product.reviews
+        .filter(is_approved=True)
+        .select_related("user")
+        .order_by("-created_at")
+    )
+
     return render(request, "catalog/product_detail.html", {
         "product": product,
+        "reviews": reviews,
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
     })
 
 
 def about(request):
+    """Display the About Us page."""
     return render(request, "catalog/about.html")
 
 
 def winter_isles(request):
-    products = Product.objects.filter(
-        active=True, tags__icontains="winter").order_by("-created_at")
+    """Display products tagged as 'winter'."""
+    qs = Product.objects.filter(
+        active=True, tags__icontains="winter"
+    ).order_by("-created_at")
+
+    paginator = Paginator(qs, 12)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "catalog/category_page.html", {
-        "products": products,
+        "products": page_obj,     # IMPORTANT: send the page object as products
+        "page_obj": page_obj,
+        "paginator": paginator,
+
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
         "page_title": "Winter Isles",
         "page_description":
-        "Limited edition seasonal blends inspired by the "
-        "UK landscape — sea air, hedgerow berries, juniper and frost.",
-        "hero_image": "img/hero/slide2.png",  # change to your real hero
+            "Limited edition seasonal blends inspired by the "
+            "UK landscape — sea air, hedgerow berries, juniper and frost.",
+        "hero_image": "img/hero/slide2-1200.webp",
         "tag": "winter",
     })
 
 
 def refillables(request):
-    products = Product.objects.filter(
-        active=True, tags__icontains="refillable").order_by("-created_at")
+    """Display products tagged as 'refillable'."""
+    qs = Product.objects.filter(
+        active=True, tags__icontains="refillable"
+    ).order_by("-created_at")
+
+    paginator = Paginator(qs, 12)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "catalog/category_page.html", {
-        "products": products,
+        "products": page_obj,
+        "page_obj": page_obj,
+        "paginator": paginator,
+
         "LOW_STOCK_THRESHOLD": settings.LOW_STOCK_THRESHOLD,
         "page_title": "Refillable Soaps",
         "page_description":
-        "Low-waste favourites designed for everyday rituals — "
-        "refill options so you don’t have to keep buying new bottles.",
-        "hero_image": "img/hero/slide3.png",  # change to your real hero
+            "Low-waste favourites designed for everyday rituals — "
+            "refill options so you don’t have to keep buying new bottles.",
+        "hero_image": "img/hero/slide3-1200.webp",
         "tag": "refillable",
     })
+
+def products_api(request):
+    products = Product.objects.filter(active=True).order_by("-created_at")
+
+    data = [
+        {
+            "id": product.id,
+            "name": product.title,
+            "price": float(product.price),
+            "slug": product.slug,
+            "tags": product.tags,
+        }
+        for product in products
+    ]
+
+    return JsonResponse(data, safe=False)

@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %} Home | Moon & Moss{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'catalog/css/catalog.css' %}">
+{% endblock extra_css %}
 {% block content %}
 
   <!-- Trust badges + simple claims -->
@@ -81,9 +85,21 @@
 
         <!-- Slide 1 -->
         <div class="carousel-item active">
-          <img src="{% static 'img/hero/slide1.jpg' %}"
-               class="d-block w-100 bb-hero-img"
-               alt="Moon & Moss soaps">
+          <img
+            src="{% static 'img/hero/slide1-960.webp' %}"
+            srcset="
+              {% static 'img/hero/slide1-640.webp' %} 640w,
+              {% static 'img/hero/slide1-960.webp' %} 960w,
+              {% static 'img/hero/slide1-1200.webp' %} 1200w
+            "
+            sizes="(max-width: 992px) 100vw, 1200px"
+            class="d-block w-100 bb-hero-img"
+            fetchpriority="high"
+            decoding="async"
+            width="1400"
+            height="933"
+            alt="Moon & Moss soaps"
+          >
 
           <div class="bb-hero-overlay p-3 p-md-4">
             <div class="bb-hero-overlay-inner d-flex flex-column gap-3">
@@ -98,9 +114,22 @@
 
         <!-- Slide 2 -->
         <div class="carousel-item">
-          <img src="{% static 'img/hero/slide2.png' %}"
-               class="d-block w-100 bb-hero-img"
-               alt="Winter Isles limited edition collection">
+          <img
+            src="{% static 'img/hero/slide2-960.webp' %}"
+            srcset="
+              {% static 'img/hero/slide2-640.webp' %} 640w,
+              {% static 'img/hero/slide2-960.webp' %} 960w,
+              {% static 'img/hero/slide2-1200.webp' %} 1200w
+            "
+            sizes="(max-width: 992px) 100vw, 1200px"
+            class="d-block w-100 bb-hero-img"
+            loading="lazy"
+            decoding="async"
+            width="1400"
+            height="933"
+            alt="Winter Isles limited edition collection"
+          >
+
 
           <div class="bb-hero-overlay p-3 p-md-4">
             <div class="bb-hero-overlay-inner d-flex flex-column gap-3">
@@ -115,9 +144,22 @@
 
         <!-- Slide 3 -->
         <div class="carousel-item">
-          <img src="{% static 'img/hero/slide3.png' %}"
-               class="d-block w-100 bb-hero-img"
-               alt="Refillable hand and body washes">
+          <img
+            src="{% static 'img/hero/slide3-960.webp' %}"
+            srcset="
+              {% static 'img/hero/slide3-640.webp' %} 640w,
+              {% static 'img/hero/slide3-960.webp' %} 960w,
+              {% static 'img/hero/slide3-1200.webp' %} 1200w
+            "
+            sizes="(max-width: 992px) 100vw, 1200px"
+            class="d-block w-100 bb-hero-img"
+            loading="lazy"
+            decoding="async"
+            width="1400"
+            height="933"
+            alt="Refillable hand and body washes"
+          >
+
 
           <div class="bb-hero-overlay p-3 p-md-4">
             <div class="bb-hero-overlay-inner d-flex flex-column gap-3">
@@ -150,11 +192,12 @@
       <div class="bb-testimonials-row">
         {% for t in testimonials %}
         <article class="bb-quote-card">
-          <div class="bb-quote-top">
-            <span class="bb-quote-mark" aria-hidden="true">“</span>
-            <div class="bb-stars" aria-label="5 star rating">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </div>
+          <div class="bb-stars" role="img" aria-label="5 star rating">
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
           </div>
 
           <p class="mb-2">“{{ t.quote }}”</p>
@@ -170,67 +213,83 @@
   <!-- Best sellers / favourites -->
   <section class="py-5">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-3 bb-bestsellers-head">
+      <div class="d-flex justify-content-between align-items-end mb-3 bb-bestsellers-head">
+        <div>
           <h2 class="h4 mb-1">Best sellers</h2>
           <p class="text-muted mb-0">Start with proven favourites people come back for.</p>
         </div>
-        <div class="d-flex justify-content-between align-items-end mb-3">
-          <a href="{% url 'catalog:product_list' %}"
-            class="btn btn-outline-secondary bb-viewall-btn">
-            View all
-          </a>   
-        </div>
+        <a href="{% url 'catalog:product_list' %}"
+          class="btn btn-outline-secondary bb-viewall-btn">
+          View all
+        </a>
+      </div>
     </div>
-      
-      <div class="row g-3">
-        {% for p in best_sellers %}
-          <div class="col-12 col-sm-6 col-lg-3">
-            <div class="card h-100 shadow-sm">
-              {% if p.images.first %}
-                <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
-                  <img src="{{ p.images.first.image.url }}"
-                      class="card-img-top"
-                      alt="{{ p.images.first.alt_text }}">
-                </a>
-              {% endif %}
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title mb-1">{{ p.title }}</h5>
-                <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
-                <p class="mb-2 product-price">£{{ p.price }}</p>
-                <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
-                  <a href="{% url 'catalog:product_detail' p.slug %}"
-                     class="btn btn-sm btn-outline-primary">View</a>
-                  <form method="post"
-                        action="{% url 'cart:add_to_cart' p.id %}"
-                        class="js-add-to-cart">
-                    {% csrf_token %}
-                    <input type="hidden" name="qty" value="1">
-                    <button type="submit"
-                            class="btn btn-primary"
-                            {% if p.stock_qty == 0 %}disabled{% endif %}>Add to cart</button>
-                  </form>
-                </div>
 
-                {% if p.stock_qty == 0 %}
-                  <p class="small text-muted mt-2 mb-0">Out of stock</p>
+    <!-- Mobile horizontal scroll wrapper -->
+    <div class="container">
+      <div class="bb-scroll-wrap">
+        <div class="row g-3 bb-scroll-row">
+          {% for p in best_sellers %}
+            <div class="col-10 col-sm-6 col-lg-3 bb-scroll-item">
+              <div class="card h-100 shadow-sm">
+                {% if p.images.first %}
+                  <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
+                    <img
+                      src="{{ p.images.first.image.url }}"
+                      class="card-img-top"
+                      alt="{{ p.images.first.alt_text|default:p.title }}"
+                      width="656"
+                      height="437"
+                      loading="lazy"
+                      decoding="async">
+                  </a>
                 {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title mb-1">{{ p.title }}</h5>
+                  <p class="card-text product-meta mb-2">{{ p.scent }} • {{ p.weight_g }}g</p>
+                  <p class="mb-2 product-price">£{{ p.price }}</p>
+
+                  <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
+                    <a href="{% url 'catalog:product_detail' p.slug %}" class="btn btn-sm btn-outline-primary">
+                      View
+                    </a>
+
+                    <form method="post"
+                          action="{% url 'cart:add_to_cart' p.id %}"
+                          class="js-add-to-cart">
+                      {% csrf_token %}
+                      <input type="hidden" name="qty" value="1">
+                      <button type="submit"
+                              class="btn btn-primary"
+                              {% if p.stock_qty == 0 %}disabled{% endif %}>
+                        Add to cart
+                      </button>
+                    </form>
+                  </div>
+
+                  {% if p.stock_qty == 0 %}
+                    <p class="small text-muted mt-2 mb-0">Out of stock</p>
+                  {% endif %}
+                </div>
               </div>
             </div>
-          </div>
-        {% empty %}
-          <p class="text-muted">No best sellers yet.</p>
-        {% endfor %}
+          {% empty %}
+            <div class="col-12">
+              <p class="text-muted mb-0">No best sellers yet.</p>
+            </div>
+          {% endfor %}
+        </div>
       </div>
-
     </div>
   </section>
 
+
   <!-- Our Story -->
-  <section class="py-5 bb-story-feature">
+  <section class="py-3 py-lg-4 bb-story-feature">
   <div class="container">
     <div class="row align-items-center g-4">
       <div class="col-lg-6 order-2 order-lg-1">
-        <span class="bb-section-kicker">Moon &amp; Moss</span>
         <h2 class="h4 mb-2">Our story</h2>
         <p class="text-muted mb-3">
           Moon &amp; Moss started with a love of simple rituals — the kind that slow you down and bring you back to yourself.
@@ -241,7 +300,22 @@
 
       <div class="col-lg-6 order-1 order-lg-2">
         <a href="{% url 'catalog:about' %}" class="bb-story-card">
-          <img src="{% static 'img/hero/our_story.png' %}" class="w-100" alt="Our story">
+          <img
+            src="{% static 'img/hero/our_story-960.webp' %}"
+            srcset="
+              {% static 'img/hero/our_story-640.webp' %} 640w,
+              {% static 'img/hero/our_story-960.webp' %} 960w,
+              {% static 'img/hero/our_story-1200.webp' %} 1200w
+            "
+            sizes="(max-width: 992px) 100vw, 540px"
+            class="w-100"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            height="800"
+            alt="Our story"
+          >
+
           <div class="bb-story-chip">
             <i class="fa-solid fa-seedling"></i>
             <span>Small-batch • UK made</span>
@@ -251,6 +325,5 @@
     </div>
   </div>
 </section>
-
 
 {% endblock content %}

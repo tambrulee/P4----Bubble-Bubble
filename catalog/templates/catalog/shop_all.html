@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %}Shop | Moon & Moss{% endblock %}
+{% load tag_extras %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'catalog/css/catalog.css' %}">
+{% endblock extra_css %}
 {% block content %}
-  {% load tag_extras %}
   <section class="py-4">
     <div class="container">
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-3">
@@ -9,100 +13,70 @@
           <h1 class="h3 mb-1">Shop All</h1>
           <p class="text-muted mb-0">Browse the full range — soaps, refillables, and seasonal drops.</p>
         </div>
-        {# Optional: simple “quick links” to category pages if you have them #}
-        <div class="d-flex flex-wrap gap-2">
-          <a class="btn btn-sm btn-outline-secondary"
-             href="{% url 'catalog:product_list' %}">All</a>
-          <a class="btn btn-sm {% if active_tag == 'winter' %}btn-primary{% else %}btn-outline-secondary{% endif %}"
-             href="{% url 'catalog:product_list' %}?tag=winter">Winter Isles</a>
-          <a class="btn btn-sm {% if active_tag == 'refillable' %}btn-primary{% else %}btn-outline-secondary{% endif %}"
-             href="{% url 'catalog:product_list' %}?tag=refillable">Refillables</a>
-          {% if active_tag %}
-            <a class="btn btn-sm btn-outline-danger"
-               href="{% url 'catalog:product_list' %}">Clear filter</a>
-          {% endif %}
-          <form method="get" class="d-flex align-items-center gap-2">
-            {% if active_tag %}<input type="hidden" name="tag" value="{{ active_tag }}">{% endif %}
-            <label class="small text-muted mb-0" for="sort">Sort</label>
-            <select id="sort"
-                    name="sort"
-                    class="form-select form-select-sm"
-                    style="max-width: 220px"
-                    onchange="this.form.submit()">
-              <option value="newest" {% if active_sort == "newest" %}selected{% endif %}>Newest</option>
-              <option value="price_asc"
-                      {% if active_sort == "price_asc" %}selected{% endif %}>Price: low to high</option>
-              <option value="price_desc"
-                      {% if active_sort == "price_desc" %}selected{% endif %}>Price: high to low</option>
-              <option value="popularity"
-                      {% if active_sort == "popularity" %}selected{% endif %}>Popularity</option>
-            </select>
-            <noscript>
-              <button class="btn btn-sm btn-outline-secondary" type="submit">Apply</button>
-            </noscript>
-          </form>
-        </div>
       </div>
+
+      <!-- Filter Form -->
       <form method="get" class="card shadow-sm border-0 p-3 mb-3">
         <div class="row g-2 align-items-end">
-          {# RANGE #}
+
           <div class="col-12 col-md-3">
-            <label class="form-label small text-muted mb-1">Range</label>
-            <select name="range" class="form-select form-select-sm">
+            <label for="filter-range" class="form-label small text-muted mb-1">Range</label>
+            <select id="filter-range" name="range" class="form-select form-select-sm">
               <option value="" {% if not active_range %}selected{% endif %}>All ranges</option>
               <option value="winter" {% if active_range == "winter" %}selected{% endif %}>Winter Isles</option>
-              <option value="refillable"
-                      {% if active_range == "refillable" %}selected{% endif %}>Refillables</option>
+              <option value="refillable" {% if active_range == "refillable" %}selected{% endif %}>Refillables</option>
             </select>
           </div>
-          {# SCENT FAMILY #}
+
           <div class="col-12 col-md-3">
-            <label class="form-label small text-muted mb-1">Scent family</label>
-            <select name="scent_family" class="form-select form-select-sm">
+            <label for="filter-scent-family" class="form-label small text-muted mb-1">Scent family</label>
+            <select id="filter-scent-family" name="scent_family" class="form-select form-select-sm">
               <option value="" {% if not active_scent_family %}selected{% endif %}>All scent families</option>
               {% for val,label in SCENT_FAMILIES %}
-                <option value="{{ val }}"
-                        {% if active_scent_family == val %}selected{% endif %}>{{ label }}</option>
+                <option value="{{ val }}" {% if active_scent_family == val %}selected{% endif %}>{{ label }}</option>
               {% endfor %}
             </select>
           </div>
-          {# PRICE #}
+
           <div class="col-6 col-md-2">
-            <label class="form-label small text-muted mb-1">Min £</label>
-            <input type="number"
-                   step="0.01"
-                   name="price_min"
-                   value="{{ active_price_min }}"
-                   class="form-control form-control-sm">
+            <label for="filter-price-min" class="form-label small text-muted mb-1">Min £</label>
+            <input id="filter-price-min"
+                  type="number"
+                  step="1.00"
+                  name="price_min"
+                  value="{{ active_price_min }}"
+                  class="form-control form-control-sm">
           </div>
+
           <div class="col-6 col-md-2">
-            <label class="form-label small text-muted mb-1">Max £</label>
-            <input type="number"
-                   step="0.01"
-                   name="price_max"
-                   value="{{ active_price_max }}"
-                   class="form-control form-control-sm">
+            <label for="filter-price-max" class="form-label small text-muted mb-1">Max £</label>
+            <input id="filter-price-max"
+                  type="number"
+                  step="1.00"
+                  name="price_max"
+                  value="{{ active_price_max }}"
+                  class="form-control form-control-sm">
           </div>
-          {# SORT #}
+
           <div class="col-12 col-md-2">
-            <label class="form-label small text-muted mb-1">Sort</label>
-            <select name="sort" class="form-select form-select-sm">
+            <label for="filter-sort" class="form-label small text-muted mb-1">Sort</label>
+            <select id="filter-sort" name="sort" class="form-select form-select-sm">
               <option value="newest" {% if active_sort == "newest" %}selected{% endif %}>Newest</option>
-              <option value="price_asc"
-                      {% if active_sort == "price_asc" %}selected{% endif %}>Price: low to high</option>
-              <option value="price_desc"
-                      {% if active_sort == "price_desc" %}selected{% endif %}>Price: high to low</option>
-              <option value="popularity"
-                      {% if active_sort == "popularity" %}selected{% endif %}>Popularity</option>
+              <option value="price_asc" {% if active_sort == "price_asc" %}selected{% endif %}>Price: low to high</option>
+              <option value="price_desc" {% if active_sort == "price_desc" %}selected{% endif %}>Price: high to low</option>
+              <option value="popularity" {% if active_sort == "popularity" %}selected{% endif %}>Popularity</option>
             </select>
           </div>
+
           <div class="col-12 d-flex gap-2 mt-2">
             <button class="btn btn-primary btn-sm" type="submit">Apply</button>
-            <a class="btn btn-outline-secondary btn-sm"
-               href="{% url 'catalog:product_list' %}">Clear</a>
+            <a class="btn btn-outline-secondary btn-sm" href="{% url 'catalog:product_list' %}">Clear</a>
           </div>
+
         </div>
       </form>
+
+      <!-- Product Grid -->
       <div class="row g-3">
         {% for p in products %}
           <div class="col-12 col-sm-6 col-lg-3">
@@ -111,6 +85,7 @@
                 <a href="{% url 'catalog:product_detail' p.slug %}" class="bb-card-img-link">
                   <img src="{{ p.images.first.image.url }}"
                       class="card-img-top"
+                      aria-label="View {{ p.title }}"
                       alt="{{ p.images.first.alt_text }}">
                 </a>
               {% endif %}
@@ -126,7 +101,8 @@
                 <p class="mb-2 product-price">£{{ p.price }}</p>
                 <div class="mt-auto d-flex justify-content-between align-items-center gap-2">
                   <a href="{% url 'catalog:product_detail' p.slug %}"
-                     class="btn btn-sm btn-outline-primary">View</a>
+                    aria-label="View {{ p.title }}"
+                    class="btn btn-sm btn-outline-primary">View</a>
                   <form method="post"
                         action="{% url 'cart:add_to_cart' p.id %}"
                         class="js-add-to-cart">
@@ -145,6 +121,47 @@
           <p>No products yet.</p>
         {% endfor %}
       </div>
+
+<!-- Pagination -->
+      {% if page_obj %}
+        <nav class="mt-4">
+          <ul class="pagination justify-content-center">
+
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link"
+                  href="?{% querystring request.GET 'page' page_obj.previous_page_number %}">
+                  Previous
+                </a>
+              </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                <li class="page-item">
+                  <a class="page-link"
+                    href="?{% querystring request.GET 'page' num %}">
+                    {{ num }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link"
+                  href="?{% querystring request.GET 'page' page_obj.next_page_number %}">
+                  Next
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      {% endif %}
     </div>
   </section>
 {% endblock content %}

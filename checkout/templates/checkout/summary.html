@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %}Checkout | Moon & Moss{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
+{% endblock extra_css %}
 {% block content %}
   <div class="container py-4 py-lg-5">
     <!-- Header -->
@@ -19,9 +23,17 @@
           <div class="card-body p-3 p-md-4">
             <h5 class="mb-1">Delivery details</h5>
             <p class="text-muted mb-3">Where should we send your goodies?</p>
-            <form method="post" action="{% url 'checkout:start_checkout' %}" novalidate>
+            <form method="post"
+              action="{% url 'checkout:start_checkout' %}"
+              class="needs-validation"
+              novalidate>            
               {% csrf_token %}
-              {{ form.non_field_errors }}
+              {% if form.is_bound and form.non_field_errors %}
+                <div class="alert alert-danger mb-3">
+                  {{ form.non_field_errors }}
+                </div>
+              {% endif %}
+
               <div class="row g-3">
                 {% if user.is_authenticated and form.saved_address %}
                   <div class="col-12">
@@ -29,7 +41,22 @@
                     {{ form.saved_address }}
                     <div class="form-text">Pick one to use it, or type a new address below.</div>
                   </div>
+
+                  <script id="saved-addresses-data" type="application/json">
+                    {
+                      {% for a in user.shipping_addresses.all %}
+                        "{{ a.pk }}": {
+                          "full_name": "{{ a.full_name|default_if_none:''|escapejs }}",
+                          "address_line1": "{{ a.address_line1|escapejs }}",
+                          "address_line2": "{{ a.address_line2|default_if_none:''|escapejs }}",
+                          "city": "{{ a.city|escapejs }}",
+                          "postcode": "{{ a.postcode|escapejs }}"
+                        }{% if not forloop.last %},{% endif %}
+                      {% endfor %}
+                    }
+                  </script>
                 {% endif %}
+
                 <div class="col-12">
                   <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
@@ -38,7 +65,7 @@
                       <label>Full name</label>
                     </div>
                   </div>
-                  {% for error in form.full_name.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                  {% for error in form.full_name.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                 </div>
                 <div class="col-12">
                   <div class="input-group">
@@ -48,7 +75,7 @@
                       <label>Email address</label>
                     </div>
                   </div>
-                  {% for error in form.email.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                  {% for error in form.email.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
                   <div class="form-text">Receipt + dispatch updates go here.</div>
                 </div>
                 <div class="col-12">
@@ -59,6 +86,9 @@
                       <label>Address line 1</label>
                     </div>
                   </div>
+                  {% for error in form.address_line1.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                  {% endfor %}
                 </div>
                 <div class="col-12">
                   <div class="input-group">
@@ -74,12 +104,18 @@
                     {{ form.city }}
                     <label>City</label>
                   </div>
+                  {% for error in form.city.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                  {% endfor %}
                 </div>
                 <div class="col-12 col-md-5">
                   <div class="form-floating">
                     {{ form.postcode }}
                     <label>Postcode</label>
                   </div>
+                  {% for error in form.postcode.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                  {% endfor %}
                 </div>
               </div>
               <hr class="my-4">
@@ -119,7 +155,7 @@
                       <td class="fw-medium">{{ item.product.title }}</td>
                       <td class="text-center">{{ item.qty }}</td>
                       <td class="text-end">£{{ item.product.price|floatformat:2 }}</td>
-                      <td class="text-end fw-semibold">£{{ item.subtotal|floatformat:2 }}</td>
+                      <td class="text-end">£{{ item.subtotal|floatformat:2 }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -137,15 +173,7 @@
   </div>
 {% endblock content %}
 {% block scripts %}
-  <style>
-  .card { border-radius: 1rem; }
-  .table thead th { border-bottom: 1px solid rgba(0,0,0,.08); }
-  .table tbody td { border-top: 1px solid rgba(0,0,0,.06); }
-  .position-lg-sticky { position: static; }
-  @media (min-width: 992px) {
-    .position-lg-sticky { position: sticky; }
-  }
-  .input-group-text { background: #fff; }
-  .form-control:focus { box-shadow: none; }
-  </style>
-{% endblock content %}
+{% endblock scripts %}
+{% block extra_js %}
+  <script src="{% static 'checkout/js/checkout.js' %}" defer></script>
+{% endblock extra_js %}

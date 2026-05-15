@@ -2,6 +2,7 @@ from .utils import get_or_create_cart
 
 
 def cart_count(request):
+    """A context processor to add cart item count to context."""
     cart = get_or_create_cart(request)
     try:
         count = sum(i.qty for i in cart.items.all())
